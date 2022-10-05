@@ -16,16 +16,16 @@ function DS_Update_MissionsData() {
   // EventCampaignDetails covers character events
   // No campaign
 
-  var data = [];
-  for (var f = 0; f < fileNames.length; f++) {
+  const data = [];
+  for (let f = 0; f < fileNames.length; f++) {
     const challengesFile = missionsFolder.getFilesByName(fileNames[f]).next();
     const content = challengesFile.getBlob().getDataAsString();
     const json = JSON.parse(content);
 
-    var ids = Object.keys(json.GameData);
-    var count = ids.length;
+    const ids = Object.keys(json.GameData);
+    const count = ids.length;
 
-    for (var e = 0; e < count; e++) {
+    for (let e = 0; e < count; e++) {
       const eventId = ids[e];
       if (fileNames[f] == 'EventCampaignDetails.json' && !eventId.endsWith('_A')) continue;
 
@@ -40,14 +40,14 @@ function DS_Update_MissionsData() {
       if (!mission.hasOwnProperty('m_heroFilters')) continue;
       if (!mission.m_heroFilters.hasOwnProperty('filters')) continue;
 
-      var allTraits = [];
-      var anyTrait = [];
-      var filterIds = [];
+      let allTraits = [];
+      let anyTrait = [];
+      let filterIds = [];
 
       if (mission.m_heroFilters.hasOwnProperty('anyFilters')) {
         //Mythic Legendary
         if (mission.m_heroFilters.anyFilters.length == 0) continue;
-        for (var c = 0; c < mission.m_heroFilters.anyFilters.length; c++) {
+        for (let c = 0; c < mission.m_heroFilters.anyFilters.length; c++) {
           if (mission.m_heroFilters.anyFilters[c].hasOwnProperty('allTraits'))
             allTraits.push(mission.m_heroFilters.anyFilters[c].allTraits);
           if (mission.m_heroFilters.anyFilters[c].hasOwnProperty('anyTrait'))
@@ -73,17 +73,17 @@ function DS_Update_MissionsData() {
         }
       }
 
-      var eventName = event.m_name;
+      let eventName = event.m_name;
 
-      var rewards = [];
+      let rewards = [];
       if (mission.hasOwnProperty('m_rewardsIDList')) rewards = mission.m_rewardsIDList;
 
-      var reward = '';
+      let reward = '';
       if (rewards.length > 0) {
         if (rewards[0].hasOwnProperty('m_rewardID')) reward = rewards[0].m_rewardID;
       }
 
-      var eventType;
+      let eventType;
 
       if (eventName.startsWith('ID_LE_')) eventType = 'EVENT_LEGENDARY';
       else if (eventName.startsWith('ID_FL_')) eventType = 'EVENT_FLASH_EVENT';
@@ -98,7 +98,7 @@ function DS_Update_MissionsData() {
         eventName = eventName.substring(eventName.indexOf('_') + 1);
         eventName = eventName.substring(0, eventName.lastIndexOf('_'));
       }
-      var row = [];
+      const row = [];
 
       row.push(eventType);
       row.push(eventName.toUpperCase());
@@ -114,17 +114,17 @@ function DS_Update_MissionsData() {
         row.push(reward.replace('_', ''));
       } else row.push('');
 
-      for (var c = 0; c < 5; c++) {
+      for (let c = 0; c < 5; c++) {
         if (allTraits.length > c) row.push('HERO_TRAIT_' + allTraits[c].toString().toUpperCase());
         else row.push('');
       }
 
-      for (var c = 0; c < 5; c++) {
+      for (let c = 0; c < 5; c++) {
         if (anyTrait.length > c) row.push('HERO_TRAIT_' + anyTrait[c].toString().toUpperCase());
         else row.push('');
       }
 
-      for (var c = 0; c < 5; c++) {
+      for (let c = 0; c < 5; c++) {
         if (filterIds.length > c) row.push(filterIds[c]);
         else row.push('');
       }
@@ -138,10 +138,10 @@ function DS_Update_MissionsData() {
   const content = missionFile.getBlob().getDataAsString();
   const json = JSON.parse(content);
 
-  var ids = Object.keys(json.GameData);
-  var count = ids.length;
+  const ids = Object.keys(json.GameData);
+  const count = ids.length;
 
-  for (var e = 0; e < count; e++) {
+  for (let e = 0; e < count; e++) {
     const eventId = ids[e];
     const event = json.GameData[eventId];
 
@@ -149,23 +149,23 @@ function DS_Update_MissionsData() {
     if (!event.hasOwnProperty('m_chapterList')) continue;
     if (!event.m_chapterList[0].hasOwnProperty('m_missionList')) continue;
 
-    var eventName = event.m_name;
+    let eventName = event.m_name;
     if (!eventName.startsWith('ID_GAMEMODE_') || !eventName.endsWith('_NAME')) continue;
     eventName = eventName.substring(3, eventName.lastIndexOf('_'));
 
-    var globalFilter = null;
+    let globalFilter = null;
     if (event.hasOwnProperty('m_heroFilters')) globalFilter = event.m_heroFilters.filters;
 
     const chaptersList = event.m_chapterList;
-    var chaptersFilters = [];
-    for (var chapterNum = 0; chapterNum < chaptersList.length; chapterNum++) {
+    const chaptersFilters = [];
+    for (let chapterNum = 0; chapterNum < chaptersList.length; chapterNum++) {
       const chapter = chaptersList[chapterNum];
 
       const missionList = chapter.m_missionList;
 
       // Only check the boss nodes, so far missions are always grouped by 3
-      var missionsFilters = [];
-      for (var missionNum = 2; missionNum < missionList.length; missionNum += 3) {
+      const missionsFilters = [];
+      for (let missionNum = 2; missionNum < missionList.length; missionNum += 3) {
         const mission = missionList[missionNum];
         if (mission.hasOwnProperty('m_heroFilters'))
           missionsFilters.push(CombineFilters(globalFilter, mission.m_heroFilters.filters));
@@ -175,11 +175,11 @@ function DS_Update_MissionsData() {
       chaptersFilters.push(missionsFilters);
     }
 
-    var lines = [];
-    for (var chapterNum = 0; chapterNum < chaptersFilters.length; chapterNum++) {
+    const lines = [];
+    for (let chapterNum = 0; chapterNum < chaptersFilters.length; chapterNum++) {
       // All the missions of this chapter share the same filter, let's check if the following ones do as well
       if (SameFilters(chaptersFilters[chapterNum])) {
-        var ch = chapterNum + 1;
+        let ch = chapterNum + 1;
         while (
           ch < chaptersFilters.length &&
           SameFilters(chaptersFilters[ch]) &&
@@ -200,7 +200,7 @@ function DS_Update_MissionsData() {
         continue;
       }
 
-      for (var mission = 0; mission < chaptersFilters[chapterNum].length; mission++) {
+      for (let mission = 0; mission < chaptersFilters[chapterNum].length; mission++) {
         // Ignore if a section has the global campaign filter unless it's on the first chapter, just in case
         if (chapterNum > 0 && !EqualFilters(globalFilter, chaptersFilters[chapterNum][mission]))
           lines.push({
@@ -212,9 +212,9 @@ function DS_Update_MissionsData() {
       }
     }
 
-    for (var l = 0; l < lines.length; l++) {
+    for (let l = 0; l < lines.length; l++) {
       const line = lines[l];
-      var row = [];
+      const row = [];
       row.push('GAMEMODE_CAMPAIGNS');
       row.push(eventName);
       if (line.FirstChapter < 0 || (line.FirstChapter == 1 && line.Mission == -1)) {
@@ -228,25 +228,25 @@ function DS_Update_MissionsData() {
       }
       row.push(''); // Not yet shard rewards considering they aren't in these data. Will see later how we can handle this
 
-      var allTraits = [];
-      var anyTrait = [];
-      var filterIds = [];
+      let allTraits = [];
+      let anyTrait = [];
+      let filterIds = [];
       if (line.Filter != null) {
         if (line.Filter.hasOwnProperty('allTraits')) allTraits = line.Filter.allTraits;
         if (line.Filter.hasOwnProperty('anyTrait')) anyTrait = line.Filter.anyTrait;
         if (line.Filter.hasOwnProperty('id')) filterIds = line.Filter.id;
       }
-      for (var c = 0; c < 5; c++) {
+      for (let c = 0; c < 5; c++) {
         if (allTraits.length > c) row.push('HERO_TRAIT_' + allTraits[c].toUpperCase());
         else row.push('');
       }
 
-      for (var c = 0; c < 5; c++) {
+      for (let c = 0; c < 5; c++) {
         if (anyTrait.length > c) row.push('HERO_TRAIT_' + anyTrait[c].toUpperCase());
         else row.push('');
       }
 
-      for (var c = 0; c < 5; c++) {
+      for (let c = 0; c < 5; c++) {
         if (filterIds.length > c) row.push(filterIds[c]);
         else row.push('');
       }
@@ -260,7 +260,7 @@ function DS_Update_MissionsData() {
 function SameFilters(filters) {
   if (filters.length < 2) return true;
 
-  for (var f = 1; f < filters.length; f++) if (!EqualFilters(filters[0], filters[f])) return false;
+  for (let f = 1; f < filters.length; f++) if (!EqualFilters(filters[0], filters[f])) return false;
 
   return true;
 }
@@ -271,35 +271,35 @@ function CombineFilters(filter1, filter2) {
   if (filter1.length == 0) return filter2;
   if (filter2.length == 0) return filter1;
 
-  var res = {};
+  const res = {};
   if (filter1.hasOwnProperty('allTraits')) {
     res.allTraits = [];
-    for (var t = 0; t < filter1.allTraits.length; t++) res.allTraits.push(filter1.allTraits[t]);
+    for (let t = 0; t < filter1.allTraits.length; t++) res.allTraits.push(filter1.allTraits[t]);
   }
   if (filter1.hasOwnProperty('anyTrait')) {
     res.anyTrait = [];
-    for (var t = 0; t < filter1.anyTrait.length; t++) res.anyTrait.push(filter1.anyTrait[t]);
+    for (let t = 0; t < filter1.anyTrait.length; t++) res.anyTrait.push(filter1.anyTrait[t]);
   }
   if (filter1.hasOwnProperty('id')) {
     res.id = [];
-    for (var t = 0; t < filter1.id.length; t++) res.id.push(filter1.id[t]);
+    for (let t = 0; t < filter1.id.length; t++) res.id.push(filter1.id[t]);
   }
 
   if (filter2.hasOwnProperty('allTraits')) {
     if (!res.hasOwnProperty('allTraits')) res.allTraits = [];
-    for (var t = 0; t < filter2.allTraits.length; t++) {
+    for (let t = 0; t < filter2.allTraits.length; t++) {
       if (!res.allTraits.includes(filter2.allTraits[t])) res.allTraits.push(filter2.allTraits[t]);
     }
   }
   if (filter2.hasOwnProperty('anyTrait')) {
     if (!res.hasOwnProperty('anyTrait')) res.anyTrait = [];
-    for (var t = 0; t < filter2.anyTrait.length; t++) {
+    for (let t = 0; t < filter2.anyTrait.length; t++) {
       if (!res.anyTrait.includes(filter2.anyTrait[t])) res.anyTrait.push(filter2.anyTrait[t]);
     }
   }
   if (filter2.hasOwnProperty('id')) {
     if (!res.hasOwnProperty('id')) res.id = [];
-    for (var t = 0; t < filter2.id.length; t++) {
+    for (let t = 0; t < filter2.id.length; t++) {
       if (!res.id.includes(filter2.id[t])) res.id.push(filter2.id[t]);
     }
   }
@@ -318,7 +318,7 @@ function EqualFilters(filter1, filter2) {
   if (filter1.hasOwnProperty('allTraits')) {
     if (filter1.allTraits.length != filter2.allTraits.length) return false;
 
-    for (var t = 0; t < filter1.allTraits.length; t++) {
+    for (let t = 0; t < filter1.allTraits.length; t++) {
       if (!filter2.allTraits.includes(filter1.allTraits[t])) return false;
     }
   }
@@ -326,7 +326,7 @@ function EqualFilters(filter1, filter2) {
   if (filter1.hasOwnProperty('anyTrait')) {
     if (filter1.anyTrait.length != filter2.anyTrait.length) return false;
 
-    for (var t = 0; t < filter1.anyTrait.length; t++) {
+    for (let t = 0; t < filter1.anyTrait.length; t++) {
       if (!filter2.anyTrait.includes(filter1.anyTrait[t])) return false;
     }
   }
@@ -334,7 +334,7 @@ function EqualFilters(filter1, filter2) {
   if (filter1.hasOwnProperty('id')) {
     if (filter1.id.length != filter2.id.length) return false;
 
-    for (var t = 0; t < filter1.id.length; t++) {
+    for (let t = 0; t < filter1.id.length; t++) {
       if (!filter2.id.includes(filter1.id[t])) return false;
     }
   }
@@ -348,10 +348,10 @@ function DS_Update_MissionsDataFormula() {
 
   const ranges = GetEmptyRows(rangeFormulas);
 
-  for (var g = 0; g < ranges.length; g++) {
-    var newData = [];
-    for (var row = ranges[g][0]; row < ranges[g][1]; row++) {
-      var newRow = [];
+  for (let g = 0; g < ranges.length; g++) {
+    const newData = [];
+    for (let row = ranges[g][0]; row < ranges[g][1]; row++) {
+      const newRow = [];
 
       newRow.push(
         '=IFERROR(INDEX(_M3Localization_Challenges_Name,MATCH(B' +

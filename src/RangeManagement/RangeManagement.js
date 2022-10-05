@@ -3,8 +3,8 @@ function GetSheet(sheetName) {
 }
 
 function ResizeSheet(sheet, rows, columns) {
-  var currentrows = sheet.getMaxRows();
-  var currentcolumns = sheet.getMaxColumns();
+  const currentrows = sheet.getMaxRows();
+  const currentcolumns = sheet.getMaxColumns();
 
   if (currentrows < rows) {
     // Insert before the last row to make sure we keep named ranges
@@ -33,7 +33,7 @@ function ClearSheet(sheet, clearHeader) {
 }
 
 function CompareData(currentData, newData, start, count) {
-  for (var c = 0; c < count; c++) {
+  for (let c = 0; c < count; c++) {
     if (currentData[start + c] == '' && newData[start + c] == null) continue;
     if (newData[start + c] < currentData[start + c]) return -1;
     if (newData[start + c] > currentData[start + c]) return 1;
@@ -42,9 +42,9 @@ function CompareData(currentData, newData, start, count) {
 }
 
 function GetEmptyRows(range) {
-  var first = -1;
-  var ranges = [];
-  for (var r = 0; r < range.length; r++) {
+  let first = -1;
+  const ranges = [];
+  for (let r = 0; r < range.length; r++) {
     const isEmpty = range[r][0] == '';
 
     if (first < 0 && isEmpty) first = r + 1;
@@ -59,7 +59,7 @@ function GetEmptyRows(range) {
 }
 
 function SortTable(data, keyColumns) {
-  data.sort(function (x, y) {
+  data.sort((x, y) => {
     return CompareData(y, x, 0, keyColumns);
   });
 }

@@ -22,25 +22,25 @@ function DS_Update_GearTiers() {
   const globalContent = fileGlobal.getBlob().getDataAsString();
   const json = JSON.parse(globalContent);
 
-  var GearTierCap = Number(json.GearTierCap);
+  let GearTierCap = Number(json.GearTierCap);
   const overrideGTC = getNamedRangeValue('Preferences_OverrideMaxGearTier');
   if (overrideGTC != '' && Number(overrideGTC) > GearTierCap) GearTierCap = Number(overrideGTC);
 
   const content = file.getBlob().getDataAsString();
   const input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
-  var newData = [];
+  const newData = [];
 
-  var id = '';
-  var origin = '';
-  for (var row = 1; row < input.length; row++) {
+  let id = '';
+  let origin = '';
+  for (let row = 1; row < input.length; row++) {
     const sourceStats = input[row - 1]; // Use the base of the tier rather than the max
     const source = input[row];
     if (IsInvalidHero(source[0], true)) continue;
 
     if (source[1] == 0) continue; // Skip tier 0
 
-    var tier = Number(source[1]);
+    const tier = Number(source[1]);
     if (tier > GearTierCap) continue;
 
     if (id != source[0]) {
@@ -49,11 +49,11 @@ function DS_Update_GearTiers() {
       origin = origin.substring(origin.indexOf('_') + 1, origin.lastIndexOf('_'));
     }
 
-    var focus = GetTierOf(source[2]);
-    var damage = GetTierOf(source[6]);
-    var resist = GetTierOf(source[8]);
-    var armor = GetTierOf(source[10]);
-    var health = GetTierOf(source[12]);
+    const focus = GetTierOf(source[2]);
+    const damage = GetTierOf(source[6]);
+    const resist = GetTierOf(source[8]);
+    const armor = GetTierOf(source[10]);
+    const health = GetTierOf(source[12]);
     line = [
       id,
       tier,
@@ -81,10 +81,10 @@ function DS_Update_GearTiersFormula() {
 
   const ranges = GetEmptyRows(rangeFormulas);
 
-  for (var g = 0; g < ranges.length; g++) {
-    var newData = [];
-    for (var row = ranges[g][0]; row < ranges[g][1]; row++) {
-      var newRow = [];
+  for (let g = 0; g < ranges.length; g++) {
+    const newData = [];
+    for (let row = ranges[g][0]; row < ranges[g][1]; row++) {
+      const newRow = [];
 
       // COST
       newRow[0] =
@@ -152,7 +152,7 @@ function DS_Update_GearTiersFormula() {
         row +
         ',1)+0))';
 
-      for (var c = 0; c < 6; c++) {
+      for (let c = 0; c < 6; c++) {
         newRow[3 + c] =
           '=IF(ISBLANK(P' +
           row +

@@ -60,8 +60,8 @@ function ImportAbilityFocus_19() {
 }
 
 function ImportAbilityFocus(index) {
-  var folderId = '1hIY1LFnY0wVrBfJw-nCUYoCHzXH-TRHk';
-  var abilityFocusFolder = DriveApp.getFolderById(folderId);
+  const folderId = '1hIY1LFnY0wVrBfJw-nCUYoCHzXH-TRHk';
+  const abilityFocusFolder = DriveApp.getFolderById(folderId);
 
   /*var files = abilityFocusFolder.getFilesByName("*.json");
     var file = null;
@@ -80,29 +80,29 @@ function ImportAbilityFocus(index) {
     if (file == null) return;
     */
 
-  var afSources = getNamedRangeValues('_AbilityFocus_Source');
-  var author = afSources[index][0];
+  const afSources = getNamedRangeValues('_AbilityFocus_Source');
+  const author = afSources[index][0];
 
-  var file = abilityFocusFolder.getFilesByName(author + '.json').next();
-  var content = file.getBlob().getDataAsString();
-  var json = JSON.parse(content);
+  const file = abilityFocusFolder.getFilesByName(author + '.json').next();
+  const content = file.getBlob().getDataAsString();
+  const json = JSON.parse(content);
 
-  var teams = json.Teams;
+  const teams = json.Teams;
 
-  var data = [];
+  const data = [];
 
   data[0] = [json.Author, 'HERO', 'BASIC', 'SPECIAL', 'ULTIMATE', 'PASSIVE', 'SECONDARY'];
 
-  var index = 1;
-  for (var t = 0; t < teams.length; t++) {
-    var teamId = teams[t].Id;
+  let _index = 1;
+  for (let t = 0; t < teams.length; t++) {
+    const teamId = teams[t].Id;
 
-    for (var h = 0; h < teams[t].Hero.length; h++) {
-      var hero = teams[t].Hero[h];
+    for (let h = 0; h < teams[t].Hero.length; h++) {
+      const hero = teams[t].Hero[h];
 
       output('Hero = ' + hero);
 
-      data[index++] = [
+      data[_index++] = [
         teamId,
         hero.id,
         hero.Abilities[0],
@@ -114,7 +114,7 @@ function ImportAbilityFocus(index) {
     }
   }
 
-  var sheet = GetSheet('_AbilityFocusTable');
+  const sheet = GetSheet('_AbilityFocusTable');
 
   // Clear current data
   ClearSheet(sheet, true);
@@ -123,6 +123,6 @@ function ImportAbilityFocus(index) {
   ResizeSheet(sheet, data.length, data[0].length);
 
   // Paste new data
-  var rangeData = sheet.getRange(1, 1, data.length, data[0].length);
+  const rangeData = sheet.getRange(1, 1, data.length, data[0].length);
   rangeData.setValues(data);
 }

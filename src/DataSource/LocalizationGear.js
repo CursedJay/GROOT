@@ -16,18 +16,18 @@ function DS_Update_Localization_Gear() {
   const globalContent = fileGlobal.getBlob().getDataAsString();
   const json = JSON.parse(globalContent);
 
-  var GearTierCap = Number(json.GearTierCap);
+  let GearTierCap = Number(json.GearTierCap);
   const overrideGTC = getNamedRangeValue('Preferences_OverrideMaxGearTier');
   if (overrideGTC != '' && Number(overrideGTC) > GearTierCap) GearTierCap = Number(overrideGTC);
 
-  var gearIndex = {};
-  var data = [];
+  const gearIndex = {};
+  const data = [];
 
   // Parse folders and add loc
-  var langFolders = locFolder.getFolders();
-  var langIndex = [];
+  const langFolders = locFolder.getFolders();
+  const langIndex = [];
 
-  for (var l = 0; l < _langIds.length; l++) {
+  for (let l = 0; l < _langIds.length; l++) {
     langIndex[_langIds[l].toUpperCase()] = 1 + l;
   }
 
@@ -38,12 +38,12 @@ function DS_Update_Localization_Gear() {
     const file = folder.getFilesByName('gear.csv').next();
 
     content = file.getBlob().getDataAsString();
-    var input = Utilities.parseCsv(content, ','.charCodeAt(0));
+    const input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
     // Parse lines of the CSV file
-    var row = 0;
-    for (var r = 1; r < input.length; r++) {
-      var id = input[r][0];
+    let row = 0;
+    for (let r = 1; r < input.length; r++) {
+      let id = input[r][0];
       if (id.indexOf('ID_GEAR_') != 0 || id.indexOf('_NAME') < 0) continue;
       id = id.substring(8, id.indexOf('_NAME'));
 
@@ -58,7 +58,7 @@ function DS_Update_Localization_Gear() {
         if (tier > GearTierCap) continue;
       }
 
-      var value = input[r][1];
+      const value = input[r][1];
       if (value == 'No one uses THIS gear piece') continue;
       if (id == 'T1_TECH_RESIST') continue; //Scopely removed 'No one uses THIS gear piece on that piece' in ZHS folder... lol
 

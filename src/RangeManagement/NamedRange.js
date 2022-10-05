@@ -14,8 +14,8 @@ function getNamedRangeIntegerOn(doc, name) {
   }
 }
 
-var _setValuesCount = 0;
-var _maxSetValue = 20000;
+let _setValuesCount = 0;
+const _maxSetValue = 20000;
 function setNamedRangeValueOn(doc, name, value) {
   if (_setValuesCount + 1 > _maxSetValue) return false;
 
@@ -25,7 +25,7 @@ function setNamedRangeValueOn(doc, name, value) {
 }
 
 function setNamedRangeValuesOn(doc, name, values) {
-  var total = values.length * values[0].length;
+  const total = values.length * values[0].length;
   if (_setValuesCount + total > _maxSetValue) return false;
 
   _setValuesCount += total;
@@ -70,12 +70,12 @@ function canSetValues(count) {
 }
 
 function setNamedRangeValuesResize(name, values) {
-  var range = getNamedRange(name);
+  let range = getNamedRange(name);
   range.clearContent();
 
   if (values.length == 0) return true;
 
-  var total = values.length * values[0].length;
+  const total = values.length * values[0].length;
   if (_setValuesCount + total > _maxSetValue) return false;
 
   range = range.getSheet().getRange(range.getRow(), range.getColumn(), values.length, values[0].length);

@@ -11,30 +11,30 @@ function DS_Update_Localization_Challenges() {
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();
   const locFolder = versionFolder.getFoldersByName('m3localization').next();
 
-  var listIndex = {};
-  var data = [];
+  const listIndex = {};
+  const data = [];
 
   // Parse folders and add loc
-  var langFolders = locFolder.getFolders();
-  var langIndex = {};
+  const langFolders = locFolder.getFolders();
+  const langIndex = {};
 
-  for (var l = 0; l < _langIds.length; l++) {
+  for (let l = 0; l < _langIds.length; l++) {
     langIndex[_langIds[l].toUpperCase()] = 1 + l;
   }
 
-  var row = 0;
+  let row = 0;
   while (langFolders.hasNext()) {
     const folder = langFolders.next();
     const langindex = langIndex[folder.getName().toUpperCase()];
 
     ///////////////////////////////////////////////////////////////////////////
-    var file = folder.getFilesByName('challenges.csv').next();
-    var content = file.getBlob().getDataAsString();
-    var input = Utilities.parseCsv(content, ','.charCodeAt(0));
+    let file = folder.getFilesByName('challenges.csv').next();
+    let content = file.getBlob().getDataAsString();
+    let input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
     // Parse lines of the CSV file
-    for (var r = 1; r < input.length; r++) {
-      var id = input[r][0];
+    for (let r = 1; r < input.length; r++) {
+      let id = input[r][0];
 
       if (id != 'ID_EVENT_LEGENDARY' && id != 'ID_EVENT_FLASH_EVENT' && id != 'ID_EVENT_CHARACTER_EVENT') {
         if (id.indexOf('_NAME') < 0) continue;
@@ -61,13 +61,13 @@ function DS_Update_Localization_Challenges() {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    var file = folder.getFilesByName('missions.csv').next();
-    var content = file.getBlob().getDataAsString();
-    var input = Utilities.parseCsv(content, ','.charCodeAt(0));
+    file = folder.getFilesByName('missions.csv').next();
+    content = file.getBlob().getDataAsString();
+    input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
     // Parse lines of the CSV file
-    for (var r = 1; r < input.length; r++) {
-      var id = input[r][0];
+    for (let r = 1; r < input.length; r++) {
+      let id = input[r][0];
 
       if (id.indexOf('_NAME') < 0) continue;
       id = id.substring(0, id.indexOf('_NAME'));
@@ -88,8 +88,8 @@ function DS_Update_Localization_Challenges() {
     input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
     // Parse lines of the CSV file
-    for (var r = 1; r < input.length; r++) {
-      var id = input[r][0];
+    for (let r = 1; r < input.length; r++) {
+      let id = input[r][0];
 
       if (
         id != 'ID_GAMEMODE_CAMPAIGNS' &&
@@ -112,9 +112,9 @@ function DS_Update_Localization_Challenges() {
     }
   }
 
-  for (var r = 0; r < data.length; r++) {
+  for (let r = 0; r < data.length; r++) {
     // If there's empty slots anywhere, use the ID as name
-    for (var l = 1; l < data[0].length; l++) {
+    for (let l = 1; l < data[0].length; l++) {
       if (data[r][l] == null) data[r][l] = data[r][0];
     }
   }

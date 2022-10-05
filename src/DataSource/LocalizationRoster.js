@@ -10,18 +10,18 @@ function DS_Update_Localization_Roster() {
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();
   const locFolder = versionFolder.getFoldersByName('m3localization').next();
 
-  var listIndex = {};
-  var data = [];
+  const listIndex = {};
+  const data = [];
 
   // Parse folders and add loc
-  var langFolders = locFolder.getFolders();
-  var langIndex = {};
+  const langFolders = locFolder.getFolders();
+  const langIndex = {};
 
-  for (var l = 0; l < _langIds.length; l++) {
+  for (let l = 0; l < _langIds.length; l++) {
     langIndex[_langIds[l].toUpperCase()] = 1 + l;
   }
 
-  var row = 0;
+  let row = 0;
   while (langFolders.hasNext()) {
     const folder = langFolders.next();
     const langindex = langIndex[folder.getName().toUpperCase()];
@@ -33,8 +33,8 @@ function DS_Update_Localization_Roster() {
     const input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
     // Parse lines of the CSV file
-    for (var r = 1; r < input.length; r++) {
-      var id = input[r][0];
+    for (let r = 1; r < input.length; r++) {
+      let id = input[r][0];
       if (id.startsWith('ID_ENUM_HERO_TRAIT_')) id = id.substring(8);
       else if (
         id == 'ID_ROSTER_FILTER_ALL' ||
@@ -53,9 +53,9 @@ function DS_Update_Localization_Roster() {
     }
   }
 
-  for (var r = 0; r < data.length; r++) {
+  for (let r = 0; r < data.length; r++) {
     // If there's empty slots anywhere, use the ID as name
-    for (var l = 1; l < data[0].length; l++) {
+    for (let l = 1; l < data[0].length; l++) {
       if (data[r][l] == null) data[r][l] = data[r][0];
     }
   }

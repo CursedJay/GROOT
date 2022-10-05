@@ -25,15 +25,15 @@ function InfoSourceUpdate() {
     'STORE_REDSTAR'
   ];
 
-  var data = [];
-  for (var r = 0; r < count; r++) {
+  const data = [];
+  for (let r = 0; r < count; r++) {
     const id = ids[r];
     const hero = json.Hero[id];
-    var line = [];
+    const line = [];
     line.push(id);
 
     if (hero.hasOwnProperty('RELEASE')) {
-      var date = new Date();
+      const date = new Date();
       try {
         date.setTime(parseInt(hero.RELEASE));
         line.push(date);
@@ -42,7 +42,7 @@ function InfoSourceUpdate() {
       }
     } else line.push('');
 
-    for (var f = 0; f < flags.length; f++) line.push(hero.Flags.includes(flags[f]));
+    for (let f = 0; f < flags.length; f++) line.push(hero.Flags.includes(flags[f]));
 
     data.push(line);
   }

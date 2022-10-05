@@ -1,4 +1,4 @@
-var _data;
+let _data;
 const _zaratoolsFolder = 'MSF_Zaratools';
 const _grootFilename = 'MSF_PlayerData.json';
 const _dataSourceFolderId = '1Geyeo5qv0RO5zHor-RXtBiTPeqhpjJQx';
@@ -23,7 +23,7 @@ function IsInvalidHero(id, invalidlist) {
     return true;
 
   if (invalidlist) {
-    for (var i = 0; i < invalidHero.length; i++) {
+    for (let i = 0; i < invalidHero.length; i++) {
       if (id == invalidHero[i]) {
         return true;
       }

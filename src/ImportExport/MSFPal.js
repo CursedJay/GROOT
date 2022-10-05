@@ -1,37 +1,37 @@
 function msfpal_import() {
-  var allianceId = getNamedRangeValue('Preferences_MSFPal_AllianceId');
-  var apiKey = getNamedRangeValue('Preferences_MSFPal_Key');
-  var playerName = getNamedRangeValue('Profile_Name');
+  const allianceId = getNamedRangeValue('Preferences_MSFPal_AllianceId');
+  const apiKey = getNamedRangeValue('Preferences_MSFPal_Key');
+  const playerName = getNamedRangeValue('Profile_Name');
 
-  var url = 'https://msf.pal.gg/rest/v1/alliance/' + allianceId + '/' + playerName + '/characters?api-key=' + apiKey;
-  var response = UrlFetchApp.fetch(url);
-  var heroes = JSON.parse(response.getContentText());
-  var rosterIds = getNamedRangeValues('Roster_Import_Ids');
-  var rosterData = getNamedRangeValues('Roster_Import_Data');
+  const url = 'https://msf.pal.gg/rest/v1/alliance/' + allianceId + '/' + playerName + '/characters?api-key=' + apiKey;
+  const response = UrlFetchApp.fetch(url);
+  const heroes = JSON.parse(response.getContentText());
+  const rosterIds = getNamedRangeValues('Roster_Import_Ids');
+  const rosterData = getNamedRangeValues('Roster_Import_Data');
 
   setIdConverter('_MSFPal_PalId', '_MSFPal_GameId');
 
-  var rosterNotesRange = getNamedRange('Roster_Notes');
-  var formulas = rosterNotesRange.getFormulas();
+  const rosterNotesRange = getNamedRange('Roster_Notes');
+  const formulas = rosterNotesRange.getFormulas();
 
-  var classOf = {};
+  const classOf = {};
   const classId = getNamedRangeValues('_Option_Class_Id');
   const className = getNamedRangeValues('_Option_Class_Name');
   classOf[''] = '';
-  for (var i = 0; i < classId.length; i++) {
+  for (let i = 0; i < classId.length; i++) {
     classOf[classId[i][0].toLowerCase()] = className[i][0];
   }
 
-  for (var i = 0; i < heroes.length; i++) {
-    var hero = heroes[i];
+  for (let i = 0; i < heroes.length; i++) {
+    const hero = heroes[i];
     if (hero.id == '') continue;
 
-    var id = valueOf(hero.id);
+    let id = valueOf(hero.id);
     if (id == '') id = hero.id;
 
     if (hero.unlocked) {
-      var s = -1;
-      for (var r = 0; r < rosterIds.length; r++) {
+      let s = -1;
+      for (let r = 0; r < rosterIds.length; r++) {
         if (rosterIds[r][0] == id) {
           s = r;
           break;
@@ -66,8 +66,8 @@ function msfpal_import() {
   setNamedRangeValues('Roster_Import_Ids', rosterIds);
   setNamedRangeValues('Roster_Import_Data', rosterData);
 
-  for (var row = 0; row < formulas.length; row++) {
-    var formula = formulas[row][0];
+  for (let row = 0; row < formulas.length; row++) {
+    const formula = formulas[row][0];
     if (formula) {
       rosterNotesRange.getCell(row + 1, 1).setFormula(formula);
     }
@@ -75,28 +75,28 @@ function msfpal_import() {
 }
 
 function msfpal_export() {
-  var allianceId = getNamedRangeValue('Preferences_MSFPal_AllianceId');
-  var apiKey = getNamedRangeValue('Preferences_MSFPal_Key');
-  var playerName = getNamedRangeValue('Profile_Name');
+  const allianceId = getNamedRangeValue('Preferences_MSFPal_AllianceId');
+  const apiKey = getNamedRangeValue('Preferences_MSFPal_Key');
+  const playerName = getNamedRangeValue('Profile_Name');
 
-  var rosterIds = getNamedRangeValues('Roster_Import_Ids');
-  var rosterData = getNamedRangeValues('Roster_Import_Data');
+  const rosterIds = getNamedRangeValues('Roster_Import_Ids');
+  const rosterData = getNamedRangeValues('Roster_Import_Data');
 
-  var heroes = [];
+  const heroes = [];
   setIdConverter('_MSFPal_GameId', '_MSFPal_PalId');
 
-  var classOf = {};
+  const classOf = {};
   const classId = getNamedRangeValues('_Option_Class_Id');
   const className = getNamedRangeValues('_Option_Class_Name');
   classOf[''] = '';
-  for (var i = 0; i < classId.length; i++) {
+  for (let i = 0; i < classId.length; i++) {
     classOf[className[i][0]] = classId[i][0].toLowerCase();
   }
 
-  for (var r = 0; r < rosterIds.length; r++) {
+  for (let r = 0; r < rosterIds.length; r++) {
     if (rosterIds[r][0] == '') continue;
 
-    var hero = {};
+    const hero = {};
 
     hero.id = valueOf(rosterIds[r][0]);
     if (hero.id == '') hero.id = rosterIds[r][0];
@@ -106,16 +106,16 @@ function msfpal_export() {
     if (rosterIds[r][1] == true) hero.favorite = true;
 
     if (hero.unlocked) {
-      var redStars = Number(0 + rosterData[r][1]);
-      var level = Number(0 + rosterData[r][2]);
-      var gear = Number(0 + rosterData[r][3]);
-      var basic = Number(0 + rosterData[r][18]);
-      var special = Number(0 + rosterData[r][19]);
-      var ultimate = Number(0 + rosterData[r][20]);
-      var passive = Number(0 + rosterData[r][21]);
-      var power = Number(0 + rosterData[r][22]);
-      var iso8class = rosterData[r][10];
-      var iso8level = Number(0 + rosterData[r][12]);
+      const redStars = Number(0 + rosterData[r][1]);
+      let level = Number(0 + rosterData[r][2]);
+      let gear = Number(0 + rosterData[r][3]);
+      const basic = Number(0 + rosterData[r][18]);
+      const special = Number(0 + rosterData[r][19]);
+      const ultimate = Number(0 + rosterData[r][20]);
+      const passive = Number(0 + rosterData[r][21]);
+      const power = Number(0 + rosterData[r][22]);
+      const iso8class = rosterData[r][10];
+      const iso8level = Number(0 + rosterData[r][12]);
 
       // Prevents fail when level is missing
       if (level == 0) level = 1;
@@ -138,7 +138,7 @@ function msfpal_export() {
     heroes[heroes.length] = hero;
   }
 
-  var fetchPost = {
+  const fetchPost = {
     method: 'post',
     contentType: 'application/json',
     payload: JSON.stringify(heroes)
@@ -146,7 +146,7 @@ function msfpal_export() {
 
   output(JSON.stringify(heroes));
 
-  var url = 'https://msf.pal.gg/rest/v1/alliance/' + allianceId + '/' + playerName + '/characters?api-key=' + apiKey;
+  const url = 'https://msf.pal.gg/rest/v1/alliance/' + allianceId + '/' + playerName + '/characters?api-key=' + apiKey;
   UrlFetchApp.fetch(url, fetchPost);
 }
 
@@ -154,31 +154,31 @@ function msfpal_export() {
 // MSFPAL EXPORT (Thanks to Maliciargh)
 // -------------------------------------------------
 function msfpal_exportCSV() {
-  var csvtext =
+  let csvtext =
     'id,label,unlocked,power,level,gearLevel,yellowStars,redStars,basic,special,ultimate,passive,iso8Class,iso8Level';
 
-  var folder = getFolder(_zaratoolsFolder, true);
+  const folder = getFolder(_zaratoolsFolder, true);
 
-  var rosterIds = getNamedRangeValues('Roster_Import_Ids');
-  var rosterData = getNamedRangeValues('Roster_Import_Data');
+  const rosterIds = getNamedRangeValues('Roster_Import_Ids');
+  const rosterData = getNamedRangeValues('Roster_Import_Data');
 
   setIdConverter('_MSFPal_GameId', '_MSFPal_PalId');
 
-  var classOf = {};
+  const classOf = {};
   const classId = getNamedRangeValues('_Option_Class_Id');
   const className = getNamedRangeValues('_Option_Class_Name');
   classOf[''] = '';
-  for (var i = 0; i < classId.length; i++) {
+  for (let i = 0; i < classId.length; i++) {
     classOf[className[i][0]] = classId[i][0].toLowerCase();
   }
 
-  for (var row = 0; row < rosterIds.length; row++) {
+  for (let row = 0; row < rosterIds.length; row++) {
     if (rosterIds[row][0] == '') continue;
 
-    var id = valueOf(rosterIds[row][0]);
+    let id = valueOf(rosterIds[row][0]);
     if (id == '') id = rosterIds[row][0];
 
-    var power = Number(rosterData[row][21]);
+    const power = Number(rosterData[row][21]);
 
     csvtext +=
       '\r\n' +

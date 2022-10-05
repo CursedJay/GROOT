@@ -12,10 +12,10 @@
 }*/
 
 function GetColumnValues(sheet, column, skipHeader) {
-  var rangeData = sheet.getRange(skipHeader ? 2 : 1, column, sheet.getMaxRows() - skipHeader ? 1 : 0).getValues();
-  var res = [];
+  const rangeData = sheet.getRange(skipHeader ? 2 : 1, column, sheet.getMaxRows() - skipHeader ? 1 : 0).getValues();
+  let res = [];
 
-  for (var i = 0; i < rangeData.length; i++) {
+  for (let i = 0; i < rangeData.length; i++) {
     res = rangeData[i][0];
   }
 
@@ -23,10 +23,10 @@ function GetColumnValues(sheet, column, skipHeader) {
 }
 
 function GetValuesIndexes(sheet, column, skipHeader) {
-  var rangeData = sheet.getRange(skipHeader ? 2 : 1, column, sheet.getMaxRows() - skipHeader ? 1 : 0).getValues();
-  var res = {};
+  const rangeData = sheet.getRange(skipHeader ? 2 : 1, column, sheet.getMaxRows() - skipHeader ? 1 : 0).getValues();
+  const res = {};
 
-  for (var i = 0; i < rangeData.length; i++) {
+  for (let i = 0; i < rangeData.length; i++) {
     res[rangeData[i][0]] = i;
   }
 

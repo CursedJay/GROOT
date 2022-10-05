@@ -51,14 +51,14 @@ function msftoolbot_import() {
     return;
   }
 
-  var importIds = getNamedRangeValues('Roster_Import_Ids');
-  var importData = getNamedRangeValues('Roster_Import_Data');
-  var rosterNotesRange = getNamedRange('Roster_Notes');
-  var formulas = rosterNotesRange.getFormulas();
+  const importIds = getNamedRangeValues('Roster_Import_Ids');
+  const importData = getNamedRangeValues('Roster_Import_Data');
+  const rosterNotesRange = getNamedRange('Roster_Notes');
+  const formulas = rosterNotesRange.getFormulas();
   const classData = getNamedRangeValues('_Option_Class');
   classOf = {};
   classOf[''] = '';
-  for (var i = 0; i < classData.length; i++) {
+  for (let i = 0; i < classData.length; i++) {
     classOf[classData[i][0]] = classData[i][1];
   }
 
@@ -66,11 +66,11 @@ function msftoolbot_import() {
   columnOf = {};
   sourceRow = [];
 
-  for (var i = 0; i < sourceData[0].length; i++) {
+  for (let i = 0; i < sourceData[0].length; i++) {
     columnOf[sourceData[0][i]] = i;
   }
 
-  for (var i = 1; i < sourceData.length; i++) {
+  for (let i = 1; i < sourceData.length; i++) {
     sourceRow = sourceData[i];
     const id = tb_value('ID');
     const gearPieces = [
@@ -86,9 +86,9 @@ function msftoolbot_import() {
     const iso8class = tb_value('IsoClass');
 
     // Find current position of this character
-    var s = -1;
-    var added = true;
-    for (var r = 0; r < importIds.length; r++) {
+    let s = -1;
+    let added = true;
+    for (let r = 0; r < importIds.length; r++) {
       if (importIds[r][0] == id) {
         s = r;
         added = false;
@@ -106,12 +106,12 @@ function msftoolbot_import() {
     importData[s][2] = tb_value('Level');
     importData[s][3] = tb_value('Tier');
 
-    for (var g = 0; g < gearPieces.length; g++) {
+    for (let g = 0; g < gearPieces.length; g++) {
       if (gearPieces[g] != '') importData[s][4 + g] = gearPieces[g];
     }
 
     if (iso8class != '') {
-      var isoMatrix = Number(tb_value('IsoPips'));
+      const isoMatrix = Number(tb_value('IsoPips'));
       importData[s][10] = iso8class;
 
       if (isoMatrix <= 5) {
@@ -123,7 +123,7 @@ function msftoolbot_import() {
       } else importData[s][12] = isoMatrix;
     }
 
-    for (var a = 0; a < gearPieces.length; a++) {
+    for (let a = 0; a < gearPieces.length; a++) {
       if (abilities[a] != '') importData[s][18 + a] = abilities[a];
     }
 
@@ -134,8 +134,8 @@ function msftoolbot_import() {
   setNamedRangeValues('Roster_Import_Ids', importIds);
   setNamedRangeValues('Roster_Import_Data', importData);
 
-  for (var row = 0; row < formulas.length; row++) {
-    var formula = formulas[row][0];
+  for (let row = 0; row < formulas.length; row++) {
+    const formula = formulas[row][0];
     if (formula) {
       rosterNotesRange.getCell(row + 1, 1).setFormula(formula);
     }

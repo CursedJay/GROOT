@@ -1,6 +1,6 @@
-var powermul_table = [];
-var statmod_table = [];
-var statmod_levels = [];
+let powermul_table = [];
+const statmod_table = [];
+const statmod_levels = [];
 
 /// Will update sheet _HeroData and _HeroData_PowerMul
 function DS_Update_HeroData() {
@@ -15,10 +15,10 @@ function DS_Update_HeroData() {
   const M3HeroSheet = heroesFolder.getFilesByName('M3HeroSheet.json').next();
   const M3GearTiers = heroesFolder.getFilesByName('M3GearTiers.csv').next();
 
-  var heroDataSheet = GetSheet('_HeroData');
-  var column = {};
-  var newData = [];
-  var heroIndex = {};
+  const heroDataSheet = GetSheet('_HeroData');
+  const column = {};
+  const newData = [];
+  const heroIndex = {};
 
   const columns = [
     'HERO_ID',
@@ -46,39 +46,39 @@ function DS_Update_HeroData() {
     'Resist_mod_index'
   ];
 
-  for (var c = 0; c < columns.length; c++) {
+  for (let c = 0; c < columns.length; c++) {
     column[columns[c]] = c;
   }
 
   // characters.json ====================================================================
-  var content = characters.getBlob().getDataAsString();
-  var json = JSON.parse(content);
+  let content = characters.getBlob().getDataAsString();
+  let json = JSON.parse(content);
 
-  var ids = Object.keys(json.Data);
-  var count = ids.length;
+  let ids = Object.keys(json.Data);
+  let count = ids.length;
 
-  var row = 0;
+  let row = 0;
 
   powermul_table = [];
 
-  for (var r = 0; r < count; r++) {
-    var id = ids[r];
+  for (let r = 0; r < count; r++) {
+    const id = ids[r];
 
     // MANAGE SKIPPED LINES -------------------------------------------------
     if (IsInvalidHero(id, true)) continue;
 
-    var d = json.Data[id];
+    const d = json.Data[id];
 
     if (!d.hasOwnProperty('special')) continue;
 
-    var traits = d.traits;
-    var minion = false;
+    const traits = d.traits;
+    let minion = false;
 
     if (traits == null) continue;
 
     // Safety net: skip some NPC traits (should be skipped by IsInvalidHero already)
-    var skip = false;
-    for (var t = 0; t < traits.length; t++) {
+    let skip = false;
+    for (let t = 0; t < traits.length; t++) {
       if (traits[t] == 'Summon' || traits[t] == 'Operator' || traits[t] == 'DoomBot') {
         skip = true;
         break;
@@ -91,9 +91,9 @@ function DS_Update_HeroData() {
     // -----------------------------------------------------------------------
 
     // Create the data line
-    var herodata = [];
+    const herodata = [];
 
-    var n = column['affiliation1'];
+    let n = column['affiliation1'];
     heroIndex[id] = row;
 
     herodata[column['HERO_ID']] = id;
@@ -101,8 +101,8 @@ function DS_Update_HeroData() {
 
     if (minion) herodata[n++] = 'HERO_TRAIT_MINION';
 
-    for (var t = 0; t < traits.length; t++) {
-      var trait = typeof traits[t] == 'string' ? 'HERO_TRAIT_' + traits[t].toUpperCase() : null;
+    for (let t = 0; t < traits.length; t++) {
+      const trait = typeof traits[t] == 'string' ? 'HERO_TRAIT_' + traits[t].toUpperCase() : null;
 
       switch (GetTraitType(traits[t])) {
         case 'Alignment':
@@ -135,14 +135,14 @@ function DS_Update_HeroData() {
   ids = Object.keys(json);
   count = ids.length;
 
-  for (var i = 0; i < count; i++) {
-    var s = 100;
-    var id = ids[i];
+  for (let i = 0; i < count; i++) {
+    let s = 100;
+    const id = ids[i];
 
     // Skip the heroes not in the previous list
     if (!heroIndex.hasOwnProperty(id)) continue;
-    var d = json[id];
-    var index = heroIndex[id];
+    const d = json[id];
+    const index = heroIndex[id];
 
     if (d.hasOwnProperty('speed_Override')) s = d.speed_Override[1];
 
@@ -161,13 +161,13 @@ function DS_Update_HeroData() {
   ids = Object.keys(json);
   count = ids.length;
 
-  for (var i = 0; i < count; i++) {
-    var id = ids[i];
+  for (let i = 0; i < count; i++) {
+    const id = ids[i];
 
     // Skip the heroes not in the previous list
     if (!heroIndex.hasOwnProperty(id)) continue;
-    var d = json[id];
-    var index = heroIndex[id];
+    const d = json[id];
+    const index = heroIndex[id];
 
     newData[index][column['player_Character']] = d.player_Character;
     newData[index][column['unlock_StarLevel']] = d.unlock_StarLevel;
@@ -175,16 +175,16 @@ function DS_Update_HeroData() {
 
   // M3GearTier ==========================================================================
   content = M3GearTiers.getBlob().getDataAsString();
-  var input = Utilities.parseCsv(content, ','.charCodeAt(0));
+  const input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
   count = input.length;
 
-  for (var i = 1; i < count; i++) {
-    var id = input[i][0];
+  for (let i = 1; i < count; i++) {
+    const id = input[i][0];
 
     // Skip the heroes not in the previous list
     if (!heroIndex.hasOwnProperty(id)) continue;
-    var index = heroIndex[id];
+    const index = heroIndex[id];
 
     newData[index][column['base health']] = input[i][14];
     newData[index][column['base damage']] = input[i][15];
@@ -200,25 +200,25 @@ function DS_Update_HeroData() {
   if (!UpdateSortedRangeData(heroDataSheet, 1, 1, newData[0].length, 1, newData)) return false;
 
   // Stats mod table =========================
-  var heroStats = [];
+  const heroStats = [];
   heroStats[0] = [];
-  var len = 0;
+  let len = 0;
 
   // Header: levels
   statmod_levels[1] = true;
-  for (var c = 0; c < statmod_levels.length; c++) {
+  for (let c = 0; c < statmod_levels.length; c++) {
     if (statmod_levels[c] == true) heroStats[0][len++] = c;
   }
 
-  for (var r = 0; r < statmod_table.length; r++) {
+  for (let r = 0; r < statmod_table.length; r++) {
     heroStats[r + 1] = [];
-    var value = 0.3;
-    var index = 0;
-    var stats = statmod_table[r];
-    var statsk = Object.keys(stats);
-    var len = statsk.length;
+    let value = 0.3;
+    let index = 0;
+    const stats = statmod_table[r];
+    const statsk = Object.keys(stats);
+    len = statsk.length;
 
-    for (var c = 0; c < heroStats[0].length; c++) {
+    for (let c = 0; c < heroStats[0].length; c++) {
       if (index < statsk.length && statsk[index] == heroStats[0][c]) value = stats[statsk[index++]];
 
       heroStats[r + 1][c] = value;
@@ -237,17 +237,17 @@ function DS_Update_HeroDataFormula() {
   const rangeNameFormula = heroDataSheet.getRange(1, heroDataSheet.getMaxColumns(), height, 1).getFormulas();
   const ranges = GetEmptyRows(rangeNameFormula);
 
-  for (var i = 0; i < ranges.length; i++) {
+  for (let i = 0; i < ranges.length; i++) {
     // Formulas =============================
-    var formulas = [];
+    const formulas = [];
 
-    for (var index = ranges[i][0]; index < ranges[i][1]; index++) {
+    for (let index = ranges[i][0]; index < ranges[i][1]; index++) {
       const rindex = '$Y' + index; // Roster index column name
       const lindex = '$Z' + index; // Level column name
       const gindex = '$AC' + index; // Gear column name
       const hsindex = '$AD' + index; // HeroStats2 LevelIndex
       const gtindex = '$AE' + index; // GearTier Hero Index
-      var forms = [];
+      const forms = [];
 
       // Hero Name - Only used for color...
       forms.push(
@@ -305,9 +305,9 @@ function DS_Update_HeroDataFormula() {
       forms.push('=IF(ISBLANK(' + lindex + '),,' + gtindex + '+' + gindex + '-INDEX(_GearTiers_Tier,' + gtindex + '))');
 
       // GearTiers - Gear Index
-      const statsTiersIndex = [1, , 2, 3, 4, 5];
-      for (var part = 0; part < 6; part++) {
-        if (part == 1)
+      const statsTiersIndex = [1, 0, 2, 3, 4, 5];
+      for (let part = 0; part < 6; part++) {
+        if (part === 1)
           forms.push('=IF(OR(ISBLANK(' + lindex + '),INDEX(Roster_GearParts,' + rindex + ',2)<>TRUE),,' + gindex + ')');
         else
           forms.push(
@@ -326,16 +326,16 @@ function DS_Update_HeroDataFormula() {
       }
 
       // Gear stats
-      var statsMods = [];
+      const statsMods = [];
       const statscols = ['S', 'T', 'U', 'V', 'W']; // Mod index
-      for (var c = 0; c < statscols.length; c++) {
+      for (let c = 0; c < statscols.length; c++) {
         const statCell = statscols[c] + index;
         statsMods.push('OFFSET(_M3HeroStats!$A$1,' + statCell + ',' + hsindex + ')');
       }
 
       const baseStat = ['M', 'N', 'O', 'P', 'Q'];
       const gearCol = ['$AG' + index, '$AH' + index, '$AI' + index, '$AJ' + index, '$AK' + index, '$AL' + index];
-      var gearStats = [];
+      const gearStats = [];
       const gearLibStat = [
         '_GearLibrary_Stats_Focus',
         '_GearLibrary_Hero_Stats',
@@ -344,10 +344,10 @@ function DS_Update_HeroDataFormula() {
         '_GearLibrary_Stats_Armor',
         '_GearLibrary_Stats_Health'
       ];
-      for (var c = 0; c < baseStat.length; c++) {
-        var f = '(INDEX(_GearTiers_BaseStats,$AF' + index + ',' + (c + 1) + ')';
+      for (let c = 0; c < baseStat.length; c++) {
+        let f = '(INDEX(_GearTiers_BaseStats,$AF' + index + ',' + (c + 1) + ')';
 
-        for (var g = 0; g < gearCol.length; g++) {
+        for (let g = 0; g < gearCol.length; g++) {
           f += ' + IF(ISBLANK(' + gearCol[g] + '),,INDEX(' + gearLibStat[g] + ',' + gearCol[g] + ',' + (c + 1) + '))';
         }
 
@@ -357,8 +357,8 @@ function DS_Update_HeroDataFormula() {
       }
 
       // Stark Tech %
-      var starkTech = [];
-      for (var st = 1; st <= 5; st++)
+      const starkTech = [];
+      for (let st = 1; st <= 5; st++)
         starkTech.push(
           'IF(' +
             lindex +
@@ -373,7 +373,7 @@ function DS_Update_HeroDataFormula() {
       const statFactor = ['', '(0.06+1/4.25)*', '0.06*', '', ''];
 
       // Total stats
-      for (var s = 0; s < statFactor.length; s++) {
+      for (let s = 0; s < statFactor.length; s++) {
         forms.push(
           '=IF(ISBLANK(' +
             lindex +
@@ -456,73 +456,43 @@ function DS_Update_HeroDataFormula() {
 }
 
 function GetPowerMulIndex(d, minion) {
-  var basic = d.basic.power_mul;
-  var special = d.special.power_mul;
-  var ultimate = minion ? null : d.ultimate.power_mul;
-  var passive = d.passive_power_mul || [1, 1, 1, 1, 1];
+  const basic = d.basic.power_mul;
+  const special = d.special.power_mul;
+  const ultimate = minion ? null : d.ultimate.power_mul;
+  const passive = d.passive_power_mul || [1, 1, 1, 1, 1];
 
-  var line = [];
+  const line = [
+    basic[1],
+    basic[2],
+    basic[3],
+    basic[4],
+    basic[5],
+    basic[6],
+    special[1],
+    special[2],
+    special[3],
+    special[4],
+    special[5],
+    special[6],
+    ultimate?.[0],
+    ultimate?.[1],
+    ultimate?.[2],
+    ultimate?.[3],
+    ultimate?.[4],
+    ultimate?.[5],
+    ultimate?.[6],
+    passive[0],
+    passive[1],
+    passive[2],
+    passive[3],
+    passive[4]
+  ];
 
-  if (minion)
-    line = [
-      basic[1],
-      basic[2],
-      basic[3],
-      basic[4],
-      basic[5],
-      basic[6],
-      special[1],
-      special[2],
-      special[3],
-      special[4],
-      special[5],
-      special[6],
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      passive[0],
-      passive[1],
-      passive[2],
-      passive[3],
-      passive[4]
-    ];
-  else
-    line = [
-      basic[1],
-      basic[2],
-      basic[3],
-      basic[4],
-      basic[5],
-      basic[6],
-      special[1],
-      special[2],
-      special[3],
-      special[4],
-      special[5],
-      special[6],
-      ultimate[0],
-      ultimate[1],
-      ultimate[2],
-      ultimate[3],
-      ultimate[4],
-      ultimate[5],
-      ultimate[6],
-      passive[0],
-      passive[1],
-      passive[2],
-      passive[3],
-      passive[4]
-    ];
-
-  var i = 0;
+  let i = 0;
   for (i = 0; i < powermul_table.length; i++) {
-    var power = powermul_table[i];
-    var equals = true;
-    for (var j = 0; j < power.length; j++) {
+    const power = powermul_table[i];
+    let equals = true;
+    for (let j = 0; j < power.length; j++) {
       if (line[j] != power[j]) {
         equals = false;
         break;
@@ -537,18 +507,18 @@ function GetPowerMulIndex(d, minion) {
 }
 
 function GetStatModIndex(mods) {
-  var modsk = Object.keys(mods);
-  var i = 0;
+  const modsk = Object.keys(mods);
+  let i = 0;
 
   for (i = 0; i < statmod_table.length; i++) {
-    var stats = statmod_table[i];
-    var statsk = Object.keys(stats);
+    const stats = statmod_table[i];
+    const statsk = Object.keys(stats);
 
     if (statsk.length != modsk.length) continue;
 
-    var equals = true;
+    let equals = true;
 
-    for (var j = 0; j < statsk.length; j++) {
+    for (let j = 0; j < statsk.length; j++) {
       if (statsk[j] != modsk[j] || stats[statsk[j]] != mods[statsk[j]]) {
         equals = false;
         break;
@@ -557,7 +527,7 @@ function GetStatModIndex(mods) {
     if (equals) return i;
   }
 
-  for (var j = 0; j < modsk.length; j++) {
+  for (let j = 0; j < modsk.length; j++) {
     statmod_levels[modsk[j]] = true;
   }
   statmod_table[i] = mods;

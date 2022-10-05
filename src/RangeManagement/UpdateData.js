@@ -1,18 +1,18 @@
 function Test_UpdateData() {
-  var sheet = GetSheet('_GTTest');
+  const sheet = GetSheet('_GTTest');
 
   //var data = [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [11, 12, 13, 14, 15]];
-  var data = [];
+  const data = [];
   //var characters = ["AimControl_Infect", "AimDmg_Offense", "AimSupport_Heal", "Hela", "HumanTorch", "Hulk", "HydraDmg_AoE", "HydraDmg_Buff"];
-  var characters = ['HumanTorch', 'Hulk', 'YoYo'];
+  const characters = ['HumanTorch', 'Hulk', 'YoYo'];
 
-  for (var h = 0; h < characters.length; h++) {
-    for (var g = 1; g <= 3; g++) {
+  for (let h = 0; h < characters.length; h++) {
+    for (let g = 1; g <= 3; g++) {
       data.push([characters[h], g, 'Tech']);
     }
   }
 
-  var setValues = false;
+  let setValues = false;
 
   setValues = true;
   //----------------------------
@@ -31,22 +31,22 @@ function Test_UpdateData() {
 }
 // Change sheet size and update any data that has changed (if any)
 function UpdateRangeData(sheet, firstRow, firstColumn, lastColumn, newData) {
-  var currentData = sheet
+  const currentData = sheet
     .getRange(firstRow, firstColumn, sheet.getMaxRows() - firstRow + 1, lastColumn - firstColumn + 1)
     .getValues();
-  var rowCopy = -1;
-  var cMin;
-  var cMax;
+  let rowCopy = -1;
+  let cMin;
+  let cMax;
 
-  var copyArea = [];
+  const copyArea = [];
 
   // Check all lines of the current sheet
-  for (var r = 0; r < currentData.length; r++) {
+  for (let r = 0; r < currentData.length; r++) {
     // Less data on the new table, let's skip
     if (r >= newData.length) break;
 
-    var first = -1;
-    for (var c = 0; c < currentData[r].length; c++) {
+    let first = -1;
+    for (let c = 0; c < currentData[r].length; c++) {
       if (currentData[r][c] == '' && newData[r][c] == null) continue;
       if (currentData[r][c] != newData[r][c]) {
         first = c;
@@ -65,7 +65,7 @@ function UpdateRangeData(sheet, firstRow, firstColumn, lastColumn, newData) {
     }
 
     // There's changes on this line, check the right limit
-    var last;
+    let last;
     for (last = currentData[r].length - 1; last > first; last--) {
       if (currentData[r][last] == '' && newData[r][last] == null) continue;
       if (currentData[r][last] != newData[r][last]) break;
@@ -98,12 +98,12 @@ function UpdateRangeData(sheet, firstRow, firstColumn, lastColumn, newData) {
   }
 
   // Patch data
-  for (var i = 0; i < copyArea.length; i++) {
-    var area = copyArea[i];
-    var patch = [];
-    for (var r = area[0]; r < area[2]; r++) {
-      var row = [];
-      for (var c = area[1]; c < area[3]; c++) {
+  for (let i = 0; i < copyArea.length; i++) {
+    const area = copyArea[i];
+    const patch = [];
+    for (let r = area[0]; r < area[2]; r++) {
+      const row = [];
+      for (let c = area[1]; c < area[3]; c++) {
         row.push(newData[r][c]);
       }
       patch.push(row);
@@ -120,19 +120,19 @@ function UpdateRangeFormula(sheet, firstRow, firstColumn, lastColumn, newData) {
   const currentData = sheet
     .getRange(firstRow, firstColumn, sheet.getMaxRows() - firstRow + 1, lastColumn - firstColumn + 1)
     .getFormulas();
-  var rowCopy = -1;
-  var cMin;
-  var cMax;
+  let rowCopy = -1;
+  let cMin;
+  let cMax;
 
-  var copyArea = [];
+  const copyArea = [];
 
   // Check all lines of the current sheet
-  for (var r = 0; r < currentData.length; r++) {
+  for (let r = 0; r < currentData.length; r++) {
     // Less data on the new table, let's skip
     if (r >= newData.length) break;
 
-    var first = -1;
-    for (var c = 0; c < currentData[r].length; c++) {
+    let first = -1;
+    for (let c = 0; c < currentData[r].length; c++) {
       if (currentData[r][c] == '' && newData[r][c] == null) continue;
       if (currentData[r][c] != newData[r][c]) {
         first = c;
@@ -151,7 +151,7 @@ function UpdateRangeFormula(sheet, firstRow, firstColumn, lastColumn, newData) {
     }
 
     // There's changes on this line, check the right limit
-    var last;
+    let last;
     for (last = currentData[r].length - 1; last > first; last--) {
       if (currentData[r][last] == '' && newData[r][last] == null) continue;
       if (currentData[r][last] != newData[r][last]) break;
@@ -183,12 +183,12 @@ function UpdateRangeFormula(sheet, firstRow, firstColumn, lastColumn, newData) {
   }
 
   // Patch data
-  for (var i = 0; i < copyArea.length; i++) {
-    var area = copyArea[i];
-    var patch = [];
-    for (var r = area[0]; r < area[2]; r++) {
-      var row = [];
-      for (var c = area[1]; c < area[3]; c++) {
+  for (let i = 0; i < copyArea.length; i++) {
+    const area = copyArea[i];
+    const patch = [];
+    for (let r = area[0]; r < area[2]; r++) {
+      const row = [];
+      for (let c = area[1]; c < area[3]; c++) {
         row.push(newData[r][c]);
       }
       patch.push(row);
@@ -202,22 +202,22 @@ function UpdateRangeFormula(sheet, firstRow, firstColumn, lastColumn, newData) {
 
 // Update data when the table is sorted (insert, update or remove rows accordingly)
 function UpdateSortedRangeData(sheet, firstRow, firstColumn, lastColumn, keyColumns, newData) {
-  var currentData = sheet
+  const currentData = sheet
     .getRange(firstRow, firstColumn, sheet.getMaxRows() - firstRow + 1, lastColumn - firstColumn + 1)
     .getValues();
-  var rowCopy = -1;
-  var cMin;
-  var cMax;
-  var bufferSize = 0;
-  var incomplete = false;
+  let rowCopy = -1;
+  let cMin;
+  let cMax;
+  let bufferSize = 0;
+  let incomplete = false;
 
-  var copyArea = [];
+  const copyArea = [];
 
   // Sort the data, just to be completely sure it's fine (ex: GearTier data is sorted... except HumanTorch is before Hulk)
   SortTable(newData, 2);
 
   // Check all lines of the current sheet
-  for (var r = 0; r < currentData.length && r < newData.length; r++) {
+  for (let r = 0; r < currentData.length && r < newData.length; r++) {
     //output("row... " + r);
     //output(" > currentData[r][0] = " + currentData[r][0]);
     //output(" > newData[r][0] = " + newData[r][0]);
@@ -230,7 +230,7 @@ function UpdateSortedRangeData(sheet, firstRow, firstColumn, lastColumn, keyColu
 
     // Delete one or multiple rows
     if (keyDiff > 0) {
-      var r2 = r + 1;
+      let r2 = r + 1;
       for (; r2 < currentData.length; r2++) {
         const keyDiff2 = CompareData(currentData[r2], newData[r], 0, keyColumns);
         if (keyDiff2 <= 0) break;
@@ -246,8 +246,8 @@ function UpdateSortedRangeData(sheet, firstRow, firstColumn, lastColumn, keyColu
 
     // Insert one or multiple rows
     if (keyDiff < 0) {
-      var r2 = r + 1;
-      var thenExit = false;
+      let r2 = r + 1;
+      let thenExit = false;
       if (!canSetValues(newData[0].length)) return false;
 
       for (; r2 < newData.length; r2++) {
@@ -263,8 +263,8 @@ function UpdateSortedRangeData(sheet, firstRow, firstColumn, lastColumn, keyColu
       const count = r2 - r;
       if (count > 0) {
         sheet.insertRowsBefore(firstRow + r, count);
-        var patch = [];
-        for (var row = r; row < r2; row++) {
+        const patch = [];
+        for (let row = r; row < r2; row++) {
           patch.push(newData[row]);
           currentData.splice(r, 0, newData[row]);
         }
@@ -279,7 +279,7 @@ function UpdateSortedRangeData(sheet, firstRow, firstColumn, lastColumn, keyColu
     }
 
     // Same key, different value: add to the copy area
-    var first;
+    let first;
     //output('First...');
     for (first = keyColumns; first < currentData[r].length; first++) {
       if (currentData[r][first] == '' && newData[r][first] == null) continue;
@@ -297,7 +297,7 @@ function UpdateSortedRangeData(sheet, firstRow, firstColumn, lastColumn, keyColu
       continue;
     }
 
-    var last;
+    let last;
     for (last = currentData[r].length - 1; last > first; last--) {
       if (currentData[r][last] == '' && newData[r][last] == null) continue;
       if (currentData[r][last] != newData[r][last]) {
@@ -351,12 +351,12 @@ function UpdateSortedRangeData(sheet, firstRow, firstColumn, lastColumn, keyColu
   }
 
   // Patch data
-  for (var i = 0; i < copyArea.length; i++) {
-    var area = copyArea[i];
-    var patch = [];
-    for (var r = area[0]; r < area[2]; r++) {
-      var row = [];
-      for (var c = area[1]; c < area[3]; c++) {
+  for (let i = 0; i < copyArea.length; i++) {
+    const area = copyArea[i];
+    const patch = [];
+    for (let r = area[0]; r < area[2]; r++) {
+      const row = [];
+      for (let c = area[1]; c < area[3]; c++) {
         row.push(newData[r][c]);
       }
       patch.push(row);

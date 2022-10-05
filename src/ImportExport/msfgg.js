@@ -8,21 +8,21 @@ function msfgg_saveData() {
 }
 
 function msfgg_exportWarDefense() {
-  var csvtext = 'position,character1,character2,character3,character4,character5\r\n';
+  let csvtext = 'position,character1,character2,character3,character4,character5\r\n';
 
-  var folder = getFolder(_zaratoolsFolder, true);
-  var playerName = getNamedRangeValue('Profile_Name');
-  var warDefenseIds = getNamedRangeValues('_War_Heroes_Defense');
+  const folder = getFolder(_zaratoolsFolder, true);
+  const playerName = getNamedRangeValue('Profile_Name');
+  const warDefenseIds = getNamedRangeValues('_War_Heroes_Defense');
 
-  for (var team = 0; team < 8; team++) {
-    for (var hero = 0; hero < 5; hero++) {
+  for (let team = 0; team < 8; team++) {
+    for (let hero = 0; hero < 5; hero++) {
       csvtext += warDefenseIds[team * 5 + hero];
       if (hero < 4) csvtext += ',';
     }
     csvtext += '\r\n';
   }
 
-  var filename = playerName + '-war-defense.csv';
+  const filename = playerName + '-war-defense.csv';
   folder.createFile(filename, csvtext);
   Browser.msgBox('File "' + filename + '" is waiting in your Drive.\nCheck https://drive.google.com/drive/my-drive');
 }
@@ -35,21 +35,21 @@ function msfgg_import() {
   const roster = JSON.parse(response.getContentText());
   //const roster = getFileContent(); //to test
 
-  var rosterIds = getNamedRangeValues('Roster_Import_Ids');
-  var rosterData = getNamedRangeValues('Roster_Import_Data');
+  const rosterIds = getNamedRangeValues('Roster_Import_Ids');
+  const rosterData = getNamedRangeValues('Roster_Import_Data');
   setIdConverter('_Option_Class_Id', '_Option_Class_Name');
-  var rosterNotesRange = getNamedRange('Roster_Notes');
-  var formulas = rosterNotesRange.getFormulas();
+  const rosterNotesRange = getNamedRange('Roster_Notes');
+  const formulas = rosterNotesRange.getFormulas();
 
-  var characters = Object.keys(roster);
+  const characters = Object.keys(roster);
 
-  for (var i = 0; i < characters.length; i++) {
-    var characterId = characters[i];
-    var hero = roster[characterId];
+  for (let i = 0; i < characters.length; i++) {
+    const characterId = characters[i];
+    const hero = roster[characterId];
 
     if (characterId === 'undefined') continue;
-    var s = -1;
-    for (var r = 0; r < rosterIds.length; r++) {
+    let s = -1;
+    for (let r = 0; r < rosterIds.length; r++) {
       if (rosterIds[r][0] == characterId) {
         s = r;
         break;
@@ -64,9 +64,9 @@ function msfgg_import() {
     rosterData[s][2] = hero.level == 0 ? '' : hero.level;
     rosterData[s][3] = hero.tier == 0 ? '' : hero.tier;
 
-    for (var gearPart = 1; gearPart <= 6; gearPart++) {
-      var slot = 'slot' + gearPart;
-      var equipped = hero[slot];
+    for (let gearPart = 1; gearPart <= 6; gearPart++) {
+      const slot = 'slot' + gearPart;
+      const equipped = hero[slot];
       rosterData[s][4 + (gearPart - 1)] = Number(equipped) == 1;
     }
 
@@ -91,8 +91,8 @@ function msfgg_import() {
   setNamedRangeValues('Roster_Import_Ids', rosterIds);
   setNamedRangeValues('Roster_Import_Data', rosterData);
 
-  for (var row = 0; row < formulas.length; row++) {
-    var formula = formulas[row][0];
+  for (let row = 0; row < formulas.length; row++) {
+    const formula = formulas[row][0];
     if (formula) {
       rosterNotesRange.getCell(row + 1, 1).setFormula(formula);
     }
@@ -245,20 +245,20 @@ function msfgg_exportCSV()
 */
 
 function msfgg_export() {
-  var roster = [];
+  const roster = [];
   const rosterIds = getNamedRangeValues('Roster_Import_Ids');
   const rosterData = getNamedRangeValues('Roster_Import_Data');
 
   setIdConverter('_Option_Class_Name', '_Option_Class_Id');
 
-  for (var row = 0; row < rosterIds.length; row++) {
-    var id = rosterIds[row][0];
+  for (let row = 0; row < rosterIds.length; row++) {
+    const id = rosterIds[row][0];
     if (id == '') continue;
 
-    var skillId = valueOf(rosterData[row][10]).toLowerCase();
+    let skillId = valueOf(rosterData[row][10]).toLowerCase();
     if (skillId == '') skillId = null;
 
-    var hero = {
+    const hero = {
       HeroId: id,
       Power: rosterData[row][22] == '' ? 0 : Number(rosterData[row][22]),
       Level: rosterData[row][2] == '' ? 0 : Number(rosterData[row][2]),
@@ -293,21 +293,21 @@ function msfgg_export() {
     //break;
   }
 
-  var data = {
+  const data = {
     ID: getNamedRangeValue('Preferences_MSFgg_Id'),
     Key: getNamedRangeValue('Preferences_MSFgg_Key'),
     Roster: roster
   };
 
-  var fetchPost = {
+  const fetchPost = {
     method: 'post',
     headers: { Authorization: 'Bearer ' + msfggtoken },
     contentType: 'application/json',
     payload: JSON.stringify(data)
   };
 
-  var url = 'https://api.msf.gg/services/api/saveRoster';
-  var res = UrlFetchApp.fetch(url, fetchPost);
+  const url = 'https://api.msf.gg/services/api/saveRoster';
+  const res = UrlFetchApp.fetch(url, fetchPost);
 
   output(res);
 }

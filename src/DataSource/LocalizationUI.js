@@ -12,14 +12,14 @@ function DS_Update_Localization_UI() {
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();
   const locFolder = versionFolder.getFoldersByName('m3localization').next();
 
-  var listIndex = {};
-  var data = [];
+  const listIndex = {};
+  const data = [];
 
   // Parse folders and add loc
-  var langFolders = locFolder.getFolders();
-  var langIndex = {};
+  const langFolders = locFolder.getFolders();
+  const langIndex = {};
 
-  for (var l = 0; l < _langIds.length; l++) {
+  for (let l = 0; l < _langIds.length; l++) {
     langIndex[_langIds[l].toUpperCase()] = 1 + l;
   }
 
@@ -76,21 +76,21 @@ function DS_Update_Localization_UI() {
   const sourceFiles = ['ui.csv', 'store.csv'];
   const sourceIds = [uiIds, storeIds];
 
-  var row = 0;
+  let row = 0;
 
   while (langFolders.hasNext()) {
     const folder = langFolders.next();
     const langindex = langIndex[folder.getName().toUpperCase()];
 
-    for (var source = 0; source < sourceFiles.length; source++) {
+    for (let source = 0; source < sourceFiles.length; source++) {
       ////////////////////////////////////////////////////////////////////////////
       const file = folder.getFilesByName(sourceFiles[source]).next();
       const content = file.getBlob().getDataAsString();
       const input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
       // Parse lines of the CSV file
-      for (var r = 1; r < input.length; r++) {
-        var id = input[r][0];
+      for (let r = 1; r < input.length; r++) {
+        let id = input[r][0];
 
         if (!sourceIds[source].includes(id)) continue;
 
@@ -102,10 +102,10 @@ function DS_Update_Localization_UI() {
           listIndex[id] = row++;
         }
 
-        var value = input[r][1];
+        let value = input[r][1];
 
         while (value.includes('{') && value.includes('}')) {
-          var val = value;
+          const val = value;
           value = '';
           if (val.indexOf('{') > 0) value = val.substring(0, val.indexOf('{'));
           value += val.substring(val.indexOf('}') + 1);
@@ -119,9 +119,9 @@ function DS_Update_Localization_UI() {
     }
   }
 
-  for (var r = 0; r < data.length; r++) {
+  for (let r = 0; r < data.length; r++) {
     // If there's empty slots anywhere, use the ID as name
-    for (var l = 1; l < data[0].length; l++) {
+    for (let l = 1; l < data[0].length; l++) {
       if (data[r][l] == null) data[r][l] = data[r][0];
     }
   }

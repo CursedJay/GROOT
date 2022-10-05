@@ -13,25 +13,25 @@ function DS_Update_Localization_Heroes() {
   const characters = combat_dataFolder.getFilesByName('characters.json').next();
   const locFolder = versionFolder.getFoldersByName('m3localization').next();
 
-  var heroIndex = {};
-  var data = [[]];
+  const heroIndex = {};
+  const data = [[]];
 
   // characters.json ====================================================================
-  var content = characters.getBlob().getDataAsString();
-  var json = JSON.parse(content);
+  let content = characters.getBlob().getDataAsString();
+  const json = JSON.parse(content);
 
-  var ids = Object.keys(json.Data);
-  var count = ids.length;
-  var row = 0;
+  const ids = Object.keys(json.Data);
+  const count = ids.length;
+  let row = 0;
 
   // Parse all the characters, and skip the irrelevant ones
-  for (var r = 0; r < count; r++) {
-    var id = ids[r];
+  for (let r = 0; r < count; r++) {
+    const id = ids[r];
     // Keep VIP_A considering he's got a specific portrait
     if (id != 'VIPMaleAOperator' && IsInvalidHero(id, false)) continue;
 
-    var d = json.Data[id];
-    var traits = d.traits;
+    const d = json.Data[id];
+    const traits = d.traits;
     if (traits == null) continue;
 
     heroIndex[id.toUpperCase()] = row;
@@ -43,9 +43,9 @@ function DS_Update_Localization_Heroes() {
 
   // Parse folders and add loc
   const langFolders = locFolder.getFolders();
-  var langIndex = [];
+  const langIndex = [];
 
-  for (var l = 0; l < _langIds.length; l++) {
+  for (let l = 0; l < _langIds.length; l++) {
     langIndex[_langIds[l].toUpperCase()] = l + 1;
   }
 
@@ -59,10 +59,10 @@ function DS_Update_Localization_Heroes() {
     const file = folder.getFilesByName('heroes.csv').next();
 
     content = file.getBlob().getDataAsString();
-    var input = Utilities.parseCsv(content, ','.charCodeAt(0));
+    const input = Utilities.parseCsv(content, ','.charCodeAt(0));
 
     // Parse lines of the CSV file
-    for (var r = 0; r < input.length; r++) {
+    for (let r = 0; r < input.length; r++) {
       const fullid = input[r][0].toString();
       if (fullid.indexOf('ID_SHARD_') != 0 || fullid.indexOf('_NAME') < 0) continue;
       const cid = fullid.substring(9, fullid.indexOf('_NAME'));
@@ -94,9 +94,9 @@ function DS_Update_Localization_HeroesFormula() {
   const rangeFormulas = sheet.getRange(1, 1, sheet.getMaxRows(), 1).getFormulas();
   const ranges = GetEmptyRows(rangeFormulas);
 
-  for (var g = 0; g < ranges.length; g++) {
-    var newData = [];
-    for (var row = ranges[g][0]; row < ranges[g][1]; row++) {
+  for (let g = 0; g < ranges.length; g++) {
+    const newData = [];
+    for (let row = ranges[g][0]; row < ranges[g][1]; row++) {
       // Set formula table for the portrait
       newData.push(['=IF(Preferences_Images_Portraits,IMAGE(_Values_Url_Portrait&$C' + row + '&_Values_Image_Ext),)']);
     }

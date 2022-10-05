@@ -1,8 +1,8 @@
-var _updateStart;
-var updateVersion;
+let _updateStart;
+let updateVersion;
 
 function SetUpdateProgress(newValue) {
-  var oldValue = PropertiesService.getScriptProperties().getProperty('OldUpdateProgress');
+  const oldValue = PropertiesService.getScriptProperties().getProperty('OldUpdateProgress');
 
   if (oldValue != null) {
     SpreadsheetApp.getActiveSpreadsheet().removeMenu(oldValue);
@@ -10,7 +10,7 @@ function SetUpdateProgress(newValue) {
   }
 
   if (newValue != null) {
-    var subMenu = [{ name: 'Continue', functionName: 'DataSourceUpdate_Continue' }];
+    const subMenu = [{ name: 'Continue', functionName: 'DataSourceUpdate_Continue' }];
     PropertiesService.getScriptProperties().setProperty('OldUpdateProgress', newValue);
     SpreadsheetApp.getActiveSpreadsheet().addMenu(newValue, subMenu);
   }
@@ -32,7 +32,7 @@ function DataSourceUpdate_Continue() {
     return;
   }
 
-  var step = DataSource_GetStep();
+  const step = DataSource_GetStep();
   DataSource_Loop(step);
 }
 
@@ -68,7 +68,7 @@ function DataSource_TimeoutPopup() {
 }
 
 function DataSource_Timeout(secLeft) {
-  var elapsed = new Date().getTime() - _updateStart;
+  const elapsed = new Date().getTime() - _updateStart;
   return Math.round(elapsed / 1000) + secLeft >= 6 * 60;
 }
 
@@ -139,7 +139,6 @@ function DataSource_UpdateStep(step) {
       DS_Update_Links();
       setNamedRangeValue('_Version_DataSource_Current', updateVersion);
       return 666;
-      break;
   }
 
   DataSource_SetStep(++step);

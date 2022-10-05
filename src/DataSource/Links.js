@@ -3,12 +3,12 @@ function DS_Update_Links() {
   const content = file.getBlob().getDataAsString();
   const json = JSON.parse(content);
 
-  var range = getNamedRange('Links_Sources');
+  const range = getNamedRange('Links_Sources');
   range.clearContent();
 
-  var data = [];
+  const data = [];
 
-  for (var i = 0; i < range.getHeight(); i++) {
+  for (let i = 0; i < range.getHeight(); i++) {
     data[i] = ['', '', ''];
     if (i < json.ContentCreators.length)
       data[i][0] = '=HYPERLINK("' + json.ContentCreators[i].URL + '", "' + json.ContentCreators[i].Title + '")';

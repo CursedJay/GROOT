@@ -1,5 +1,5 @@
 function getFolder(folderName, createIfDoesntExist) {
-  var folders = DriveApp.getFoldersByName(folderName);
+  const folders = DriveApp.getFoldersByName(folderName);
 
   if (folders.hasNext()) return folders.next();
   if (!createIfDoesntExist) return null;
@@ -11,10 +11,10 @@ function getFolder(folderName, createIfDoesntExist) {
 }
 
 function getFile(folder, filename) {
-  var files = folder.getFilesByName(filename);
+  const files = folder.getFilesByName(filename);
 
   while (files.hasNext()) {
-    var file = files.next();
+    const file = files.next();
     return file;
   }
   return null;

@@ -39,8 +39,8 @@ function onOpen(event) {
     const infoSourceCurrent = getNamedRangeValue('_Version_InfoSource_Current');
     const infoSourceLatest = getNamedRangeValue('_Version_InfoSource_Latest');
 
-    var t1 = infoSourceCurrent.getTime();
-    var t2 = infoSourceLatest.getTime();
+    const t1 = infoSourceCurrent.getTime();
+    const t2 = infoSourceLatest.getTime();
 
     // 10mn delta
     if (Math.abs(t1 - t2) > 10 * 60 * 1000) {
@@ -57,20 +57,22 @@ function FinishUpdate() {
   try {
     SpreadsheetApp.getActiveSpreadsheet().setName(docname.substring(0, docname.lastIndexOf(_finishUpdateTag)));
     SpreadsheetApp.getActiveSpreadsheet().removeMenu('Finish Update');
-  } catch (e) {}
+  } catch (e) {
+    error(e);
+  }
 }
 
 function GetAbilityFocusSources() {
-  var cache = CacheService.getScriptCache();
+  const cache = CacheService.getScriptCache();
 
-  var cached = cache.get('AbilityFocusSources');
+  const cached = cache.get('AbilityFocusSources');
   if (cached != null) {
     return JSON.parse(cached);
   }
 
-  var afSources = getNamedRangeValues('_AbilityFocus_Source');
-  var result = [];
-  for (var i = 0; i < afSources.length; i++) {
+  const afSources = getNamedRangeValues('_AbilityFocus_Source');
+  const result = [];
+  for (let i = 0; i < afSources.length; i++) {
     result.push(afSources[i][0]);
   }
   cache.put('AbilityFocusSources', JSON.stringify(result), 60 * 60); // Cache for 60 minutes
@@ -80,7 +82,7 @@ function GetAbilityFocusSources() {
 function CreateMenu() {
   const ui = SpreadsheetApp.getUi();
 
-  let msfapi = ui.createMenu('MSF API');
+  const msfapi = ui.createMenu('MSF API');
   msfapi.addItem('Update inventory', 'api_importInventory');
   msfapi.addItem('Import FULL inventory', 'api_importFullInventory');
   msfapi.addSeparator();
@@ -88,7 +90,7 @@ function CreateMenu() {
   msfapi.addSeparator();
   msfapi.addItem('Forget me', 'forgetMe');
 
-  let dataSource = ui.createMenu('Data source');
+  const dataSource = ui.createMenu('Data source');
   dataSource.addItem('Update data source', 'DataSourceUpdate_Start');
   dataSource.addItem('Add missing characters', 'AddMissingToons');
 
@@ -96,7 +98,7 @@ function CreateMenu() {
   //menuUpdate.addItem("Begin update to latest version", "updateVersion");
   //menuUpdate.addItem("Begin update to latest beta version", "updateBetaVersion");
 
-  let menuImport = ui.createMenu('Import');
+  const menuImport = ui.createMenu('Import');
   menuImport.addItem('Import roster from MSF.gg', 'msfgg_import');
   menuImport.addSeparator();
   menuImport.addItem('Import from Google Drive', 'loadJSON');
@@ -106,7 +108,7 @@ function CreateMenu() {
   menuImport.addSeparator();
   menuImport.addItem('Finish Update', 'FinishUpdate');
 
-  var menuExport = ui.createMenu('Export');
+  const menuExport = ui.createMenu('Export');
   menuExport.addItem('Export MSF.gg War Defense (csv)', 'msfgg_exportWarDefense');
   menuExport.addSeparator();
   menuExport.addItem('Export to Google Drive', 'saveJSON');

@@ -15,7 +15,7 @@ function updateVersion() {
 }
 
 function updateVersionTo(buildNum, sheetId, version) {
-  var ui = SpreadsheetApp.getUi();
+  const ui = SpreadsheetApp.getUi();
   const current = Number(getNamedRangeValue('_Version_Build_Current'));
 
   if (current == 0 || buildNum == 0) {
@@ -28,16 +28,16 @@ function updateVersionTo(buildNum, sheetId, version) {
     return;
   }
 
-  var sourceId = SpreadsheetApp.getActive().getId();
-  var file = DriveApp.getFileById(sourceId);
-  var fileParents = file.getParents();
+  const sourceId = SpreadsheetApp.getActive().getId();
+  const file = DriveApp.getFileById(sourceId);
+  const fileParents = file.getParents();
 
-  var folder = null;
+  let folder = null;
   if (fileParents.hasNext()) {
     folder = fileParents.next();
   }
 
-  var latestFile = DriveApp.getFileById(sheetId);
+  const latestFile = DriveApp.getFileById(sheetId);
   const playerName = getNamedRangeValue('Profile_Name');
   const fileName =
     (playerName.length == 0 || playerName == '<Your Name Here>' ? 'GROOT' : playerName) +
@@ -45,7 +45,7 @@ function updateVersionTo(buildNum, sheetId, version) {
     version +
     _finishUpdateTag;
 
-  var newFile = null;
+  let newFile = null;
   if (folder != null) newFile = latestFile.makeCopy(fileName, folder);
   else newFile = latestFile.makeCopy(fileName);
 
@@ -53,13 +53,13 @@ function updateVersionTo(buildNum, sheetId, version) {
   // Anyone with the link can view, then copy sharing settings
   newFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
-  var thisFile = DriveApp.getFileById(SpreadsheetApp.getActive().getId());
-  var editors = thisFile.getEditors();
-  for (var i = 0; i < editors.length; i++) {
+  const thisFile = DriveApp.getFileById(SpreadsheetApp.getActive().getId());
+  const editors = thisFile.getEditors();
+  for (let i = 0; i < editors.length; i++) {
     newFile.addEditor(editors[i]);
   }
-  var viewers = thisFile.getViewers();
-  for (var i = 0; i < viewers.length; i++) {
+  const viewers = thisFile.getViewers();
+  for (let i = 0; i < viewers.length; i++) {
     newFile.addViewer(viewers[i]);
   }
   // ---------------------------------------------------
@@ -79,8 +79,8 @@ function updateVersionTo(buildNum, sheetId, version) {
 }
 
 function openSheet(spreadsheetId) {
-  var url = 'https://docs.google.com/spreadsheets/d/' + spreadsheetId;
-  var html = "<script>window.open('" + url + "');google.script.host.close();</script>";
-  var userInterface = HtmlService.createHtmlOutput(html);
+  const url = 'https://docs.google.com/spreadsheets/d/' + spreadsheetId;
+  const html = "<script>window.open('" + url + "');google.script.host.close();</script>";
+  const userInterface = HtmlService.createHtmlOutput(html);
   SpreadsheetApp.getUi().showModalDialog(userInterface, 'Opening your new document');
 }
