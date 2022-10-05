@@ -78,9 +78,9 @@ function GetAbilityFocusSources() {
 }
 
 function CreateMenu() {
-  var ui = SpreadsheetApp.getUi();
+  const ui = SpreadsheetApp.getUi();
 
-  let msfapi = SpreadsheetApp.getUi().createMenu('MSF API');
+  let msfapi = ui.createMenu('MSF API');
   msfapi.addItem('Update inventory', 'api_importInventory');
   msfapi.addItem('Import FULL inventory', 'api_importFullInventory');
   msfapi.addSeparator();
@@ -88,7 +88,7 @@ function CreateMenu() {
   msfapi.addSeparator();
   msfapi.addItem('Forget me', 'forgetMe');
 
-  var dataSource = SpreadsheetApp.getUi().createMenu('Data source');
+  let dataSource = ui.createMenu('Data source');
   dataSource.addItem('Update data source', 'DataSourceUpdate_Start');
   dataSource.addItem('Add missing characters', 'AddMissingToons');
 
@@ -96,7 +96,7 @@ function CreateMenu() {
   //menuUpdate.addItem("Begin update to latest version", "updateVersion");
   //menuUpdate.addItem("Begin update to latest beta version", "updateBetaVersion");
 
-  var menuImport = SpreadsheetApp.getUi().createMenu('Import');
+  let menuImport = ui.createMenu('Import');
   menuImport.addItem('Import roster from MSF.gg', 'msfgg_import');
   menuImport.addSeparator();
   menuImport.addItem('Import from Google Drive', 'loadJSON');
@@ -106,7 +106,7 @@ function CreateMenu() {
   menuImport.addSeparator();
   menuImport.addItem('Finish Update', 'FinishUpdate');
 
-  var menuExport = SpreadsheetApp.getUi().createMenu('Export');
+  var menuExport = ui.createMenu('Export');
   menuExport.addItem('Export MSF.gg War Defense (csv)', 'msfgg_exportWarDefense');
   menuExport.addSeparator();
   menuExport.addItem('Export to Google Drive', 'saveJSON');
@@ -150,8 +150,8 @@ function onEdit(event) {
       activeSheet.getRange(3, 3).clearContent();
     }
   } else if (activeSheet.getName() == 'Missions') {
-    var column = ss.getActiveCell().getColumn();
-    var row = ss.getActiveCell().getRow();
+    const column = ss.getActiveCell().getColumn();
+    const row = ss.getActiveCell().getRow();
 
     if (ss.getActiveCell().getA1Notation() == 'B2') {
       activeSheet.getRange(2, 3).setValue('');
