@@ -80,13 +80,6 @@ function GetAbilityFocusSources() {
 function CreateMenu() {
   var ui = SpreadsheetApp.getUi();
 
-  var abilityFocus = SpreadsheetApp.getUi().createMenu('Ability Focus');
-
-  var afSources = GetAbilityFocusSources();
-  for (var i = 0; i < afSources.length; i++) {
-    abilityFocus.addItem(afSources[i], 'ImportAbilityFocus_' + i);
-  }
-
   let msfapi = SpreadsheetApp.getUi().createMenu('MSF API');
   msfapi.addItem('Update inventory', 'api_importInventory');
   msfapi.addItem('Import FULL inventory', 'api_importFullInventory');
@@ -98,7 +91,6 @@ function CreateMenu() {
   var dataSource = SpreadsheetApp.getUi().createMenu('Data source');
   dataSource.addItem('Update data source', 'DataSourceUpdate_Start');
   dataSource.addItem('Add missing characters', 'AddMissingToons');
-  dataSource.addSubMenu(abilityFocus);
 
   //var menuUpdate = SpreadsheetApp.getUi().createMenu("Update");
   //menuUpdate.addItem("Begin update to latest version", "updateVersion");
