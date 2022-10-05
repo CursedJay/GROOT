@@ -7,8 +7,10 @@
   "author": "JayG64#7990",
   "license": "ISC",
   "devDependencies": {
+    "@types/google-apps-script": "^1.0.55",
     "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-googleappsscript": "^1.0.4",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "2.7.1"
   },
