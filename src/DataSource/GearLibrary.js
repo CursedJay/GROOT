@@ -11,7 +11,7 @@ function GetCostOf(material) {
   const index = _gearLibraryIndex[material];
 
   if (index == null) {
-    output('error with ' + material);
+    output(`error with ${material}`);
     return -1;
   }
 
@@ -33,7 +33,7 @@ function GetAllMaterial(material, count, onlyBasicCatalyst) {
   if (material === '') return null;
   const index = _gearLibraryIndex[material];
   if (index == null) {
-    output('No index for ' + material);
+    output(`No index for ${material}`);
     return;
   }
   const matParts = [_gearLibraryTable[index][15], _gearLibraryTable[index][17], _gearLibraryTable[index][19]];
@@ -267,7 +267,7 @@ function DS_Update_GearLibrary() {
       //for (var g = 0; g < _statsTypeShort.length; g++) st.push(gearRow[g + 2]);
       //dataStats.push(st);
 
-      dataPicture.push([gearRow[0], gearRow[14] + '.png']);
+      dataPicture.push([gearRow[0], `${gearRow[14]}.png`]);
 
       continue;
     }
@@ -281,7 +281,7 @@ function DS_Update_GearLibrary() {
       if (id.startsWith('Red_') && GearTierCap < 19) continue;
       if (id.startsWith('White_') && GearTierCap < 23) continue;
 
-      dataPicture.push([gearRow[0], gearRow[14] + '.png']);
+      dataPicture.push([gearRow[0], `${gearRow[14]}.png`]);
       continue;
     }
 
@@ -306,7 +306,7 @@ function DS_Update_GearLibrary() {
         for (let s = 0; s < _statsTypeShort.length; s++) cr.push('0'); // And has no cost
         dataCraft.push(cr);
       }
-      dataPicture.push([gearRow[0], gearRow[14] + '.png']);
+      dataPicture.push([gearRow[0], `${gearRow[14]}.png`]);
       continue;
     }
 
@@ -338,7 +338,7 @@ function DS_Update_GearLibrary() {
       for (let g = 0; g < _statsTypeShort.length; g++) rowHero.push(gearRow[g + 2]);
 
       if (allMat.CatalystMats.length + (allMat.UniqueMat == null ? 0 : 1) > 2 || allMat.CatalystMats.length > 2) {
-        error('Too many material for ' + id);
+        error(`Too many material for ${id}`);
       }
 
       rowHero.push(allMat.BasicCatalyst);
@@ -361,7 +361,7 @@ function DS_Update_GearLibrary() {
       // Crafted non hero gear image library T12+
       if (id.startsWith('T')) {
         if (tier >= 12) {
-          dataPicture.push([gearRow[0], gearRow[14] + '.png']);
+          dataPicture.push([gearRow[0], `${gearRow[14]}.png`]);
         }
       }
 
@@ -383,12 +383,12 @@ function DS_Update_GearLibrary() {
         const allMat = GetAllMaterial(id, 1, false);
         const rowCraft = [origin, tier, allMat.StatCatalyst, allMat.BasicCatalyst];
         for (let s = 1; s < _statsTypeShort.length; s++) {
-          const statMat = GetAllMaterial('T' + tier + '_' + origin + '_' + _statsTypeShort[s], 1, true);
+          const statMat = GetAllMaterial(`T${tier}_${origin}_${_statsTypeShort[s]}`, 1, true);
           rowCraft.push(statMat.BasicCatalyst);
         }
 
         if (allMat.Mats.length > extraMaterial) {
-          error('Too many material for ' + id);
+          error(`Too many material for ${id}`);
         }
 
         for (let i = 0; i < extraMaterial; i++) {
@@ -400,7 +400,7 @@ function DS_Update_GearLibrary() {
         }
 
         for (let s = 0; s < _statsTypeShort.length; s++)
-          rowCraft.push(GetCostOf('T' + tier + '_' + origin + '_' + _statsTypeShort[s]));
+          rowCraft.push(GetCostOf(`T${tier}_${origin}_${_statsTypeShort[s]}`));
 
         dataCraft.push(rowCraft);
       }
@@ -429,57 +429,25 @@ function DS_Update_GearLibraryCraftFormula() {
       // Count of gear we need of each type
       for (let s = 0; s < _statsTypeShort.length; s++)
         newRow.push(
-          '=COUNTIFS(_GearTiers_Slot_' +
-            _statsTypeShort[s] +
-            ', "=" & TRUE, _GearTiers_Origin, "=" & A' +
-            row +
-            ', _GearTiers_Tier_' +
-            _statsTypeShort[s] +
-            ', "=" & B' +
-            row +
-            ')'
+          `=COUNTIFS(_GearTiers_Slot_${_statsTypeShort[s]}, "=" & TRUE, _GearTiers_Origin, "=" & A${row}, _GearTiers_Tier_${_statsTypeShort[s]}, "=" & B${row})`
         );
 
       const statCountCol = ['Z', 'AA', 'AB', 'AC', 'AD'];
 
       // Total of gear we need for this row
-      newRow.push('=SUM(' + statCountCol[0] + row + ': ' + statCountCol[statCountCol.length - 1] + row + ')');
+      newRow.push(`=SUM(${statCountCol[0]}${row}: ${statCountCol[statCountCol.length - 1]}${row})`);
 
       // Stat catalysts
-      for (let s = 0; s < statCountCol.length; s++) newRow.push('=' + statCountCol[s] + row + ' * $C' + row);
+      for (let s = 0; s < statCountCol.length; s++) newRow.push(`=${statCountCol[s]}${row} * $C${row}`);
 
       // Basic catalyst
       newRow.push(
-        '= ' +
-          statCountCol[0] +
-          row +
-          ' * D' +
-          row +
-          ' + ' +
-          statCountCol[1] +
-          row +
-          ' * E' +
-          row +
-          ' + ' +
-          statCountCol[2] +
-          row +
-          ' * F' +
-          row +
-          ' + ' +
-          statCountCol[3] +
-          row +
-          ' * G' +
-          row +
-          ' + ' +
-          statCountCol[4] +
-          row +
-          ' * H' +
-          row
+        `= ${statCountCol[0]}${row} * D${row} + ${statCountCol[1]}${row} * E${row} + ${statCountCol[2]}${row} * F${row} + ${statCountCol[3]}${row} * G${row} + ${statCountCol[4]}${row} * H${row}`
       );
 
       // Total material
       const matCountCol = ['J', 'L', 'N', 'P', 'R', 'T'];
-      for (let s = 0; s < matCountCol.length; s++) newRow.push('=' + matCountCol[s] + row + ' * $AE' + row);
+      for (let s = 0; s < matCountCol.length; s++) newRow.push(`=${matCountCol[s]}${row} * $AE${row}`);
 
       newData.push(newRow);
     }
@@ -501,9 +469,7 @@ function DS_Update_GearLibraryHeroFormula() {
     for (let row = ranges[g][0]; row < ranges[g][1]; row++) {
       const newRow = [];
 
-      newRow.push(
-        '=INDEX(_GearTiers_Slot_Hero, MATCH(A' + row + ' & B' + row + ', _GearTiers_HeroId & _GearTiers_Tier, 0))'
-      );
+      newRow.push(`=INDEX(_GearTiers_Slot_Hero, MATCH(A${row} & B${row}, _GearTiers_HeroId & _GearTiers_Tier, 0))`);
 
       newData.push(newRow);
     }

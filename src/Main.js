@@ -137,7 +137,7 @@ function onEdit(event) {
 
   if (activeSheet.getName() == 'Preferences') {
     if (ss.getActiveCell().getA1Notation() == 'B4') {
-      output('ChangeLanguage: ' + event.value);
+      output(`ChangeLanguage: ${event.value}`);
       ChangeLanguage(event.value);
     }
   } else if (activeSheet.getName() == 'Roster') {
@@ -191,12 +191,12 @@ function UpdateModified() {
   const today = Utilities.formatDate(date, 'GMT-04:00', 'yyyy/MM/dd');
   const cache = CacheService.getUserCache();
   const docId = SpreadsheetApp.getActiveSpreadsheet().getId();
-  const lastUpdateRoster = cache.get(docId + '_lastUpdateRoster');
-  const lastUpdate = cache.get(docId + '_lastUpdate');
+  const lastUpdateRoster = cache.get(`${docId}_lastUpdateRoster`);
+  const lastUpdate = cache.get(`${docId}_lastUpdate`);
 
   if (today != lastUpdateRoster) {
     if (today != lastUpdate) {
-      cache.put(docId + '_lastUpdate', today);
+      cache.put(`${docId}_lastUpdate`, today);
       setNamedRangeValue('_GAMORA_UpdateDoc', today);
     }
 
@@ -210,7 +210,7 @@ function UpdateModified() {
       powerRange.getSheet().getSheetId() == activeSheet.getSheetId() &&
       powerRange.getColumn() == editedCell.getColumn()
     ) {
-      cache.put(docId + '_lastUpdateRoster', today);
+      cache.put(`${docId}_lastUpdateRoster`, today);
       setNamedRangeValue('_GAMORA_UpdateRoster', today);
     }
   }

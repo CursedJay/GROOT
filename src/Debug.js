@@ -3,5 +3,5 @@ function output(text) {
 }
 
 function error(text) {
-  SpreadsheetApp.getUi().alert('ERROR: ' + text);
+  SpreadsheetApp.getUi().alert(`ERROR: ${text}`);
 }

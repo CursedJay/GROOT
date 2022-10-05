@@ -39,11 +39,9 @@ function updateVersionTo(buildNum, sheetId, version) {
 
   const latestFile = DriveApp.getFileById(sheetId);
   const playerName = getNamedRangeValue('Profile_Name');
-  const fileName =
-    (playerName.length == 0 || playerName == '<Your Name Here>' ? 'GROOT' : playerName) +
-    ' v' +
-    version +
-    _finishUpdateTag;
+  const fileName = `${
+    playerName.length == 0 || playerName == '<Your Name Here>' ? 'GROOT' : playerName
+  } v${version}${_finishUpdateTag}`;
 
   let newFile = null;
   if (folder != null) newFile = latestFile.makeCopy(fileName, folder);
@@ -79,8 +77,8 @@ function updateVersionTo(buildNum, sheetId, version) {
 }
 
 function openSheet(spreadsheetId) {
-  const url = 'https://docs.google.com/spreadsheets/d/' + spreadsheetId;
-  const html = "<script>window.open('" + url + "');google.script.host.close();</script>";
+  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}`;
+  const html = `<script>window.open('${url}');google.script.host.close();</script>`;
   const userInterface = HtmlService.createHtmlOutput(html);
   SpreadsheetApp.getUi().showModalDialog(userInterface, 'Opening your new document');
 }

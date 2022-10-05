@@ -3,7 +3,7 @@ function msfpal_import() {
   const apiKey = getNamedRangeValue('Preferences_MSFPal_Key');
   const playerName = getNamedRangeValue('Profile_Name');
 
-  const url = 'https://msf.pal.gg/rest/v1/alliance/' + allianceId + '/' + playerName + '/characters?api-key=' + apiKey;
+  const url = `https://msf.pal.gg/rest/v1/alliance/${allianceId}/${playerName}/characters?api-key=${apiKey}`;
   const response = UrlFetchApp.fetch(url);
   const heroes = JSON.parse(response.getContentText());
   const rosterIds = getNamedRangeValues('Roster_Import_Ids');
@@ -146,7 +146,7 @@ function msfpal_export() {
 
   output(JSON.stringify(heroes));
 
-  const url = 'https://msf.pal.gg/rest/v1/alliance/' + allianceId + '/' + playerName + '/characters?api-key=' + apiKey;
+  const url = `https://msf.pal.gg/rest/v1/alliance/${allianceId}/${playerName}/characters?api-key=${apiKey}`;
   UrlFetchApp.fetch(url, fetchPost);
 }
 
@@ -180,41 +180,50 @@ function msfpal_exportCSV() {
 
     const power = Number(rosterData[row][21]);
 
-    csvtext +=
-      '\r\n' +
-      id +
-      ',' + // ID
-      id +
-      ',' + //LABEL (Replace by name)
-      (+rosterData[row][0] > 0) +
-      ',' + // UNLOCKED
-      power +
-      ',' + // POWER
-      rosterData[row][2] +
-      ',' + // LEVEL
-      rosterData[row][3] +
-      ',' + // GEAR TIER
-      rosterData[row][0] +
-      ',' + // STAR
-      rosterData[row][1] +
-      ',' + // RED STAR
-      rosterData[row][18] +
-      ',' + // BASIC
-      rosterData[row][19] +
-      ',' + // SPECIAL
-      rosterData[row][20] +
-      ',' + // ULTIMATE
-      rosterData[row][21] +
-      ',' + // PASSIVE
-      classOf[rosterData[row][10]] +
-      ',' + // iso8 class
-      rosterData[row][12]; // iso8 level
+    csvtext += `\r\n${id},${
+      // ID
+      id
+    },${
+      //LABEL (Replace by name)
+      +rosterData[row][0] > 0
+    },${
+      // UNLOCKED
+      power
+    },${
+      // POWER
+      rosterData[row][2]
+    },${
+      // LEVEL
+      rosterData[row][3]
+    },${
+      // GEAR TIER
+      rosterData[row][0]
+    },${
+      // STAR
+      rosterData[row][1]
+    },${
+      // RED STAR
+      rosterData[row][18]
+    },${
+      // BASIC
+      rosterData[row][19]
+    },${
+      // SPECIAL
+      rosterData[row][20]
+    },${
+      // ULTIMATE
+      rosterData[row][21]
+    },${
+      // PASSIVE
+      classOf[rosterData[row][10]]
+    },${
+      // iso8 class
+      rosterData[row][12]
+    }`; // iso8 level
   }
 
   folder.createFile('msfpal.csv', csvtext);
   Browser.msgBox(
-    'File "' +
-      _zaratoolsFolder +
-      '/msfpal.csv" is waiting in your Drive.\nCheck https://drive.google.com/drive/my-drive'
+    `File "${_zaratoolsFolder}/msfpal.csv" is waiting in your Drive.\nCheck https://drive.google.com/drive/my-drive`
   );
 }

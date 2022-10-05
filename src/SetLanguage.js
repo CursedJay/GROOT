@@ -54,7 +54,7 @@ function TestChangeLanguage() {
 }
 
 function ChangeLanguage(newValue) {
-  output('Change language to ' + newValue);
+  output(`Change language to ${newValue}`);
   const langIds = getNamedRangeValues('_Option_Language');
   let newLangId = '';
 
@@ -66,7 +66,7 @@ function ChangeLanguage(newValue) {
   }
 
   if (newLangId == '') {
-    output('Unknown lang id: ' + newValue);
+    output(`Unknown lang id: ${newValue}`);
     return;
   }
 
@@ -74,7 +74,7 @@ function ChangeLanguage(newValue) {
   json = getJSON();
   // Set the new language
   setNamedRangeValue('Preferences_LanguageId', newLangId);
-  output('Lang id = ' + newLangId);
+  output(`Lang id = ${newLangId}`);
   GetLocalization(newLangId);
 
   // =================== PREFERENCES =========================
@@ -82,15 +82,15 @@ function ChangeLanguage(newValue) {
   // UPDATE COLOR SETTINGS -----------------------------------
   const colorSettings = [];
 
-  output(prefs.Colors.Heroes + ' > ' + _locOf[prefs.Colors.Heroes]);
+  output(`${prefs.Colors.Heroes} > ${_locOf[prefs.Colors.Heroes]}`);
   colorSettings[0] = [_locOf[prefs.Colors.Heroes]];
-  output(prefs.Colors.Gear + ' > ' + _locOf[prefs.Colors.Gear]);
+  output(`${prefs.Colors.Gear} > ${_locOf[prefs.Colors.Gear]}`);
   colorSettings[1] = [_locOf[prefs.Colors.Gear]];
-  output(prefs.Colors.Level + ' > ' + _locOf[prefs.Colors.Level]);
+  output(`${prefs.Colors.Level} > ${_locOf[prefs.Colors.Level]}`);
   colorSettings[2] = [_locOf[prefs.Colors.Level]];
-  output(prefs.Colors.Abilities + ' > ' + _locOf[prefs.Colors.Abilities]);
+  output(`${prefs.Colors.Abilities} > ${_locOf[prefs.Colors.Abilities]}`);
   colorSettings[3] = [_locOf[prefs.Colors.Abilities]];
-  output(prefs.Colors.Shards + ' > ' + _locOf[prefs.Colors.Shards]);
+  output(`${prefs.Colors.Shards} > ${_locOf[prefs.Colors.Shards]}`);
   colorSettings[4] = [_locOf[prefs.Colors.Shards]];
   output('4');
   setNamedRangeValues('Preferences_Color_Settings', colorSettings);
@@ -145,7 +145,7 @@ function ChangeLanguage(newValue) {
       }
     }
 
-    setNamedRangeValues('Teams_NamesColumn' + (column + 1), teamsColumn);
+    setNamedRangeValues(`Teams_NamesColumn${column + 1}`, teamsColumn);
   }
 
   /*
@@ -182,7 +182,7 @@ function SetLanguage(newLangId) {
   }
 
   if (newLangName == '') {
-    output('Unknown lang id: ' + newLangId);
+    output(`Unknown lang id: ${newLangId}`);
     return;
   }
 
@@ -202,7 +202,7 @@ function SetTeamsLang(sheet, row, col, county, countx, offsety, offsetx, teams, 
       const values = [];
 
       for (let r = 0; r < _team_size; r++) {
-        output('*' + team.Hero[r] + '* => ' + _nameOf[team.Hero[r]]);
+        output(`*${team.Hero[r]}* => ${_nameOf[team.Hero[r]]}`);
         values[r] = [_nameOf[team.Hero[r]]];
       }
       range.setValues(values);

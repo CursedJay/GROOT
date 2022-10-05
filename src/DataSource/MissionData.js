@@ -115,12 +115,12 @@ function DS_Update_MissionsData() {
       } else row.push('');
 
       for (let c = 0; c < 5; c++) {
-        if (allTraits.length > c) row.push('HERO_TRAIT_' + allTraits[c].toString().toUpperCase());
+        if (allTraits.length > c) row.push(`HERO_TRAIT_${allTraits[c].toString().toUpperCase()}`);
         else row.push('');
       }
 
       for (let c = 0; c < 5; c++) {
-        if (anyTrait.length > c) row.push('HERO_TRAIT_' + anyTrait[c].toString().toUpperCase());
+        if (anyTrait.length > c) row.push(`HERO_TRAIT_${anyTrait[c].toString().toUpperCase()}`);
         else row.push('');
       }
 
@@ -222,7 +222,7 @@ function DS_Update_MissionsData() {
       } else if (line.Mission == -1 && line.FirstChapter == line.LastChapter) {
         row.push(line.FirstChapter);
       } else if (line.Mission == -1) {
-        row.push(line.FirstChapter + '-' + line.LastChapter);
+        row.push(`${line.FirstChapter}-${line.LastChapter}`);
       } else {
         row.push(line.FirstChapter + String.fromCharCode(65 + line.Mission));
       }
@@ -237,12 +237,12 @@ function DS_Update_MissionsData() {
         if (line.Filter.hasOwnProperty('id')) filterIds = line.Filter.id;
       }
       for (let c = 0; c < 5; c++) {
-        if (allTraits.length > c) row.push('HERO_TRAIT_' + allTraits[c].toUpperCase());
+        if (allTraits.length > c) row.push(`HERO_TRAIT_${allTraits[c].toUpperCase()}`);
         else row.push('');
       }
 
       for (let c = 0; c < 5; c++) {
-        if (anyTrait.length > c) row.push('HERO_TRAIT_' + anyTrait[c].toUpperCase());
+        if (anyTrait.length > c) row.push(`HERO_TRAIT_${anyTrait[c].toUpperCase()}`);
         else row.push('');
       }
 
@@ -354,21 +354,12 @@ function DS_Update_MissionsDataFormula() {
       const newRow = [];
 
       newRow.push(
-        '=IFERROR(INDEX(_M3Localization_Challenges_Name,MATCH(B' +
-          row +
-          ',_M3Localization_Challenges_Id,0)),B' +
-          row +
-          ') & " " & C' +
-          row
+        `=IFERROR(INDEX(_M3Localization_Challenges_Name,MATCH(B${row},_M3Localization_Challenges_Id,0)),B${row}) & " " & C${row}`
       );
       newRow.push(
-        '=IFERROR(IF(ISBLANK(D' +
-          row +
-          '),,INDEX(_M3Localization_Heroes_Name, MATCH(D' +
-          row +
-          ',_M3Localization_Heroes_Id,0))))'
+        `=IFERROR(IF(ISBLANK(D${row}),,INDEX(_M3Localization_Heroes_Name, MATCH(D${row},_M3Localization_Heroes_Id,0))))`
       );
-      newRow.push('=B' + row + ' & IF(NOT(ISBLANK(C' + row + ')),C' + row + ',)');
+      newRow.push(`=B${row} & IF(NOT(ISBLANK(C${row})),C${row},)`);
 
       newData.push(newRow);
     }

@@ -22,7 +22,7 @@ function SortTeamsByPower(sorting) {
   const teamInterline = 8;
 
   for (let c = 0; c < 4; c++) {
-    inColumns[c] = getNamedRangeValues('Teams_Column' + (c + 1));
+    inColumns[c] = getNamedRangeValues(`Teams_Column${c + 1}`);
     outColumns[c] = new Array(inColumns[c].length);
   }
 
@@ -38,7 +38,7 @@ function SortTeamsByPower(sorting) {
   }
 
   for (let i = 0; i < valuesTable.length; i++) {
-    output('Was: ' + valuesTable[i][1]);
+    output(`Was: ${valuesTable[i][1]}`);
   }
 
   // ASC Power
@@ -53,7 +53,7 @@ function SortTeamsByPower(sorting) {
   } else return;
 
   for (let i = 0; i < valuesTable.length; i++) {
-    output('Now: ' + valuesTable[i][1]);
+    output(`Now: ${valuesTable[i][1]}`);
   }
 
   for (let i = 0; i < emptyTable.length; i++) {
@@ -74,7 +74,7 @@ function SortTeamsByPower(sorting) {
   }
 
   for (let c = 0; c < 4; c++) {
-    setNamedRangeValues('Teams_Column' + (c + 1), outColumns[c]);
+    setNamedRangeValues(`Teams_Column${c + 1}`, outColumns[c]);
   }
 
   // Blitz and War Checkboxes
@@ -99,6 +99,6 @@ function SortTeamsByPower(sorting) {
   }
 
   for (let c = 0; c < 4; c++) {
-    setNamedRangeValues('Teams_Flags' + (c + 1), checkcol[c]);
+    setNamedRangeValues(`Teams_Flags${c + 1}`, checkcol[c]);
   }
 }

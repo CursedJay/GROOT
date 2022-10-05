@@ -11,8 +11,8 @@ function AddMissingToons() {
   const fullCount = fullList.length;
   let availablePos = -1;
 
-  output('Full toons list:' + fullCount);
-  output('Old sheet toons:' + currentCount);
+  output(`Full toons list:${fullCount}`);
+  output(`Old sheet toons:${currentCount}`);
 
   // First, clear duplicates and invalid toons
   for (let i = 0; i < currentCount; i++) {

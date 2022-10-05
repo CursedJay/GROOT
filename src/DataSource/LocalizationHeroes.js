@@ -98,7 +98,7 @@ function DS_Update_Localization_HeroesFormula() {
     const newData = [];
     for (let row = ranges[g][0]; row < ranges[g][1]; row++) {
       // Set formula table for the portrait
-      newData.push(['=IF(Preferences_Images_Portraits,IMAGE(_Values_Url_Portrait&$C' + row + '&_Values_Image_Ext),)']);
+      newData.push([`=IF(Preferences_Images_Portraits,IMAGE(_Values_Url_Portrait&$C${row}&_Values_Image_Ext),)`]);
     }
 
     if (!copyToRangeFormula(sheet, ranges[g][0], 1, newData)) return false;

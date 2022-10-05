@@ -102,7 +102,7 @@ function DS_Update_HeroData() {
     if (minion) herodata[n++] = 'HERO_TRAIT_MINION';
 
     for (let t = 0; t < traits.length; t++) {
-      const trait = typeof traits[t] == 'string' ? 'HERO_TRAIT_' + traits[t].toUpperCase() : null;
+      const trait = typeof traits[t] == 'string' ? `HERO_TRAIT_${traits[t].toUpperCase()}` : null;
 
       switch (GetTraitType(traits[t])) {
         case 'Alignment':
@@ -242,86 +242,55 @@ function DS_Update_HeroDataFormula() {
     const formulas = [];
 
     for (let index = ranges[i][0]; index < ranges[i][1]; index++) {
-      const rindex = '$Y' + index; // Roster index column name
-      const lindex = '$Z' + index; // Level column name
-      const gindex = '$AC' + index; // Gear column name
-      const hsindex = '$AD' + index; // HeroStats2 LevelIndex
-      const gtindex = '$AE' + index; // GearTier Hero Index
+      const rindex = `$Y${index}`; // Roster index column name
+      const lindex = `$Z${index}`; // Level column name
+      const gindex = `$AC${index}`; // Gear column name
+      const hsindex = `$AD${index}`; // HeroStats2 LevelIndex
+      const gtindex = `$AE${index}`; // GearTier Hero Index
       const forms = [];
 
       // Hero Name - Only used for color...
       forms.push(
-        '=IFERROR(INDEX(_M3Localization_Heroes_Name,MATCH($A' +
-          index +
-          ',_M3Localization_Heroes_Id,0)),$A' +
-          index +
-          ')'
+        `=IFERROR(INDEX(_M3Localization_Heroes_Name,MATCH($A${index},_M3Localization_Heroes_Id,0)),$A${index})`
       );
 
       // Roster Index
-      forms.push('=IFERROR(MATCH($A' + index + ',Roster_Id,0))');
+      forms.push(`=IFERROR(MATCH($A${index},Roster_Id,0))`);
 
       // Level
-      forms.push('=IF(OR(ISBLANK(' + rindex + '),ISBLANK(' + gindex + ')),,INDEX(Roster_Level,' + rindex + '))');
+      forms.push(`=IF(OR(ISBLANK(${rindex}),ISBLANK(${gindex})),,INDEX(Roster_Level,${rindex}))`);
 
       // Stars Factor
       forms.push(
-        '=IF(ISBLANK(' +
-          lindex +
-          '),,INDEX(_M3GlobalData_StarFactor,IF(INDEX(Roster_Stars,' +
-          rindex +
-          ')+0=0,$B' +
-          index +
-          ',INDEX(Roster_Stars,' +
-          rindex +
-          ')+1)))'
+        `=IF(ISBLANK(${lindex}),,INDEX(_M3GlobalData_StarFactor,IF(INDEX(Roster_Stars,${rindex})+0=0,$B${index},INDEX(Roster_Stars,${rindex})+1)))`
       );
 
       // Red Stars Factor
       forms.push(
-        '=IF(OR(ISBLANK(' +
-          lindex +
-          '),INDEX(Roster_Stars,' +
-          rindex +
-          ')=0,INDEX(Roster_RedStars,' +
-          rindex +
-          ')=0),1,INDEX(_M3GlobalData_RedStarFactor,1+MIN(INDEX(Roster_Stars,' +
-          rindex +
-          '),INDEX(Roster_RedStars,' +
-          rindex +
-          '))))'
+        `=IF(OR(ISBLANK(${lindex}),INDEX(Roster_Stars,${rindex})=0,INDEX(Roster_RedStars,${rindex})=0),1,INDEX(_M3GlobalData_RedStarFactor,1+MIN(INDEX(Roster_Stars,${rindex}),INDEX(Roster_RedStars,${rindex}))))`
       );
 
       // Gear
-      forms.push('=IF(ISBLANK(' + rindex + '),,INDEX(Roster_Gear,' + rindex + '))');
+      forms.push(`=IF(ISBLANK(${rindex}),,INDEX(Roster_Gear,${rindex}))`);
 
       // HeroStats2 LevelIndex
-      forms.push('=IF(ISBLANK(' + lindex + '),,MATCH(' + lindex + ',_M3HeroStats!$1:$1)-1)');
+      forms.push(`=IF(ISBLANK(${lindex}),,MATCH(${lindex},_M3HeroStats!$1:$1)-1)`);
 
       // GearTiers Hero index
-      forms.push('=IF(ISBLANK(' + lindex + '),,MATCH($A' + index + ',_GearTiers_HeroId,0))');
+      forms.push(`=IF(ISBLANK(${lindex}),,MATCH($A${index},_GearTiers_HeroId,0))`);
 
       // GearTiers Hero gear index
-      forms.push('=IF(ISBLANK(' + lindex + '),,' + gtindex + '+' + gindex + '-INDEX(_GearTiers_Tier,' + gtindex + '))');
+      forms.push(`=IF(ISBLANK(${lindex}),,${gtindex}+${gindex}-INDEX(_GearTiers_Tier,${gtindex}))`);
 
       // GearTiers - Gear Index
       const statsTiersIndex = [1, 0, 2, 3, 4, 5];
       for (let part = 0; part < 6; part++) {
-        if (part === 1)
-          forms.push('=IF(OR(ISBLANK(' + lindex + '),INDEX(Roster_GearParts,' + rindex + ',2)<>TRUE),,' + gindex + ')');
+        if (part === 1) forms.push(`=IF(OR(ISBLANK(${lindex}),INDEX(Roster_GearParts,${rindex},2)<>TRUE),,${gindex})`);
         else
           forms.push(
-            '=IF(OR(ISBLANK(' +
-              lindex +
-              '),INDEX(Roster_GearParts,' +
-              rindex +
-              ',' +
-              (part + 1) +
-              ')<>TRUE),,INDEX(_GearTiers_StatsTiers,$AF' +
-              index +
-              ',' +
-              statsTiersIndex[part] +
-              ')+1)'
+            `=IF(OR(ISBLANK(${lindex}),INDEX(Roster_GearParts,${rindex},${
+              part + 1
+            })<>TRUE),,INDEX(_GearTiers_StatsTiers,$AF${index},${statsTiersIndex[part]})+1)`
           );
       }
 
@@ -330,11 +299,11 @@ function DS_Update_HeroDataFormula() {
       const statscols = ['S', 'T', 'U', 'V', 'W']; // Mod index
       for (let c = 0; c < statscols.length; c++) {
         const statCell = statscols[c] + index;
-        statsMods.push('OFFSET(_M3HeroStats!$A$1,' + statCell + ',' + hsindex + ')');
+        statsMods.push(`OFFSET(_M3HeroStats!$A$1,${statCell},${hsindex})`);
       }
 
       const baseStat = ['M', 'N', 'O', 'P', 'Q'];
-      const gearCol = ['$AG' + index, '$AH' + index, '$AI' + index, '$AJ' + index, '$AK' + index, '$AL' + index];
+      const gearCol = [`$AG${index}`, `$AH${index}`, `$AI${index}`, `$AJ${index}`, `$AK${index}`, `$AL${index}`];
       const gearStats = [];
       const gearLibStat = [
         '_GearLibrary_Stats_Focus',
@@ -345,10 +314,10 @@ function DS_Update_HeroDataFormula() {
         '_GearLibrary_Stats_Health'
       ];
       for (let c = 0; c < baseStat.length; c++) {
-        let f = '(INDEX(_GearTiers_BaseStats,$AF' + index + ',' + (c + 1) + ')';
+        let f = `(INDEX(_GearTiers_BaseStats,$AF${index},${c + 1})`;
 
         for (let g = 0; g < gearCol.length; g++) {
-          f += ' + IF(ISBLANK(' + gearCol[g] + '),,INDEX(' + gearLibStat[g] + ',' + gearCol[g] + ',' + (c + 1) + '))';
+          f += ` + IF(ISBLANK(${gearCol[g]}),,INDEX(${gearLibStat[g]},${gearCol[g]},${c + 1}))`;
         }
 
         f += ')';
@@ -360,13 +329,7 @@ function DS_Update_HeroDataFormula() {
       const starkTech = [];
       for (let st = 1; st <= 5; st++)
         starkTech.push(
-          'IF(' +
-            lindex +
-            "<20,1,1+INDEX('Stark Tech'!$C$1:$V$15," +
-            st +
-            '*2+4,MATCH($E' +
-            index +
-            ",'Stark Tech'!$C$1:$V$1,0)))"
+          `IF(${lindex}<20,1,1+INDEX('Stark Tech'!$C$1:$V$15,${st}*2+4,MATCH($E${index},'Stark Tech'!$C$1:$V$1,0)))`
         );
 
       const curveRange = ['$A:$A', '$A:$A', '$A:$A', '$B:$B', '$B:$B'];
@@ -375,75 +338,22 @@ function DS_Update_HeroDataFormula() {
       // Total stats
       for (let s = 0; s < statFactor.length; s++) {
         forms.push(
-          '=IF(ISBLANK(' +
-            lindex +
-            '),,(INDEX(_M3GlobalData_StatsCurve!' +
-            curveRange[s] +
-            ',' +
-            lindex +
-            ')*' +
-            statFactor[s] +
-            statsMods[s] +
-            '*$AA' +
-            index +
-            '+' +
-            gearStats[s] +
-            ')*$AB' +
-            index +
-            '*' +
-            starkTech[s] +
-            ')'
+          `=IF(ISBLANK(${lindex}),,(INDEX(_M3GlobalData_StatsCurve!${curveRange[s]},${lindex})*${statFactor[s]}${statsMods[s]}*$AA${index}+${gearStats[s]})*$AB${index}*${starkTech[s]})`
         );
       }
 
       // Color
       forms.push(
-        '=IF(Preferences_Color_Hero_Id="OPTION_TEAM",INDEX(Preferences_Color_Team_ColorId,INDEX(_Export_ColorTeams_Value,MIN(' +
-          'IF(ISBLANK(D' +
-          index +
-          '),30,IFERROR(MATCH(D' +
-          index +
-          ',_Export_ColorTeams_Id,0),30)),' +
-          'IF(ISBLANK(E' +
-          index +
-          '),30,IFERROR(MATCH(E' +
-          index +
-          ',_Export_ColorTeams_Id,0),30)),' +
-          'IF(ISBLANK(F' +
-          index +
-          '),30,IFERROR(MATCH(F' +
-          index +
-          ',_Export_ColorTeams_Id,0),30)),' +
-          'IF(ISBLANK(G' +
-          index +
-          '),30,IFERROR(MATCH(G' +
-          index +
-          ',_Export_ColorTeams_Id,0),30)),' +
-          'IF(ISBLANK(H' +
-          index +
-          '),30,IFERROR(MATCH(H' +
-          index +
-          ',_Export_ColorTeams_Id,0),30)),' +
-          'IF(ISBLANK(I' +
-          index +
-          '),30,IFERROR(MATCH(I' +
-          index +
-          ',_Export_ColorTeams_Id,0),30)),' +
-          'IF(ISBLANK(J' +
-          index +
-          '),30,IFERROR(MATCH(J' +
-          index +
-          ',_Export_ColorTeams_Id,0),30)),' +
-          'IF(ISBLANK(K' +
-          index +
-          '),30,IFERROR(MATCH(K' +
-          index +
-          ',_Export_ColorTeams_Id,0),30))))),' +
-          'VLOOKUP(INDEX(A' +
-          index +
-          ':G' +
-          index +
-          ',0,Preferences_Color_Hero_Index),_ColorCodes,2))'
+        `=IF(Preferences_Color_Hero_Id="OPTION_TEAM",INDEX(Preferences_Color_Team_ColorId,INDEX(_Export_ColorTeams_Value,MIN(` +
+          `IF(ISBLANK(D${index}),30,IFERROR(MATCH(D${index},_Export_ColorTeams_Id,0),30)),` +
+          `IF(ISBLANK(E${index}),30,IFERROR(MATCH(E${index},_Export_ColorTeams_Id,0),30)),` +
+          `IF(ISBLANK(F${index}),30,IFERROR(MATCH(F${index},_Export_ColorTeams_Id,0),30)),` +
+          `IF(ISBLANK(G${index}),30,IFERROR(MATCH(G${index},_Export_ColorTeams_Id,0),30)),` +
+          `IF(ISBLANK(H${index}),30,IFERROR(MATCH(H${index},_Export_ColorTeams_Id,0),30)),` +
+          `IF(ISBLANK(I${index}),30,IFERROR(MATCH(I${index},_Export_ColorTeams_Id,0),30)),` +
+          `IF(ISBLANK(J${index}),30,IFERROR(MATCH(J${index},_Export_ColorTeams_Id,0),30)),` +
+          `IF(ISBLANK(K${index}),30,IFERROR(MATCH(K${index},_Export_ColorTeams_Id,0),30))))),` +
+          `VLOOKUP(INDEX(A${index}:G${index},0,Preferences_Color_Hero_Index),_ColorCodes,2))`
       );
 
       formulas.push(forms);

@@ -9,7 +9,7 @@
 // classOf
 
 function tb_value(columnId) {
-  const val = '' + sourceRow[columnOf[columnId]];
+  const val = `${sourceRow[columnOf[columnId]]}`;
 
   switch (val.toLowerCase()) {
     case 'none':

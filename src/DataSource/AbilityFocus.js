@@ -83,7 +83,7 @@ function ImportAbilityFocus(index) {
   const afSources = getNamedRangeValues('_AbilityFocus_Source');
   const author = afSources[index][0];
 
-  const file = abilityFocusFolder.getFilesByName(author + '.json').next();
+  const file = abilityFocusFolder.getFilesByName(`${author}.json`).next();
   const content = file.getBlob().getDataAsString();
   const json = JSON.parse(content);
 
@@ -100,7 +100,7 @@ function ImportAbilityFocus(index) {
     for (let h = 0; h < teams[t].Hero.length; h++) {
       const hero = teams[t].Hero[h];
 
-      output('Hero = ' + hero);
+      output(`Hero = ${hero}`);
 
       data[_index++] = [
         teamId,

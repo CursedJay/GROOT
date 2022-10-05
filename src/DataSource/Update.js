@@ -38,7 +38,7 @@ function DataSourceUpdate_Continue() {
 
 function DataSource_SetStep(step) {
   PropertiesService.getScriptProperties().setProperty('DataSourceUpdateStep', step);
-  SetUpdateProgress('Updating... ' + (step + 1) + '/15');
+  SetUpdateProgress(`Updating... ${step + 1}/15`);
 }
 
 function DataSource_GetStep() {
@@ -47,7 +47,7 @@ function DataSource_GetStep() {
 
 function DataSource_Loop(step) {
   do {
-    output('Loop = ' + step);
+    output(`Loop = ${step}`);
     if (step == -1 || DataSource_Timeout(60)) {
       // Less that a minute left, abord
       DataSource_TimeoutPopup();
@@ -73,7 +73,7 @@ function DataSource_Timeout(secLeft) {
 }
 
 function DataSource_UpdateStep(step) {
-  output('Update Step ' + step);
+  output(`Update Step ${step}`);
 
   updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
 

@@ -88,83 +88,21 @@ function DS_Update_GearTiersFormula() {
 
       // COST
       newRow[0] =
-        '= IF(Q' +
-        row +
-        ', INDEX(_GearLibrary_Craft_CostFocus,  MATCH(C' +
-        row +
-        ' & D' +
-        row +
-        ', _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n' +
-        '+ IF(R' +
-        row +
-        ', INDEX(_GearLibrary_Hero_Cost,        MATCH(A' +
-        row +
-        ' & B' +
-        row +
-        ', _GearLibrary_Hero_Id      & _GearLibrary_Hero_Tier,  0)), 0)\n' +
-        '+ IF(S' +
-        row +
-        ', INDEX(_GearLibrary_Craft_CostDamage, MATCH(C' +
-        row +
-        ' & E' +
-        row +
-        ', _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n' +
-        '+ IF(T' +
-        row +
-        ', INDEX(_GearLibrary_Craft_CostResist, MATCH(C' +
-        row +
-        ' & F' +
-        row +
-        ', _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n' +
-        '+ IF(U' +
-        row +
-        ', INDEX(_GearLibrary_Craft_CostArmor,  MATCH(C' +
-        row +
-        ' & G' +
-        row +
-        ', _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n' +
-        '+ IF(V' +
-        row +
-        ', INDEX(_GearLibrary_Craft_CostHealth, MATCH(C' +
-        row +
-        ' & H' +
-        row +
-        ', _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)';
+        `= IF(Q${row}, INDEX(_GearLibrary_Craft_CostFocus,  MATCH(C${row} & D${row}, _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n` +
+        `+ IF(R${row}, INDEX(_GearLibrary_Hero_Cost,        MATCH(A${row} & B${row}, _GearLibrary_Hero_Id      & _GearLibrary_Hero_Tier,  0)), 0)\n` +
+        `+ IF(S${row}, INDEX(_GearLibrary_Craft_CostDamage, MATCH(C${row} & E${row}, _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n` +
+        `+ IF(T${row}, INDEX(_GearLibrary_Craft_CostResist, MATCH(C${row} & F${row}, _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n` +
+        `+ IF(U${row}, INDEX(_GearLibrary_Craft_CostArmor,  MATCH(C${row} & G${row}, _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)\n` +
+        `+ IF(V${row}, INDEX(_GearLibrary_Craft_CostHealth, MATCH(C${row} & H${row}, _GearLibrary_Craft_Origin & _GearLibrary_Craft_Tier, 0)), 0)`;
 
       // Farming tab hero index
-      newRow[1] = '=IFERROR(MATCH(A' + row + ',Farming_Id,0))';
+      newRow[1] = `=IFERROR(MATCH(A${row},Farming_Id,0))`;
 
       // Current gear tier for that hero
-      newRow[2] =
-        '=IF(ISBLANK(O' +
-        row +
-        '),,IF(OR(INDEX(Farming_Enable,O' +
-        row +
-        ',1)<>TRUE, B' +
-        row +
-        '<INDEX(Farming_Gear,O' +
-        row +
-        ',1),B' +
-        row +
-        '>=INDEX(Farming_Gear_Target,O' +
-        row +
-        ',1)),,INDEX(Farming_Gear,O' +
-        row +
-        ',1)+0))';
+      newRow[2] = `=IF(ISBLANK(O${row}),,IF(OR(INDEX(Farming_Enable,O${row},1)<>TRUE, B${row}<INDEX(Farming_Gear,O${row},1),B${row}>=INDEX(Farming_Gear_Target,O${row},1)),,INDEX(Farming_Gear,O${row},1)+0))`;
 
       for (let c = 0; c < 6; c++) {
-        newRow[3 + c] =
-          '=IF(ISBLANK(P' +
-          row +
-          '),,IF(P' +
-          row +
-          '<>B' +
-          row +
-          ',TRUE,NOT(INDEX(Farming_Gear,O' +
-          row +
-          ',' +
-          (c + 2) +
-          '))))';
+        newRow[3 + c] = `=IF(ISBLANK(P${row}),,IF(P${row}<>B${row},TRUE,NOT(INDEX(Farming_Gear,O${row},${c + 2}))))`;
       }
       newData.push(newRow);
     }

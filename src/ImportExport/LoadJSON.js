@@ -45,7 +45,7 @@ function loadJSON_Base(foldername, filename) {
   AddMissingToons();
 
   if (_loadErrorCount > 0)
-    SpreadsheetApp.getUi().alert('Warning: Some errors occured in the process\n\n' + _loadErrorMsg);
+    SpreadsheetApp.getUi().alert(`Warning: Some errors occured in the process\n\n${_loadErrorMsg}`);
 }
 
 function setJSON(json) {
@@ -60,7 +60,7 @@ function setJSON(json) {
     setJSON_Profile(json.Profile);
   } catch (e) {
     _loadErrorCount++;
-    _loadErrorMsg += e + '\n';
+    _loadErrorMsg += `${e}\n`;
   }
 
   try {
@@ -84,21 +84,21 @@ function setJSON(json) {
     }
   } catch (e) {
     _loadErrorCount++;
-    _loadErrorMsg += e + '\n';
+    _loadErrorMsg += `${e}\n`;
   }
 
   try {
     setJSON_Roster(json.Roster);
   } catch (e) {
     _loadErrorCount++;
-    _loadErrorMsg += e + '\n';
+    _loadErrorMsg += `${e}\n`;
   }
 
   try {
     setJSON_StarkTech(json.StarkTech);
   } catch (e) {
     _loadErrorCount++;
-    _loadErrorMsg += e + '\n';
+    _loadErrorMsg += `${e}\n`;
   }
 
   if (_isGroot) {
@@ -106,49 +106,49 @@ function setJSON(json) {
       setJSON_Teams(json.Teams);
     } catch (e) {
       _loadErrorCount++;
-      _loadErrorMsg += e + '\n';
+      _loadErrorMsg += `${e}\n`;
     }
 
     try {
       setJSON_War(json.War);
     } catch (e) {
       _loadErrorCount++;
-      _loadErrorMsg += e + '\n';
+      _loadErrorMsg += `${e}\n`;
     }
 
     try {
       setJSON_Raid(json.Raid);
     } catch (e) {
       _loadErrorCount++;
-      _loadErrorMsg += e + '\n';
+      _loadErrorMsg += `${e}\n`;
     }
 
     try {
       if (json.hasOwnProperty('Blitz')) setJSON_Blitz(json.Blitz);
     } catch (e) {
       _loadErrorCount++;
-      _loadErrorMsg += e + '\n';
+      _loadErrorMsg += `${e}\n`;
     }
 
     try {
       if (json.hasOwnProperty('Mission')) setJSON_Mission(json.Mission);
     } catch (e) {
       _loadErrorCount++;
-      _loadErrorMsg += e + '\n';
+      _loadErrorMsg += `${e}\n`;
     }
 
     try {
       if (json.hasOwnProperty('Links')) setJSON_Links(json.Links);
     } catch (e) {
       _loadErrorCount++;
-      _loadErrorMsg += e + '\n';
+      _loadErrorMsg += `${e}\n`;
     }
   } else {
     try {
       setJSON_Raid_RO(json.Raid);
     } catch (e) {
       _loadErrorCount++;
-      _loadErrorMsg += e + '\n';
+      _loadErrorMsg += `${e}\n`;
     }
   }
 
@@ -156,14 +156,14 @@ function setJSON(json) {
     setJSON_Inventory(json.Inventory);
   } catch (e) {
     _loadErrorCount++;
-    _loadErrorMsg += e + '\n';
+    _loadErrorMsg += `${e}\n`;
   }
 
   try {
     setJSON_Farming(json.Farming);
   } catch (e) {
     _loadErrorCount++;
-    _loadErrorMsg += e + '\n';
+    _loadErrorMsg += `${e}\n`;
   }
 
   try {
@@ -487,7 +487,7 @@ function setJSON_Teams(jsonTeams) {
   }
 
   for (let c = 0; c < 4; c++) {
-    if (!colAllTrue[c]) setNamedRangeValues('Teams_Flags' + (c + 1), checkcol[c]);
+    if (!colAllTrue[c]) setNamedRangeValues(`Teams_Flags${c + 1}`, checkcol[c]);
   }
 }
 

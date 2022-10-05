@@ -1,6 +1,6 @@
 function msfgg_saveData() {
-  const params = { method: 'get', headers: { Authorization: 'Bearer ' + msfggtoken } };
-  const url = 'https://api.msf.gg/services/getRoster?userGuid=' + getNamedRangeValue('Preferences_MSFgg_Id');
+  const params = { method: 'get', headers: { Authorization: `Bearer ${msfggtoken}` } };
+  const url = `https://api.msf.gg/services/getRoster?userGuid=${getNamedRangeValue('Preferences_MSFgg_Id')}`;
   const response = UrlFetchApp.fetch(url, params);
   const json = JSON.parse(response.getContentText());
   const folder = getFolder(_zaratoolsFolder, true);
@@ -22,14 +22,14 @@ function msfgg_exportWarDefense() {
     csvtext += '\r\n';
   }
 
-  const filename = playerName + '-war-defense.csv';
+  const filename = `${playerName}-war-defense.csv`;
   folder.createFile(filename, csvtext);
-  Browser.msgBox('File "' + filename + '" is waiting in your Drive.\nCheck https://drive.google.com/drive/my-drive');
+  Browser.msgBox(`File "${filename}" is waiting in your Drive.\nCheck https://drive.google.com/drive/my-drive`);
 }
 
 function msfgg_import() {
-  const params = { method: 'get', headers: { Authorization: 'Bearer ' + msfggtoken } };
-  const url = 'https://api.msf.gg/services/getRoster?userGuid=' + getNamedRangeValue('Preferences_MSFgg_Id');
+  const params = { method: 'get', headers: { Authorization: `Bearer ${msfggtoken}` } };
+  const url = `https://api.msf.gg/services/getRoster?userGuid=${getNamedRangeValue('Preferences_MSFgg_Id')}`;
   const response = UrlFetchApp.fetch(url, params);
 
   const roster = JSON.parse(response.getContentText());
@@ -65,7 +65,7 @@ function msfgg_import() {
     rosterData[s][3] = hero.tier == 0 ? '' : hero.tier;
 
     for (let gearPart = 1; gearPart <= 6; gearPart++) {
-      const slot = 'slot' + gearPart;
+      const slot = `slot${gearPart}`;
       const equipped = hero[slot];
       rosterData[s][4 + (gearPart - 1)] = Number(equipped) == 1;
     }
@@ -301,7 +301,7 @@ function msfgg_export() {
 
   const fetchPost = {
     method: 'post',
-    headers: { Authorization: 'Bearer ' + msfggtoken },
+    headers: { Authorization: `Bearer ${msfggtoken}` },
     contentType: 'application/json',
     payload: JSON.stringify(data)
   };

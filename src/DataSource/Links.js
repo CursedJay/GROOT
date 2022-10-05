@@ -11,12 +11,11 @@ function DS_Update_Links() {
   for (let i = 0; i < range.getHeight(); i++) {
     data[i] = ['', '', ''];
     if (i < json.ContentCreators.length)
-      data[i][0] = '=HYPERLINK("' + json.ContentCreators[i].URL + '", "' + json.ContentCreators[i].Title + '")';
+      data[i][0] = `=HYPERLINK("${json.ContentCreators[i].URL}", "${json.ContentCreators[i].Title}")`;
 
-    if (i < json.Tools.length) data[i][1] = '=HYPERLINK("' + json.Tools[i].URL + '", "' + json.Tools[i].Title + '")';
+    if (i < json.Tools.length) data[i][1] = `=HYPERLINK("${json.Tools[i].URL}", "${json.Tools[i].Title}")`;
 
-    if (i < json.Servers.length)
-      data[i][2] = '=HYPERLINK("' + json.Servers[i].URL + '", "' + json.Servers[i].Title + '")';
+    if (i < json.Servers.length) data[i][2] = `=HYPERLINK("${json.Servers[i].URL}", "${json.Servers[i].Title}")`;
   }
 
   range.setFormulas(data);

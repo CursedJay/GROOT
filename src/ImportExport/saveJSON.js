@@ -20,7 +20,7 @@ function saveJSON_Base(filename) {
   folder.createFile(filename, jsonString);
 
   if (_saveErrorCount > 0)
-    SpreadsheetApp.getUi().alert('Warning: Some errors occured in the process\n\n' + _saveErrorMsg);
+    SpreadsheetApp.getUi().alert(`Warning: Some errors occured in the process\n\n${_saveErrorMsg}`);
 }
 
 function getJSON() {
@@ -34,112 +34,112 @@ function getJSON() {
     json.Header = getJSON_Header();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Profile = getJSON_Profile();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.GROOT = getJSON_GROOT();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.MSFPal = { AllianceId: _data[_pref_Y + 9][_pref_X], APIKey: _data[_pref_Y + 10][_pref_X] };
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.MSFgg = { UserID: _data[30][4], Key: _data[31][4] };
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.MSFToolBot = { SheetId: _data[40][3] };
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Roster = getJSON_Roster();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.StarkTech = getJSON_StarkTech();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Teams = getJSON_Teams();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.War = getJSON_War();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Raid = getJSON_Raid();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Blitz = getJSON_Blitz();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Mission = getJSON_Mission();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Inventory = getJSON_Inventory();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Farming = getJSON_Farming();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   try {
     json.Links = getJSON_Links();
   } catch (e) {
     _saveErrorCount++;
-    _saveErrorMsg += e + '\n';
+    _saveErrorMsg += `${e}\n`;
   }
 
   return json;
@@ -498,8 +498,7 @@ function getJSON_Inventory() {
   for (let level = 0; level < 5; level++) {
     for (let role = 0; role < roles.length; role++) {
       for (let stat = 0; stat < stats.length; stat++) {
-        inventory['ISOITEM_GREEN_' + roles[role] + '_' + stats[stat] + '_' + (level + 1)] =
-          _data[index][_inventory_iso8_X];
+        inventory[`ISOITEM_GREEN_${roles[role]}_${stats[stat]}_${level + 1}`] = _data[index][_inventory_iso8_X];
 
         index++;
       }

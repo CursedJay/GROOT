@@ -11,6 +11,7 @@
   "extends": ["eslint:recommended", "eslint-config-prettier"],
   "plugins": ["eslint-plugin-prettier", "googleappsscript"],
   "rules": {
+    "prefer-template":"warn",
     "no-undef":"off",
     "no-unused-vars":"off",
     "no-var":"error",
