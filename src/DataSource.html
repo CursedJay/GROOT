@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+</head>
+
+<body>
+    <div id="form">
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+    </div>
+    <div id="res"></div>
+    <script>
+        var working = true;
+
+        function start()
+        {
+            msg('Data source update started. It will take some time, please wait...', true);
+            working = true;
+            serverExecute();
+        }
+
+        function stop()
+        {
+            if (working = true)
+            {
+                msg('stop');
+            }
+            working = false;
+        }
+
+        function serverExecute()
+        {
+            msg('serverExecute ... ');
+            google.script.run.withSuccessHandler(function (response)
+            {
+                msg(response);
+                if (working === false)
+                {
+                    msg('working = false. Prevent stop');
+                }
+                if (response === -1)
+                {
+                    working = false;
+                    msg('Update finished!');
+                }
+                if (working === true)
+                    serverExecute();
+            }).getDataSourceProgress();
+        }
+
+        function msg(str, clearBefore)
+        {
+            var res = document.getElementById('res');
+            res.innerHTML = (clearBefore ? '' : (res.innerHTML + '<br>')) + str;
+        }
+
+        window.addEventListener('DOMContentLoaded', (event) =>
+        {
+            document.getElementById('start').addEventListener('click', function (event)
+            {
+                start();
+            });
+            document.getElementById('stop').addEventListener('click', function (event)
+            {
+                stop();
+            });
+        });
+    </script>
+</body>
+
+</html>

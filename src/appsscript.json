@@ -1,0 +1,15 @@
+{
+  "timeZone": "America/New_York",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "GrootApi",
+        "version": "3",
+        "libraryId": "1QPjfi_uHcjEpI5RHDqzD2k1RnDctXpCCQLVdh7L36xJaEODG9a-GLXUt",
+        "developmentMode": false
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}

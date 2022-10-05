@@ -1,0 +1,23 @@
+{
+  "name": "groot",
+  "version": "2.1",
+  "description": "Scripts for GROOT spreadsheets",
+  "private": true,
+  "main": "Main.js",
+  "author": "JayG64#7990",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "2.7.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JayG64/GROOT.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JayG64/GROOT/issues"
+  },
+  "homepage": "https://github.com/JayG64/GROOT#readme"
+}

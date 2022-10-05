@@ -1,0 +1,19 @@
+{
+    "eslint.alwaysShowStatus": true,
+    "editor.formatOnSave": false,
+    "eslint.options": {
+      "extensions": [
+        ".js"
+      ]
+    },
+    "eslint.validate": [
+        "javascript",
+    ],
+    "eslint.trace.server": "messages",
+    "files.autoSave": "off",
+    "javascript.format.enable": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  }
+  

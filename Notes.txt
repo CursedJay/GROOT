@@ -1,0 +1,86 @@
+/*
+
+EVENT_CHARACTER_EVENT  in Japanese shows font size=40
+
+HeroLevel: INDEX(Roster_Level,MATCH($A2,Roster_Id,0))
+HeroGear: INDEX(Roster_Gear,MATCH($A2,Roster_Id,0))
+HeroId: $A2
+_Values_HeroStatsHealthIndex: MATCH("health",'_M3HeroStats'!1:1)
+_Values_HeroStatsDamageIndex: 2
+_Values_HeroStatsArmorIndex: 3
+_Values_HeroStatsFocusIndex: 4
+_Values_HeroStatsResistIndex: 5
+
+_Values_GearTiersSlotIndex[1]: 3
+_Values_GearTiersSlot2Index: 5
+_Values_GearTiersSlot3Index: 7
+_Values_GearTiersSlot4Index: 9
+_Values_GearTiersSlot5Index: 11
+_Values_GearTiersSlot6Index: 13
+_Values_GearTiersHealthIndex: 15
+_Values_GearTiersDamageIndex: 16
+_Values_GearTiersArmorIndex: 17
+_Values_GearTiersFocusIndex: 18
+_Values_GearTiersArmorIndex: 19
+
+GearLibraryHealthIndex: 3
+GearLibraryDamageIndex: 4
+GearLibraryArmorIndex: 5
+GearLibraryFocusIndex: 6
+GearLibraryResistIndex: 7
+
+HeroStats2LevelIndex: MATCH(HeroLevel,'_M3HeroStats2'!$1:$1)-1
+HeroStatsIdIndex: MATCH(HeroId,'_M3HeroStats'!$A$2:$A,0)
+
+HeroStatsHealthType: OFFSET('_M3HeroStats'!$A$1,HeroStatsIdIndex,HeroStatsHealthIndex)
+HealthMod: OFFSET('_M3HeroStats2'!$A$1,HeroStatsHealthType,HeroStats2LevelIndex)
+
+HeroStatsDamageType: OFFSET('_M3HeroStats'!$A$1,HeroStatsIdIndex,HeroStatsDamageIndex)
+DamageMod: OFFSET('_M3HeroStats2'!$A$1,HeroStatsDamageType,HeroStats2LevelIndex)
+
+HeroStatsArmorType: OFFSET('_M3HeroStats'!$A$1,HeroStatsIdIndex,HeroStatsArmorIndex)
+ArmorMod: OFFSET('_M3HeroStats2'!$A$1,HeroStatsArmorType,HeroStats2LevelIndex)
+
+HeroStatsFocusType: OFFSET('_M3HeroStats'!$A$1,HeroStatsIdIndex,HeroStatsFocusIndex)
+FocusMod: OFFSET('_M3HeroStats2'!$A$1,HeroStatsFocusType,HeroStats2LevelIndex)
+
+HeroStatsResistType: OFFSET('_M3HeroStats'!$A$1,HeroStatsIdIndex,HeroStatsResistIndex)
+ResistMod: OFFSET('_M3HeroStats2'!$A$1,HeroStatsResistType,HeroStats2LevelIndex)
+
+GearTiersHeroGearIndex: MATCH(HeroId&(HeroGear-1),'_M3GearTiers'!$A:$A&'_M3GearTiers'!$B:$B,0) [CAN'T BE A REFERENCE]
+
+GearHealthBase: ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,GearTiersHeroGearIndex,_Values_GearTiersHealthIndex))
+GearItem1: ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,GearTiersHeroGearIndex,_Values_GearTiersSlot1Index))
+GearItem2: ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,GearTiersHeroGearIndex,_Values_GearTiersSlot2Index))
+GearItem3: ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,GearTiersHeroGearIndex,_Values_GearTiersSlot3Index))
+GearItem4: ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,GearTiersHeroGearIndex,_Values_GearTiersSlot4Index))
+GearItem5: ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,GearTiersHeroGearIndex,_Values_GearTiersSlot5Index))
+GearItem6: ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,GearTiersHeroGearIndex,_Values_GearTiersSlot5Index))
+
+GearLibraryItem1Index: MATCH(GearItem1,'_M3GearLibrary'!$A$2:$A,0)
+GearLibraryItem2Index: MATCH(GearItem2,'_M3GearLibrary'!$A$2:$A,0)
+GearLibraryItem3Index: MATCH(GearItem3,'_M3GearLibrary'!$A$2:$A,0)
+GearLibraryItem4Index: MATCH(GearItem4,'_M3GearLibrary'!$A$2:$A,0)
+GearLibraryItem5Index: MATCH(GearItem5,'_M3GearLibrary'!$A$2:$A,0)
+GearLibraryItem6Index: MATCH(GearItem6,'_M3GearLibrary'!$A$2:$A,0)
+
+GearItem1Health: OFFSET('_M3GearLibrary'!$A$1,GearLibraryItem1Index,GearLibraryHealthIndex)
+
+InnerCurve: IF(HeroLevel>_M3GlobalData_Above70LevelSet,(_M3GlobalData_Above70Mul*POW(POW(_M3GlobalData_Above70Base,1/_M3GlobalData_Above70Div),HeroLevel-70)+_M3GlobalData_Above70Add),
+        (HeroLevel*_M3GlobalData_BaseStatCurveMultiplier*POW(_M3GlobalData_BaseStatCurveBase,HeroLevel-1)))
+
+CurveFocusResist: (HeroLevel*_M3GlobalData_BaseFocusResistCurveInnerMultiplier*POW(_M3GlobalData_BaseFocusResistCurveBase,HeroLevel-1)+_M3GlobalData_BaseFocusResistCurveAdd)*_M3GlobalData_BaseFocusResistCurveOuterMultiplier
+
+=IFERROR
+(
+    ARRAYFORMULA(INDEX('_M3GearTiers'!A:S,MATCH($A2&($D2-1),'_M3GearTiers'!$A:$A&'_M3GearTiers'!$B:$B,0) ,INDEX(_Values_M3GearLibraryIndex,1))
+    +IF($L2<>"",OFFSET('_M3GearLibrary'!$A$1,$L2,_Values_GearTiersHealthIndex))
+    +IF($M2<>"",OFFSET('_M3GearLibrary'!$A$1,$M2,_Values_GearTiersHealthIndex))
+    +IF($N2<>"",OFFSET('_M3GearLibrary'!$A$1,$N2,_Values_GearTiersHealthIndex))
+    +IF($O2<>"",OFFSET('_M3GearLibrary'!$A$1,$O2,_Values_GearTiersHealthIndex))
+    +IF($P2<>"",OFFSET('_M3GearLibrary'!$A$1,$P2,_Values_GearTiersHealthIndex))
+    +IF($Q2<>"",OFFSET('_M3GearLibrary'!$A$1,$Q2,_Values_GearTiersHealthIndex))
+)
+
+TEST
+*/
