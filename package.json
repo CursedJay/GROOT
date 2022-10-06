@@ -2,7 +2,6 @@
   "name": "groot",
   "version": "2.1",
   "description": "Scripts for GROOT spreadsheets",
-  "private": true,
   "main": "Main.js",
   "author": "JayG64#7990",
   "license": "ISC",
