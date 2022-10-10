@@ -3,7 +3,6 @@ function api_importInventory(since) {
   const inventoryVersionCell = getNamedRangeValue('Inventory_Since');
   const _since = since ?? (inventoryVersionCell ? inventoryVersionCell : 'fresh');
   const inventory = GrootApi.getInventory(_since);
-  saveReqToFile(inventory, 'MEGATEST YEAH.json');
 
   if (inventory === false) return;
 
@@ -32,4 +31,12 @@ function updateInventoryValues(data, idsRange, valuesRange) {
   }
 
   setNamedRangeValues(valuesRange, values);
+}
+
+function saveInventoryJSON() {
+  const inventory = GrootApi.getInventory('fresh');
+  const dateTime = Utilities.formatDate(new Date(), 'GMT+8', "yyyy-MM-dd'T'HH:mm:ss.SS");
+  const filename = `msf_inventory_${dateTime}.json`;
+
+  saveReqToFile(inventory, filename);
 }
