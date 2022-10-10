@@ -1,5 +1,5 @@
 let _updateStart;
-let updateVersion;
+let _updateVersion;
 
 function SetUpdateProgress(newValue) {
   const oldValue = PropertiesService.getScriptProperties().getProperty('OldUpdateProgress');
@@ -18,8 +18,8 @@ function SetUpdateProgress(newValue) {
 
 function DataSourceUpdate_Start() {
   _updateStart = new Date().getTime();
-  updateVersion = getNamedRangeValue('_Version_DataSource_Latest');
-  PropertiesService.getScriptProperties().setProperty('DataSourceUpdateVersion', updateVersion);
+  _updateVersion = getNamedRangeValue('_Version_DataSource_Latest');
+  PropertiesService.getScriptProperties().setProperty('DataSourceUpdateVersion', _updateVersion);
 
   DataSource_SetStep(0);
   DataSource_Loop(0);
@@ -27,7 +27,7 @@ function DataSourceUpdate_Start() {
 
 function DataSourceUpdate_Continue() {
   _updateStart = new Date().getTime();
-  if (updateVersion == null) {
+  if (_updateVersion == null) {
     SetUpdateProgress(null);
     return;
   }
@@ -75,7 +75,7 @@ function DataSource_Timeout(secLeft) {
 function DataSource_UpdateStep(step) {
   output(`Update Step ${step}`);
 
-  updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
+  _updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
 
   switch (step) {
     case 0:
@@ -137,7 +137,7 @@ function DataSource_UpdateStep(step) {
     case 14:
       AddMissingToons();
       DS_Update_Links();
-      setNamedRangeValue('_Version_DataSource_Current', updateVersion);
+      setNamedRangeValue('_Version_DataSource_Current', _updateVersion);
       return 666;
   }
 
