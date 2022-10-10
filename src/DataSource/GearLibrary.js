@@ -427,11 +427,13 @@ function DS_Update_GearLibraryCraftFormula() {
       const newRow = [];
 
       // Count of gear we need of each type
+      const statCraftedGearCol = ['Y:Y', 'Z:Z', 'AA:AA', 'AB:AB', 'AC:AC'];
       for (let s = 0; s < _statsTypeShort.length; s++)
         newRow.push(
-          `=COUNTIFS(_GearTiers_Slot_${_statsTypeShort[s]}, "=" & TRUE, _GearTiers_Origin, "=" & A${row}, _GearTiers_Tier_${_statsTypeShort[s]}, "=" & B${row})`
+          `=MAX(COUNTIFS(_GearTiers_Slot_${_statsTypeShort[s]}, "=" & TRUE, _GearTiers_Origin, "=" & A${row}, _GearTiers_Tier_${_statsTypeShort[s]}, "=" & B${row})-SUMIFS('Crafted Gear'!${statCraftedGearCol[s]}, 'Crafted Gear'!X:X, A${row}, 'Crafted Gear'!W:W, B${row}),0)`
         );
-
+      // =max(COUNTIFS(_GearTiers_Slot_Health, "=" & TRUE, _GearTiers_Origin, "=" & A1, _GearTiers_Tier_Health, "=" & B1)
+      // -sumifs('*AdvGear'!X:X,'*AdvGear'!$W:$W,A1,'*AdvGear'!$V:$V,B1),0)
       const statCountCol = ['Z', 'AA', 'AB', 'AC', 'AD'];
 
       // Total of gear we need for this row
