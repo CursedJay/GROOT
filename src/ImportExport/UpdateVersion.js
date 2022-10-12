@@ -18,7 +18,7 @@ function updateVersionTo(buildNum, sheetId, version) {
   const ui = SpreadsheetApp.getUi();
   const current = Number(getNamedRangeValue('_Version_Build_Current'));
 
-  if (current == 0 || buildNum == 0) {
+  if (current === 0 || buildNum === 0) {
     ui.alert("There's a temporary issue, please try again later.");
     return;
   }
@@ -32,7 +32,7 @@ function updateVersionTo(buildNum, sheetId, version) {
   const file = DriveApp.getFileById(sourceId);
   const fileParents = file.getParents();
 
-  let folder = null;
+  let folder;
   if (fileParents.hasNext()) {
     folder = fileParents.next();
   }
@@ -43,8 +43,8 @@ function updateVersionTo(buildNum, sheetId, version) {
     playerName.length == 0 || playerName == '<Your Name Here>' ? 'GROOT' : playerName
   } v${version}${_finishUpdateTag}`;
 
-  let newFile = null;
-  if (folder != null) newFile = latestFile.makeCopy(fileName, folder);
+  let newFile;
+  if (folder != undefined) newFile = latestFile.makeCopy(fileName, folder);
   else newFile = latestFile.makeCopy(fileName);
 
   // ---------------------------------------------------
