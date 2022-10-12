@@ -1,4 +1,7 @@
-{
+{    
+    "compilerOptions": {
+        "target": "es2019",
+    },
     "include": ["src/**/*.js"],
     "exclude": ["node_modules", "**/node_modules/*"]
 }
