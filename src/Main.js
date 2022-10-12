@@ -62,23 +62,6 @@ function FinishUpdate() {
   }
 }
 
-function GetAbilityFocusSources() {
-  const cache = CacheService.getScriptCache();
-
-  const cached = cache.get('AbilityFocusSources');
-  if (cached != null) {
-    return JSON.parse(cached);
-  }
-
-  const afSources = getNamedRangeValues('_AbilityFocus_Source');
-  const result = [];
-  for (let i = 0; i < afSources.length; i++) {
-    result.push(afSources[i][0]);
-  }
-  cache.put('AbilityFocusSources', JSON.stringify(result), 60 * 60); // Cache for 60 minutes
-  return result;
-}
-
 function CreateMenu() {
   const ui = SpreadsheetApp.getUi();
 
