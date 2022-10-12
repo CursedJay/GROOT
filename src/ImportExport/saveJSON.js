@@ -488,33 +488,48 @@ function getJSON_Mission() {
 
 function getJSON_Inventory() {
   const inventory = { CountFlag: _data[_inventory_countflag_Y][_inventory_countflag_X] };
+  inventory.mats = {};
+  inventory.crafted = {};
+  inventory.iso = {};
 
   // ISOITEM_GREEN_PROTECTOR_ARMOR_1
   const roles = ['PROTECTOR', 'BLASTER', 'SUPPORT', 'BRAWLER', 'CONTROLLER'];
   const stats = ['ARMOR', 'RESIST', 'HEALTH', 'FOCUS', 'DAMAGE'];
 
   let index = 0;
-
+  //ISO 8
   for (let level = 0; level < 5; level++) {
     for (let role = 0; role < roles.length; role++) {
       for (let stat = 0; stat < stats.length; stat++) {
-        inventory[`ISOITEM_GREEN_${roles[role]}_${stats[stat]}_${level + 1}`] = _data[index][_inventory_iso8_X];
+        inventory.iso[`ISOITEM_GREEN_${roles[role]}_${stats[stat]}_${level + 1}`] = _data[index][_inventory_iso8_X];
 
         index++;
       }
     }
   }
 
+  //Inventory materials
   for (let col = 0; col < 2; col++) {
     for (let i = 0; i < _data.length; i++) {
       const qt = _data[i][_inventory_main_X + 1 + col * 2];
       const id = _data[i][_inventory_main_X + col * 2];
 
-      if (qt == '' || qt <= 0 || id == '') continue;
+      if (qt === '' || qt <= 0 || id === '') continue;
 
-      inventory[id] = qt;
+      inventory.mats[id] = qt;
     }
   }
+
+  //Crafted gear
+  for (let i = 0; i < _data.length; i++) {
+    const qt = _data[i][_inventory_main_X + 8];
+    const id = _data[i][_inventory_main_X + 7];
+
+    if (qt === '' || qt <= 0 || id === '') continue;
+
+    inventory.crafted[id] = qt;
+  }
+
   return inventory;
 }
 

@@ -607,29 +607,24 @@ function setJSON_Mission(mission) {
 }
 
 function setJSON_Inventory(inventory) {
-  const keys = Object.keys(inventory);
-  if (keys.length == 0) return;
-
   let qt1 = 0;
   let qt2 = 0;
+  let qt3 = 0;
 
   // ISOITEM_GREEN_PROTECTOR_ARMOR_1
   const roles = ['PROTECTOR', 'BLASTER', 'SUPPORT', 'BRAWLER', 'CONTROLLER'];
   const stats = ['ARMOR', 'RESIST', 'HEALTH', 'FOCUS', 'DAMAGE'];
 
-  const max = 0;
-  const maxStr = '';
+  _data[_inventory_countflag_Y][_inventory_countflag_X] = inventory.CountFlag;
 
-  for (let i = 0; i < keys.length; i++) {
-    if (keys[i] == 'CountFlag') {
-      _data[_inventory_countflag_Y][_inventory_countflag_X] = inventory[keys[i]];
-    } else if (keys[i].startsWith('ISOITEM_')) {
-      const isoitemsplit = keys[i].split('_');
+  if (Object.keys(inventory.iso).length > 0)
+    for (const [key, value] of Object.entries(inventory.iso)) {
+      const isoitemsplit = key.split('_');
       const role = roles.indexOf(isoitemsplit[2]);
       let statStr = isoitemsplit[3];
       let level;
 
-      if (isoitemsplit.length == 5) {
+      if (isoitemsplit.length === 5) {
         level = Number(isoitemsplit[4]) - 1;
       } // Fix for v0.4.5 and .6 when I was missing a _ character before level
       else {
@@ -638,17 +633,28 @@ function setJSON_Inventory(inventory) {
       }
       const stat = stats.indexOf(statStr);
 
-      _data[roles.length * stats.length * level + stats.length * role + stat][_inventory_iso8_X];
-    } else if (keys[i] == 'T1_NoArmor' || keys[i].split('_').length > 2) {
-      _data[qt1][_inventory_main_X] = keys[i];
-      _data[qt1][_inventory_main_X + 1] = inventory[keys[i]];
-      qt1++;
-    } else {
-      _data[qt2][_inventory_unique_X] = keys[i];
-      _data[qt2][_inventory_unique_X + 1] = inventory[keys[i]];
-      qt2++;
+      _data[roles.length * stats.length * level + stats.length * role + stat][_inventory_iso8_X] = value;
     }
-  }
+
+  if (Object.keys(inventory.mats).length > 0)
+    for (const [key, value] of Object.entries(inventory.mats)) {
+      if (key === 'T1_NoArmor' || key.split('_').length > 2) {
+        _data[qt1][_inventory_main_X] = key;
+        _data[qt1][_inventory_main_X + 1] = value;
+        qt1++;
+      } else {
+        _data[qt2][_inventory_unique_X] = key;
+        _data[qt2][_inventory_unique_X + 1] = value;
+        qt2++;
+      }
+    }
+
+  if (Object.keys(inventory.crafted).length > 0)
+    for (const [key, value] of Object.entries(inventory.crafted)) {
+      _data[qt3][_inventory_main_X + 7] = key;
+      _data[qt3][_inventory_main_X + 8] = value;
+      qt3++;
+    }
 }
 
 function setJSON_Farming(farming) {
@@ -673,7 +679,7 @@ function setJSON_Farming(farming) {
       names[i] = [hero.Priority, hero.Index, valueOf(id)];
       target[i] = [hero.Target.StarLevel, hero.Target.RedStarLevel, hero.Target.Level, hero.Target.GearTier];
     } else {
-      names[i] = [hero.Priority, , valueOf(id)];
+      names[i] = [hero.Priority, '', valueOf(id)];
       target[i] = [hero.Target.StarLevel, '', hero.Target.Level, hero.Target.GearTier];
     }
 
