@@ -87,7 +87,6 @@ function CreateMenu() {
   menuImport.addItem('Import from Google Drive', 'loadJSON');
   menuImport.addItem('Import from MANTIS', 'mantis_import');
   menuImport.addItem('Import from MSF Toolbot', 'msftoolbot_import');
-  //menuImport.addItem("Import from MSF PAL", "msfpal_import");
   menuImport.addSeparator();
   menuImport.addItem('Finish Update', 'FinishUpdate');
 

@@ -52,13 +52,6 @@ function getJSON() {
   }
 
   try {
-    json.MSFPal = { AllianceId: _data[_pref_Y + 9][_pref_X], APIKey: _data[_pref_Y + 10][_pref_X] };
-  } catch (e) {
-    _saveErrorCount++;
-    _saveErrorMsg += `${e}\n`;
-  }
-
-  try {
     json.MSFgg = { UserID: _data[30][4], Key: _data[31][4] };
   } catch (e) {
     _saveErrorCount++;

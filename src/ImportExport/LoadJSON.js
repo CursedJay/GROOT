@@ -72,8 +72,6 @@ function setJSON(json) {
         _data[31][4] = json.MSFgg.Key;
       }
 
-      _data[_pref_Y + 9][_pref_X] = json.MSFPal.AllianceId;
-      _data[_pref_Y + 10][_pref_X] = json.MSFPal.APIKey;
       _data[40][3] = json.MSFToolBot.SheetId;
     } else {
       setJSON_GROOT(json.Profile);
