@@ -1,3 +1,7 @@
+/**
+ * @NotOnlyCurrentDoc
+ */
+
 const _finishUpdateTag = ' [Finish Update]';
 
 function onOpen(event) {
