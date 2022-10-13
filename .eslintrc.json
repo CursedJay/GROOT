@@ -8,15 +8,15 @@
     "ecmaVersion": 2022,
     "sourceType": "script"
   },
-  "extends": ["eslint:recommended", "eslint-config-prettier"],
+  "extends": ["eslint:recommended", "eslint-config-prettier", "plugin:jsonc/recommended-with-jsonc"],
   "plugins": ["eslint-plugin-prettier", "googleappsscript"],
   "rules": {
-    "prefer-template":"warn",
-    "no-undef":"off",
-    "no-unused-vars":"off",
-    "no-var":"error",
-    "prefer-const":"warn",
-    "prefer-arrow-callback":"warn",
+    "prefer-template": "warn",
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "no-var": "error",
+    "prefer-const": "warn",
+    "prefer-arrow-callback": "warn",
     "no-continue": "off",
     "prettier/prettier": [
       "error",
