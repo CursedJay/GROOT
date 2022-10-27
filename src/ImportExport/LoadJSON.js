@@ -15,10 +15,6 @@ function loadJSON_Update() {
   loadJSON_Base('MSF_Groots_Tools', docId);
 }
 
-function loadJSON_RO() {
-  loadJSON_Base('MSF_Groots_Tools', _grootFilename);
-}
-
 let _loadErrorCount;
 let _loadErrorMsg;
 
@@ -649,8 +645,8 @@ function setJSON_Inventory(inventory) {
 
   if (Object.keys(inventory.crafted).length > 0)
     for (const [key, value] of Object.entries(inventory.crafted)) {
-      _data[qt3][_inventory_main_X + 7] = key;
-      _data[qt3][_inventory_main_X + 8] = value;
+      _data[qt3][_inventory_crafted_X] = key;
+      _data[qt3][_inventory_crafted_X + 1] = value;
       qt3++;
     }
 }

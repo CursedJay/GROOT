@@ -515,8 +515,8 @@ function getJSON_Inventory() {
 
   //Crafted gear
   for (let i = 0; i < _data.length; i++) {
-    const qt = _data[i][_inventory_main_X + 8];
-    const id = _data[i][_inventory_main_X + 7];
+    const qt = _data[i][_inventory_crafted_X + 1];
+    const id = _data[i][_inventory_crafted_X];
 
     if (qt === '' || qt <= 0 || id === '') continue;
 

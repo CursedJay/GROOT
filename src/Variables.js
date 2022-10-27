@@ -3,6 +3,7 @@ const _zaratoolsFolder = 'MSF_Zaratools';
 const _grootFilename = 'MSF_PlayerData.json';
 const _dataSourceFolderId = '1Geyeo5qv0RO5zHor-RXtBiTPeqhpjJQx';
 const msfggtoken = '362478fb-cdf7-11ea-87db-0a2363cf333b';
+const _finishUpdateTag = ' [Finish Update]';
 
 // Data source
 function IsInvalidHero(id, invalidlist) {
@@ -18,6 +19,7 @@ function IsInvalidHero(id, invalidlist) {
     id.indexOf('Test') == 0 ||
     id.indexOf('_BBMinn') >= 0 ||
     id.indexOf('PvE_') == 0 ||
+    id.indexOf('PVE_') == 0 ||
     id.indexOf('GT_') == 0
   )
     return true;
@@ -133,6 +135,7 @@ const _inventory_unique_X = 12;
 const _inventory_countflag_X = 9;
 const _inventory_countflag_Y = 39;
 const _inventory_iso8_X = 15;
+const _inventory_crafted_X = 17;
 
 const _links_X = 6;
 const _links_Title_Y = 80;

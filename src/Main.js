@@ -2,8 +2,6 @@
  * @NotOnlyCurrentDoc
  */
 
-const _finishUpdateTag = ' [Finish Update]';
-
 function onOpen(event) {
   const docname = SpreadsheetApp.getActiveSpreadsheet().getName();
 
