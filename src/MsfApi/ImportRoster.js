@@ -61,7 +61,7 @@ function api_importRoster(since) {
 
     rosterData[s][10] = activeIso8 === undefined ? '' : valueOf(activeIso8);
     rosterData[s][11] = character.iso8?.matrix?.toUpperCase() ?? (matrixLevel >= 1 ? 'GREEN' : ''); //todo: localisation
-    rosterData[s][12] = matrixLevel === undefined ? '' : matrixLevel <= 5 ? matrixLevel : matrixLevel - 6; //level 1-5 Green, 6-10 Blue
+    rosterData[s][12] = matrixLevel === undefined ? '' : matrixLevel <= 5 ? matrixLevel : matrixLevel - 5; //level 1-5 Green, 6-10 Blue
     rosterData[s][13] = character.iso8?.armor ?? '';
     rosterData[s][14] = character.iso8?.resist ?? '';
     rosterData[s][15] = character.iso8?.health ?? '';
