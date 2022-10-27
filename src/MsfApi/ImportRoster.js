@@ -1,10 +1,25 @@
 function api_importRoster(since) {
-  //const rosterVersionCell = getNamedRangeValue('Roster_Since');
-  //const _since = since ?? (rosterVersionCell ? rosterVersionCell : 'fresh');
-  const _since = since;
+  const rosterVersionCell = getNamedRange('_Version_Roster');
+  const rosterVersionValue = rosterVersionCell.getValue();
+  const _since = since ?? (rosterVersionValue ? rosterVersionValue : 'fresh');
   const roster = GrootApi.getRoster(_since);
 
   if (roster === false) return;
+
+  const fullInv = GrootApi.getFullInventory();
+  const rosterInv = {};
+  rosterInv.shards = {};
+  rosterInv.redstars = {};
+
+  for (const piece of fullInv.data) {
+    const { item, quantity } = piece;
+    if (item.id.startsWith('SHARD_')) {
+      rosterInv.shards[item.characterId] = quantity;
+    } else if (item.id.startsWith('RS_')) {
+      const redStars = item.id.split('_')[2];
+      rosterInv.redstars[item.characterId] = redStars;
+    }
+  }
 
   const rosterIds = getNamedRangeValues('Roster_Import_Ids');
   const rosterData = getNamedRangeValues('Roster_Import_Data');
@@ -15,7 +30,7 @@ function api_importRoster(since) {
   const characters = roster.data;
 
   for (const character of characters) {
-    const characterId = character.id;
+    const characterId = character?.id;
 
     if (characterId === 'undefined') continue;
 
@@ -30,7 +45,8 @@ function api_importRoster(since) {
     rosterIds[s][1] = character?.favorite ?? false;
 
     rosterData[s][0] = character.activeYellow;
-    rosterData[s][1] = character.activeRed;
+    //rosterData[s][1] = character.activeRed;
+    rosterData[s][1] = rosterInv.redstars?.[characterId] ?? 0;
     rosterData[s][2] = character.level;
     rosterData[s][3] = character.gearTier;
 
@@ -58,7 +74,7 @@ function api_importRoster(since) {
     rosterData[s][21] = character.passive === 0 ? '' : character.passive;
 
     rosterData[s][22] = character.power;
-    //rosterData[s][23] = character.shards; //in inventory
+    rosterData[s][23] = rosterInv.shards?.[characterId] ?? '';
   }
 
   setNamedRangeValues('Roster_Import_Ids', rosterIds);
@@ -70,6 +86,7 @@ function api_importRoster(since) {
       rosterNotesRange.getCell(row + 1, 1).setFormula(formula);
     }
   }
+  rosterVersionCell.setValue(roster.meta.asOf);
 }
 
 function api_importFullRoster() {
