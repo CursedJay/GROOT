@@ -16,7 +16,7 @@ function api_importRoster(since) {
     if (item.id.startsWith('SHARD_')) {
       rosterInv.shards[item.characterId] = quantity;
     } else if (item.id.startsWith('RS_')) {
-      const redStars = item.id.split('_')[2];
+      const redStars = item.id.split('_').pop();
       rosterInv.redstars[item.characterId] = redStars;
     }
   }

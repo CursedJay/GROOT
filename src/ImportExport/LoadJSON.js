@@ -632,7 +632,7 @@ function setJSON_Inventory(inventory) {
 
   if (Object.keys(inventory.mats).length > 0)
     for (const [key, value] of Object.entries(inventory.mats)) {
-      if (key === 'T1_NoArmor' || key.split('_').length > 2) {
+      if (key.toUpperCase() === 'T1_NOARMOR' || key.split('_').length > 2) {
         _data[qt1][_inventory_main_X] = key;
         _data[qt1][_inventory_main_X + 1] = value;
         qt1++;

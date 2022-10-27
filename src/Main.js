@@ -68,10 +68,14 @@ function CreateMenu() {
   const ui = SpreadsheetApp.getUi();
 
   const msfapi = ui.createMenu('MSF API');
+  msfapi.addItem('Update roster', 'api_importRoster');
   msfapi.addItem('Update inventory', 'api_importInventory');
-  msfapi.addItem('Import FULL inventory', 'api_importFullInventory');
   msfapi.addSeparator();
-  msfapi.addItem('Import Profile', 'api_importProfile');
+  const msfapiForceUpdate = ui.createMenu('Force update');
+  msfapiForceUpdate.addItem('Force update roster', 'api_importFullRoster');
+  msfapiForceUpdate.addItem('Force update inventory', 'api_importFullInventory');
+  msfapi.addSubMenu(msfapiForceUpdate);
+  //msfapi.addItem('Import Profile', 'api_importProfile');
   msfapi.addSeparator();
   msfapi.addItem('Forget me', 'forgetMe');
 
