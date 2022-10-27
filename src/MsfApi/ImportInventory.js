@@ -1,8 +1,9 @@
 // TODO add param itemType
 function api_importInventory(since) {
-  const inventoryVersionCell = getNamedRangeValue('Inventory_Since');
-  const _since = since ?? (inventoryVersionCell ? inventoryVersionCell : 'fresh');
-  const inventory = GrootApi.getInventory(_since);
+  const inventoryVersionCell = getNamedRange('_Version_Inventory');
+  const inventoryVersionValue = inventoryVersionCell.getValue();
+  const _since = since ?? (inventoryVersionValue ? inventoryVersionValue : 'fresh');
+  const inventory = GrootApi.getGearInventory(_since);
 
   if (inventory === false) return;
 
@@ -12,9 +13,10 @@ function api_importInventory(since) {
     const craftedIdsRange = `CraftedGear_Ids${column}`;
     const craftedValuesRange = `CraftedGear_Values${column}`;
 
-    updateInventoryValues(inventory, matIdsRange, matValuesRange);
-    updateInventoryValues(inventory, craftedIdsRange, craftedValuesRange);
+    updateInventoryValues(inventory.gear, matIdsRange, matValuesRange);
+    updateInventoryValues(inventory.gear, craftedIdsRange, craftedValuesRange);
   }
+  inventoryVersionCell.setValue(inventory.since);
 }
 
 function api_importFullInventory() {
@@ -34,7 +36,7 @@ function updateInventoryValues(data, idsRange, valuesRange) {
 }
 
 function saveInventoryJSON() {
-  const inventory = GrootApi.getInventory('fresh');
+  const inventory = GrootApi.getGearInventory('fresh');
   const dateTime = Utilities.formatDate(new Date(), 'GMT+8', "yyyy-MM-dd'T'HH:mm:ss.SS");
   const filename = `msf_inventory_${dateTime}.json`;
 
