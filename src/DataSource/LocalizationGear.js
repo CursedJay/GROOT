@@ -5,7 +5,7 @@ function Test_DS_Update_Localization_Gear() {
 }
 
 // Will update sheet _M3Localization_Gear
-function DS_Update_Localization_Gear() {
+function DS_Update_Localization_Gear_Old() {
   const updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
   const dataSourceFolder = DriveApp.getFolderById(_dataSourceFolderId);
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();

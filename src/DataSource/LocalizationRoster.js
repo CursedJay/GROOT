@@ -4,7 +4,7 @@ function Test_DS_Update_M3Localization_Roster() {
   DS_Update_Localization_Roster();
 }
 
-function DS_Update_Localization_Roster() {
+function DS_Update_Localization_Roster_Old() {
   const updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
   const dataSourceFolder = DriveApp.getFolderById(_dataSourceFolderId);
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();

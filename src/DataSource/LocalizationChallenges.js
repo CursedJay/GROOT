@@ -5,7 +5,7 @@ function Test_DS_Update_M3Localization_Challenges() {
 }
 
 // Will update sheet _M3Localization_Challenges
-function DS_Update_Localization_Challenges() {
+function DS_Update_Localization_Challenges_Old() {
   const updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
   const dataSourceFolder = DriveApp.getFolderById(_dataSourceFolderId);
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();

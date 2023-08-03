@@ -5,7 +5,7 @@ function Test_DS_Update_Localization_Heroes() {
 }
 
 // TODO: Make sure if a language is added the system will still work
-function DS_Update_Localization_Heroes() {
+function DS_Update_Localization_Heroes_Old() {
   const updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
   const dataSourceFolder = DriveApp.getFolderById(_dataSourceFolderId);
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();
@@ -77,7 +77,7 @@ function DS_Update_Localization_Heroes() {
   return UpdateSortedRangeData(GetSheet('_M3Localization_Heroes'), 1, 3, 2 + data[0].length, 1, data);
 }
 
-function DS_Update_Localization_HeroesFormula() {
+function DS_Update_Localization_HeroesFormula_Old() {
   const sheet = GetSheet('_M3Localization_Heroes');
 
   // ------------------------------------------------------------------------------------------------------------------------------

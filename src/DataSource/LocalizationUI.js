@@ -6,7 +6,7 @@ function Test_DS_Update_M3Localization_UI() {
 
 // Will update sheet _M3Localization_UI
 // No need to let users use it, this is not supposed to change
-function DS_Update_Localization_UI() {
+function DS_Update_Localization_UI_Old() {
   const updateVersion = PropertiesService.getScriptProperties().getProperty('DataSourceUpdateVersion');
   const dataSourceFolder = DriveApp.getFolderById(_dataSourceFolderId);
   const versionFolder = dataSourceFolder.getFoldersByName(updateVersion).next();
