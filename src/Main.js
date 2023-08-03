@@ -70,10 +70,18 @@ function CreateMenu() {
   const msfapi = ui.createMenu('MSF API');
   msfapi.addItem('Update roster', 'api_importRoster');
   msfapi.addItem('Update inventory', 'api_importInventory');
+  msfapi.addItem('Update iso', 'api_importIso');
+  msfapi.addItem('Update training materials', 'api_importTraining');
+  msfapi.addItem('Update ability materials', 'api_importAbility');
+  msfapi.addItem('Calculate gear usage', 'api_CalculateGearUsage');
   msfapi.addSeparator();
   const msfapiForceUpdate = ui.createMenu('Force update');
   msfapiForceUpdate.addItem('Force update roster', 'api_importFullRoster');
   msfapiForceUpdate.addItem('Force update inventory', 'api_importFullInventory');
+  msfapiForceUpdate.addItem('Force update iso', 'api_importFullIso');
+  msfapiForceUpdate.addItem('Force update training materials', 'api_importFullTraining');
+  msfapiForceUpdate.addItem('Force update ability materials', 'api_importFullAbility');
+  msfapiForceUpdate.addItem('Force calculate gear usage', 'api_CalculateFullGearUsage');
   msfapi.addSubMenu(msfapiForceUpdate);
   //msfapi.addItem('Import Profile', 'api_importProfile');
   msfapi.addSeparator();
