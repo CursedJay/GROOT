@@ -6,20 +6,20 @@
   "author": "JayG64#7990",
   "license": "ISC",
   "devDependencies": {
-    "@types/google-apps-script": "^1.0.55",
-    "eslint": "^8.25.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-googleappsscript": "^1.0.4",
-    "eslint-plugin-jsonc": "^2.4.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "2.7.1"
+    "@types/google-apps-script": "^1.0.66",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-googleappsscript": "^1.0.5",
+    "eslint-plugin-jsonc": "^2.9.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "3.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JayG64/GROOT.git"
+    "url": "git+https://github.com/CursedJay/GROOT.git"
   },
   "bugs": {
-    "url": "https://github.com/JayG64/GROOT/issues"
+    "url": "https://github.com/CursedJay/GROOT/issues"
   },
-  "homepage": "https://github.com/JayG64/GROOT#readme"
+  "homepage": "https://github.com/CursedJay/GROOT#readme"
 }
