@@ -89,7 +89,7 @@ function CreateMenu() {
 
   const dataSource = ui.createMenu('Data source');
   dataSource.addItem('Update data source', 'DataSourceUpdate_Start');
-  dataSource.addItem('Add missing characters', 'AddMissingToons');
+  dataSource.addItem('Add missing characters', 'AddMissingCharacters');
 
   //var menuUpdate = SpreadsheetApp.getUi().createMenu("Update");
   //menuUpdate.addItem("Begin update to latest version", "updateVersion");

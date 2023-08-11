@@ -38,7 +38,7 @@ function loadJSON_Base(foldername, filename) {
   setJSON(json);
 
   sheetRange.setValues(_data);
-  AddMissingToons();
+  AddMissingCharacters();
 
   if (_loadErrorCount > 0)
     SpreadsheetApp.getUi().alert(`Warning: Some errors occured in the process\n\n${_loadErrorMsg}`);
