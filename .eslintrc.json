@@ -18,6 +18,7 @@
     "prefer-const": "warn",
     "prefer-arrow-callback": "warn",
     "no-continue": "off",
+    "no-prototype-builtins": "off",
     "prettier/prettier": [
       "error",
       {

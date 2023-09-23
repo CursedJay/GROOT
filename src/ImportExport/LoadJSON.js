@@ -1,4 +1,4 @@
-﻿let _loadVersion = 0;
+let _loadVersion = 0;
 let _loadToolName;
 let _isGroot;
 
@@ -365,13 +365,13 @@ function setJSON_Roster(roster) {
         false,
         false,
         false,
-        ,
-        ,
-        ,
-        ,
-        ,
-        ,
-        ,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
         hero.Abilities[0],
         hero.Abilities[1],
         hero.Abilities[2],
