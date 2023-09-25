@@ -22,7 +22,7 @@ function api_importRoster(since) {
   }
 
   const rosterIds = getNamedRangeValues('Roster_Import_Ids');
-  const rosterData = getNamedRangeValues('Roster_Import_Data');
+  const rosterData = getNamedRangeValues('Roster_Update_Data');
   setIdConverter('_Option_Class_Id2', '_Option_Class_Name2');
   const rosterNotesRange = getNamedRange('Roster_Notes');
   const formulas = rosterNotesRange.getFormulas();
@@ -78,7 +78,7 @@ function api_importRoster(since) {
   }
 
   setNamedRangeValues('Roster_Import_Ids', rosterIds);
-  setNamedRangeValues('Roster_Import_Data', rosterData);
+  setNamedRangeValues('Roster_Update_Data', rosterData);
 
   for (let row = 0; row < formulas.length; row++) {
     const formula = formulas[row][0];
