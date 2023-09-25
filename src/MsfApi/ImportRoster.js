@@ -87,6 +87,9 @@ function api_importRoster(since) {
     }
   }
   rosterVersionCell.setValue(roster.meta.asOf);
+
+  // After updating the roster, re-calculate gear usage to make sure it's accurate based on current inventory and updated roster
+  api_CalculateGearUsage();
 }
 
 function api_importFullRoster() {
