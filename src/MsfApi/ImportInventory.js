@@ -1,3 +1,4 @@
+/** @deprecated Use api_ImportInventoryGeneric instead */
 function api_importInventory(since) {
   const inventoryVersionCell = getNamedRange('_Version_Inventory');
   const inventoryVersionValue = inventoryVersionCell.getValue();
@@ -18,29 +19,12 @@ function api_importInventory(since) {
   inventoryVersionCell.setValue(inventory.since);
 }
 
+/** @deprecated Use api_ImportFullInventoryGeneric instead */
 function api_importFullInventory() {
   api_importInventory('fresh');
 }
 
-function updateInventoryValues(data, idsRangeName, valuesRangeName, idPrefix = '') {
-  if (!data) {
-    Logger.log(`Data is null for ${idsRangeName}:${valuesRangeName}`);
-    return;
-  }
-  const ids = getNamedRangeValues(idsRangeName);
-  const values = getNamedRangeValues(valuesRangeName);
-
-  for (let row = 0; row < ids.length; row++) {
-    const id = `${idPrefix}${ids[row][0]}`;
-
-    if (data.hasOwnProperty(id)) {
-      values[row] = [data[id]];
-    }
-  }
-
-  setNamedRangeValues(valuesRangeName, values);
-}
-
+/** @deprecated Use api_ImportInventoryGeneric instead */
 function api_importIso(since) {
   const idRanges = [];
   const valueRanges = [];
@@ -52,10 +36,12 @@ function api_importIso(since) {
   api_ImportInventoryGeneric(since, 'ISOITEM', '_Version_Iso', idRanges, valueRanges);
 }
 
+/** @deprecated Use api_ImportFullInventoryGeneric instead */
 function api_importFullIso() {
   api_importIso('fresh');
 }
 
+/** @deprecated Use api_ImportInventoryGeneric instead */
 function api_importTraining(since) {
   api_ImportInventoryGeneric(
     since,
@@ -66,10 +52,12 @@ function api_importTraining(since) {
   );
 }
 
+/** @deprecated Use api_ImportFullInventoryGeneric instead */
 function api_importFullTraining() {
   api_importTraining('fresh');
 }
 
+/** @deprecated Use api_ImportInventoryGeneric instead */
 function api_importAbility(since) {
   api_ImportInventoryGeneric(
     since,
@@ -80,6 +68,7 @@ function api_importAbility(since) {
   );
 }
 
+/** @deprecated Use api_ImportFullInventoryGeneric instead */
 function api_importFullAbility() {
   api_importAbility('fresh');
 }
@@ -145,4 +134,23 @@ function saveInventoryJSON() {
   const filename = `msf_inventory_${dateTime}.json`;
 
   saveReqToFile(inventory, filename);
+}
+
+function updateInventoryValues(data, idsRangeName, valuesRangeName, idPrefix = '') {
+  if (!data) {
+    Logger.log(`Data is null for ${idsRangeName}:${valuesRangeName}`);
+    return;
+  }
+  const ids = getNamedRangeValues(idsRangeName);
+  const values = getNamedRangeValues(valuesRangeName);
+
+  for (let row = 0; row < ids.length; row++) {
+    const id = `${idPrefix}${ids[row][0]}`;
+
+    if (data.hasOwnProperty(id)) {
+      values[row] = [data[id]];
+    }
+  }
+
+  setNamedRangeValues(valuesRangeName, values);
 }
