@@ -129,7 +129,7 @@ function api_CalculateGearUsage(forceClean) {
 
     const targetTier = targetGearLevels[farmingRow][0];
     const currentGearTier = currentUsageRow[1];
-    if (currentGearTier > targetTier) {
+    if (currentGearTier >= targetTier) {
       // If this usage tier is higher than the target tier make sure it's not included and continue
       currentUsageRow[5] = '';
       currentUsageRow[6] = false;

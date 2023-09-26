@@ -145,11 +145,14 @@ function updateInventoryValues(data, idsRangeName, valuesRangeName, idPrefix = '
   const values = getNamedRangeValues(valuesRangeName);
 
   for (let row = 0; row < ids.length; row++) {
-    const id = `${idPrefix}${ids[row][0]}`;
+    const key = ids[row][0];
+    if (!key) continue;
 
-    if (data.hasOwnProperty(id)) {
-      values[row] = [data[id]];
-    }
+    const id = `${idPrefix}${key}`;
+
+    // Set the value found in the data or 0
+    // It's now safe to set the value to 0 because the full inventory is return when there are changes
+    values[row] = data.hasOwnProperty(id) ? [data[id]] : [0];
   }
 
   setNamedRangeValues(valuesRangeName, values);
