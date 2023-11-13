@@ -1,3 +1,4 @@
+/** @deprecated Use @function AddMissingCharacters*/
 function AddMissingToons() {
   // Complete list of characters available ingame
   const fullRange = getNamedRange('_HeroData_Id');

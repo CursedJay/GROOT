@@ -111,7 +111,7 @@ function DataSource_UpdateStep(step) {
       break;
 
     case 8:
-      if (!DS_Update_Localization_HeroesFormula()) return -1;
+      //if (!DS_Update_Localization_HeroesFormula()) return -1;
       break;
 
     case 9:
@@ -135,7 +135,7 @@ function DataSource_UpdateStep(step) {
       break;
 
     case 14:
-      AddMissingToons();
+      AddMissingCharacters();
       DS_Update_Links();
       setNamedRangeValue('_Version_DataSource_Current', _updateVersion);
       return 666;
