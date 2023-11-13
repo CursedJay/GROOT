@@ -102,39 +102,56 @@ function api_CalculateGearUsage(forceClean) {
     }
   }
 
+  // Keeps track of newly retrieved rows to add to the spreadsheet
   let updateCount = 0;
 
   // Add the new gear rows to the gear cache values
   for (let i = 0; i < gearUsageCache.length; i++) {
-    let currentRow = gearUsageCache[i];
+    let currentUsageRow = gearUsageCache[i];
 
-    if (!currentRow[0] && updateCount < gearUsageCacheUpdatedValues.length) {
-      currentRow = gearUsageCacheUpdatedValues[updateCount];
-      gearUsageCache[i] = currentRow;
+    if (!currentUsageRow[0] && updateCount < gearUsageCacheUpdatedValues.length) {
+      currentUsageRow = gearUsageCacheUpdatedValues[updateCount];
+      gearUsageCache[i] = currentUsageRow;
       updateCount++;
     }
 
-    // Skip if there's not data in row
-    const currentCharId = currentRow[0];
+    // Skip if there's no data in the row
+    const currentCharId = currentUsageRow[0];
     if (!currentCharId) continue;
 
-    // Skip if this character is not included in usage
     const farmingRow = characterFarmingRowMap[currentCharId];
-    if (farmingRow === undefined) continue;
+    if (farmingRow === undefined) {
+      // Skip if this character is not included in usage
+      currentUsageRow[5] = '';
+      currentUsageRow[6] = false;
+      continue;
+    }
 
-    // Skip if this tier is higher than the target tier
     const targetTier = targetGearLevels[farmingRow][0];
-    const currentGearTier = currentRow[1];
-    if (currentGearTier >= targetTier) continue;
+    const currentGearTier = currentUsageRow[1];
+    if (currentGearTier >= targetTier) {
+      // If this usage tier is higher than the target tier make sure it's not included and continue
+      currentUsageRow[5] = '';
+      currentUsageRow[6] = false;
+      continue;
+    }
 
-    const currentCraftedGearId = currentRow[2];
     const currentEquippedGearRow = currentEquippedGears[farmingRow];
+    if (currentEquippedGearRow[0] > currentGearTier) {
+      // If the currently equipped tier is the same or higher, then make sure it's not included and continue
+      currentUsageRow[5] = '';
+      currentUsageRow[6] = false;
+      continue;
+    }
+
+    const currentCraftedGearId = currentUsageRow[2];
 
     // Check to see if it's already equipped
     if (
       isPieceEquippedAlready(currentEquippedGearRow, currentCraftedGearId, currentEquippedGearRow[0], currentGearTier)
     ) {
-      currentRow[5] = 'AlreadyEquipped';
+      currentUsageRow[5] = 'AlreadyEquipped';
+      currentUsageRow[6] = false;
       continue;
     }
 
@@ -154,7 +171,8 @@ function api_CalculateGearUsage(forceClean) {
 
     if (foundForCurrent) {
       // Current gear is covered by crafted piece
-      currentRow[5] = `${currentCharId}${currentGearTier}`;
+      currentUsageRow[5] = `${currentCharId}${currentGearTier}`;
+      currentUsageRow[6] = false;
 
       if (foundForCurrent.characterId === '') {
         foundForCurrent.characterId = currentCharId;
@@ -162,7 +180,8 @@ function api_CalculateGearUsage(forceClean) {
       }
     } else {
       // Need materials for this piece
-      currentRow[6] = true;
+      currentUsageRow[5] = '';
+      currentUsageRow[6] = true;
     }
   }
 
@@ -193,7 +212,7 @@ function isPieceEquippedAlready(currentEquippedGear, craftedGearId, craftedGearT
   }
 }
 
-/** Get crafted gear usage */
+/** Get crafted gear usage. If assigned to a character, that character's id will appear in the list */
 function updateCraftedGearUsage() {
   // 0             1
   // CraftedGearId CharacterAndTier
@@ -219,7 +238,7 @@ function updateCraftedGearUsage() {
     const craftedGearId = currentCraftedGearIds[i];
     gearUsageCraftedGear[i][0] = craftedGearId;
     craftedGearMap.push({
-      id: `GEAR_${craftedGearId}`, // TODO: What's the real name of these items?
+      id: `GEAR_${craftedGearId}`,
       characterId: '',
       gearTier: 0
     });
@@ -231,6 +250,12 @@ function updateCraftedGearUsage() {
   return craftedGearMap;
 }
 
+/**
+ * Create a list of crafted gear ids for each crafted gear that is owned.
+ * Multiple of the same crafted gear will appear in the list multiple times
+ * @param {string[][]} craftedGearIds Range of crafted gear ids
+ * @param {number[][]} craftedGearQuantities Range of crafted gear quantities
+ */
 function resolveCraftedGearQuantities(craftedGearIds, craftedGearQuantities) {
   const currentCraftedGearIds = [];
 
