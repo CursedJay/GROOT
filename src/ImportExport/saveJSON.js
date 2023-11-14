@@ -240,21 +240,22 @@ function getJSON_Roster() {
     hero.Favorite = line[1];
     hero.StarLevel = line[17];
     hero.RedStarLevel = line[18];
-    hero.Level = line[19];
-    hero.GearTier = line[20];
-    hero.GearParts = [line[21], line[22], line[23], line[24], line[25], line[26]];
+    hero.DiamondLevel = line[19];
+    hero.Level = line[20];
+    hero.GearTier = line[21];
+    hero.GearParts = [line[22], line[23], line[24], line[25], line[26], line[27]];
 
     hero.Iso8 = {};
-    hero.Iso8.SkillId = classOf[line[27]];
-    hero.Iso8.IsoMatrix = line[28]; //todo: localisation
-    hero.Iso8.MatrixQuality = line[29];
-    hero.Iso8.Stats = [line[30], line[31], line[32], line[33], line[34]];
+    hero.Iso8.SkillId = classOf[line[28]];
+    hero.Iso8.IsoMatrix = line[29]; //todo: localisation
+    hero.Iso8.MatrixQuality = line[30];
+    hero.Iso8.Stats = [line[31], line[32], line[33], line[34], line[35]];
 
-    hero.Abilities = [line[35], line[36], line[37], line[38]];
-    hero.Power = line[39];
-    hero.Shards = line[40];
-    hero.Notes = line[41];
-    hero.Flags = [line[42], line[43], line[44], line[45]];
+    hero.Abilities = [line[36], line[37], line[38], line[39]];
+    hero.Power = line[40];
+    hero.Shards = line[41];
+    hero.Notes = line[42];
+    hero.Flags = [line[43], line[44], line[45], line[46]];
 
     roster.Hero[id] = hero;
   }
@@ -544,10 +545,11 @@ function getJSON_Farming() {
     hero.Target = {
       StarLevel: target[r][0],
       RedStarLevel: target[r][1],
-      Level: target[r][2],
-      GearTier: target[r][3],
-      Iso8: target[r][4],
-      Abilities: [target[r][5], target[r][6], target[r][7], target[r][8]]
+      DiamondLevel: target[r][2],
+      Level: target[r][3],
+      GearTier: target[r][4],
+      Iso8: target[r][5],
+      Abilities: [target[r][6], target[r][7], target[r][8], target[r][9]]
     };
     farming.Hero[valueOf(name)] = hero;
   }

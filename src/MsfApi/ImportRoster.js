@@ -10,6 +10,7 @@ function api_importRoster(since) {
   const rosterInv = {};
   rosterInv.shards = {};
   rosterInv.redstars = {};
+  rosterInv.diamonds = {};
 
   for (const piece of fullInv.data) {
     const { item, quantity } = piece;
@@ -18,6 +19,9 @@ function api_importRoster(since) {
     } else if (item.id.startsWith('RS_')) {
       const redStars = item.id.split('_').pop();
       rosterInv.redstars[item.characterId] = redStars;
+    } else if (item.id.startsWith('PD_')) {
+      const diamonds = item.id.split('_').pop();
+      rosterInv.diamonds[item.characterId] = diamonds;
     }
   }
 
@@ -47,34 +51,35 @@ function api_importRoster(since) {
     rosterData[s][0] = character.activeYellow;
     //rosterData[s][1] = character.activeRed;
     rosterData[s][1] = rosterInv.redstars?.[characterId] ?? 0;
-    rosterData[s][2] = character.level;
-    rosterData[s][3] = character.gearTier;
+    rosterData[s][2] = rosterInv.diamonds?.[characterId] ?? '';
+    rosterData[s][3] = character.level;
+    rosterData[s][4] = character.gearTier;
 
     for (let gearPart = 1; gearPart <= 6; gearPart++) {
       const equipped = character.gearSlots[gearPart - 1]; //true or false
-      rosterData[s][4 + (gearPart - 1)] = equipped;
+      rosterData[s][5 + (gearPart - 1)] = equipped;
     }
 
     //const noIso = Object.keys(character.iso8).length === 0; //no iso equipped returns an empty iso object
     const activeIso8 = character.iso8?.active;
     const matrixLevel = character.iso8?.[activeIso8];
 
-    rosterData[s][10] = activeIso8 === undefined ? '' : valueOf(activeIso8);
-    rosterData[s][11] = character.iso8?.matrix?.toUpperCase() ?? (matrixLevel >= 1 ? 'GREEN' : ''); //todo: localisation
-    rosterData[s][12] = matrixLevel === undefined ? '' : matrixLevel <= 5 ? matrixLevel : matrixLevel - 5; //level 1-5 Green, 6-10 Blue
-    rosterData[s][13] = character.iso8?.armor ?? '';
-    rosterData[s][14] = character.iso8?.resist ?? '';
-    rosterData[s][15] = character.iso8?.health ?? '';
-    rosterData[s][16] = character.iso8?.focus ?? '';
-    rosterData[s][17] = character.iso8?.damage ?? '';
+    rosterData[s][11] = activeIso8 === undefined ? '' : valueOf(activeIso8);
+    rosterData[s][12] = character.iso8?.matrix?.toUpperCase() ?? (matrixLevel >= 1 ? 'GREEN' : ''); //todo: localisation
+    rosterData[s][13] = matrixLevel === undefined ? '' : matrixLevel <= 5 ? matrixLevel : matrixLevel - 5; //level 1-5 Green, 6-10 Blue
+    rosterData[s][14] = character.iso8?.armor ?? '';
+    rosterData[s][15] = character.iso8?.resist ?? '';
+    rosterData[s][16] = character.iso8?.health ?? '';
+    rosterData[s][17] = character.iso8?.focus ?? '';
+    rosterData[s][18] = character.iso8?.damage ?? '';
 
-    rosterData[s][18] = character.basic === 0 ? '' : character.basic;
-    rosterData[s][19] = character.special === 0 ? '' : character.special;
-    rosterData[s][20] = character.ultimate === 0 ? '' : character.ultimate;
-    rosterData[s][21] = character.passive === 0 ? '' : character.passive;
+    rosterData[s][19] = character.basic === 0 ? '' : character.basic;
+    rosterData[s][20] = character.special === 0 ? '' : character.special;
+    rosterData[s][21] = character.ultimate === 0 ? '' : character.ultimate;
+    rosterData[s][22] = character.passive === 0 ? '' : character.passive;
 
-    rosterData[s][22] = character.power;
-    rosterData[s][23] = rosterInv.shards?.[characterId] ?? '';
+    rosterData[s][23] = character.power;
+    rosterData[s][24] = rosterInv.shards?.[characterId] ?? '';
   }
 
   setNamedRangeValues('Roster_Import_Ids', rosterIds);

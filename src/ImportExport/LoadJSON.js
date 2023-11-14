@@ -316,6 +316,7 @@ function setJSON_Roster(roster) {
 
       dataLine.push(hero.StarLevel);
       dataLine.push(hero.RedStarLevel);
+      dataLine.push(hero.DiamondLevel);
       dataLine.push(hero.Level);
 
       dataLine.push(hero.GearTier);
@@ -671,14 +672,21 @@ function setJSON_Farming(farming) {
 
     if (_isGroot) {
       names[i] = [hero.Priority, hero.Index, valueOf(id)];
-      target[i] = [hero.Target.StarLevel, hero.Target.RedStarLevel, hero.Target.Level, hero.Target.GearTier];
+      target[i] = [
+        hero.Target.StarLevel,
+        hero.Target.RedStarLevel,
+        hero.Target.DiamondLevel,
+        hero.Target.Level,
+        hero.Target.GearTier,
+        hero.Target.Iso8
+      ];
     } else {
       names[i] = [hero.Priority, '', valueOf(id)];
       target[i] = [hero.Target.StarLevel, '', hero.Target.Level, hero.Target.GearTier];
     }
 
     for (let a = 0; a < 4; a++) {
-      target[i][5 + a] = hero.Target.Abilities[a];
+      target[i][6 + a] = hero.Target.Abilities[a];
     }
   }
 
