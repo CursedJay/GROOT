@@ -316,7 +316,7 @@ function setJSON_Roster(roster) {
 
       dataLine.push(hero.StarLevel);
       dataLine.push(hero.RedStarLevel);
-      dataLine.push(hero.DiamondLevel);
+      dataLine.push(hero?.DiamondLevel || '');
       dataLine.push(hero.Level);
 
       dataLine.push(hero.GearTier);
