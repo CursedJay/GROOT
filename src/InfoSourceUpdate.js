@@ -1,7 +1,7 @@
 function InfoSourceUpdate() {
   SpreadsheetApp.getActiveSpreadsheet().removeMenu('New InfoSource Available!');
 
-  const json = readJSON('1ZuULCwe2QsAazIiXxe1OWg3UJZyC-hLl');
+  const json = readJSON('1Jx-l1hm8gzzO6MXI-cYTDZG7xDH-VL2C');
 
   const ids = Object.keys(json.Hero);
   const count = ids.length;
