@@ -6,7 +6,7 @@
   "author": "JayG64#7990",
   "license": "ISC",
   "devDependencies": {
-    "@types/google-apps-script": "^1.0.78",
+    "@types/google-apps-script": "^1.0.79",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-googleappsscript": "^1.0.5",
