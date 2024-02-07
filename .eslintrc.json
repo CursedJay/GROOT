@@ -1,19 +1,17 @@
 {
   "env": {
-    "es6": true,
-    "googleappsscript/googleappsscript": true,
-    "browser": true
+    "es2022": true,
+    "googleappsscript/googleappsscript": true
   },
   "parserOptions": {
-    "ecmaVersion": 2022,
-    "sourceType": "script"
+    "ecmaVersion": "latest"
   },
   "extends": ["eslint:recommended", "eslint-config-prettier", "plugin:jsonc/recommended-with-jsonc"],
   "plugins": ["eslint-plugin-prettier", "googleappsscript"],
   "rules": {
     "prefer-template": "warn",
     "no-undef": "off",
-    "no-unused-vars": "off",
+    "no-unused-vars": ["warn", { "vars": "local" }],
     "no-var": "error",
     "prefer-const": "warn",
     "prefer-arrow-callback": "warn",

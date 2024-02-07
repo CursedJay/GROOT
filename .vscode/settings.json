@@ -1,6 +1,4 @@
 {
-  "eslint.alwaysShowStatus": true,
-  "editor.formatOnSave": false,
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -9,8 +7,8 @@
     "json5"
   ],
   "eslint.trace.server": "messages",
-  "files.autoSave": "off",
   "javascript.format.enable": false,
+  "javascript.validate.enable": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   }
