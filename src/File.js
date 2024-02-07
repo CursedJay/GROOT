@@ -4,7 +4,7 @@ function getFolder(folderName, createIfDoesntExist) {
   if (folders.hasNext()) return folders.next();
   if (!createIfDoesntExist) return null;
 
-  folder = DriveApp.createFolder(folderName);
+  const folder = DriveApp.createFolder(folderName);
   DriveApp.addFolder(folder);
 
   return folder;
