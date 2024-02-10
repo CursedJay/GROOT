@@ -161,6 +161,13 @@ function setJSON(json) {
   }
 
   try {
+    setJSON_Progress(json.Progress);
+  } catch (e) {
+    _loadErrorCount++;
+    _loadErrorMsg += `${e}\n`;
+  }
+
+  try {
     setJSON_CustomSheets(SpreadsheetApp.openById(json.GROOT.SheetId));
   } catch (e) {
     error(e);
@@ -699,6 +706,22 @@ function setJSON_Links(links) {
     _data[_links_Title_Y + r][_links_X] = links[r].Title;
     _data[_links_URL_Y + r][_links_X] = links[r].URL;
   }
+}
+
+function setJSON_Progress(progress) {
+  if (progress.length === 0) return;
+  const sheet = GetSheet('_ProgressData');
+  sheet.getRange(2, 1, progress.length, progress[0].length).setValues(progress);
+
+  //Set Delta formulas
+  sheet.getRange('D3').setFormula('=B3-B2');
+  // progress.length - 1 to skip headers
+  const formulaRange = sheet.getRange(3, 4, progress.length - 1, 2);
+  sheet.getRange('D3').copyTo(formulaRange);
+
+  //Fix date format on cells
+  const column = sheet.getRange('A2:A');
+  column.setNumberFormat('MM/dd/yyyy');
 }
 
 function setJSON_CustomSheets(source) {

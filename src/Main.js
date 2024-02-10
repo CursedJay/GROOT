@@ -77,6 +77,11 @@ function CreateMenu() {
   msfapiForceUpdate.addItem('Force update inventory', 'api_ImportFullInventoryGeneric');
   msfapiForceUpdate.addItem('Force calculate gear usage', 'api_CalculateFullGearUsage');
   msfapi.addSubMenu(msfapiForceUpdate);
+  msfapi.addSeparator();
+  const msfApiProgressReport = ui.createMenu('Progress Report');
+  msfApiProgressReport.addItem('Auto update: ON', 'addRecordProgressTrigger');
+  msfApiProgressReport.addItem('Auto update: OFF', 'removeRecordProgressTrigger');
+  msfapi.addSubMenu(msfApiProgressReport);
   //msfapi.addItem('Import Profile', 'api_importProfile');
   msfapi.addSeparator();
   msfapi.addItem('Forget me', 'forgetMe');

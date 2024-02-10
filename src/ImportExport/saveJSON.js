@@ -135,6 +135,13 @@ function getJSON() {
     _saveErrorMsg += `${e}\n`;
   }
 
+  try {
+    json.Progress = getJSON_Progress();
+  } catch (e) {
+    _saveErrorCount++;
+    _saveErrorMsg += `${e}\n`;
+  }
+
   return json;
 }
 
@@ -566,4 +573,21 @@ function getJSON_Links() {
   }
 
   return links;
+}
+
+function getJSON_Progress() {
+  const sheet = GetSheet('_ProgressData');
+  const dataRows = sheet.getLastRow() - 1;
+
+  if (dataRows <= 0) return [];
+
+  // get dates as displayed values and flatten to 1D
+  const dates = sheet.getRange(2, 1, dataRows).getDisplayValues().flat();
+  const progressData = sheet.getRange(2, 2, dataRows, 2).getValues();
+
+  // combine dates with progress values
+  const datesValuesArray = dates.map((date, i) => {
+    return [date].concat(progressData[i]);
+  });
+  return datesValuesArray;
 }
