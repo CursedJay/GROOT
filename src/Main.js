@@ -79,6 +79,8 @@ function CreateMenu() {
   msfapi.addSubMenu(msfapiForceUpdate);
   msfapi.addSeparator();
   const msfApiProgressReport = ui.createMenu('Progress Report');
+  msfApiProgressReport.addItem('Update', 'recordProgress');
+  msfApiProgressReport.addSeparator();
   msfApiProgressReport.addItem('Auto update: ON', 'addRecordProgressTrigger');
   msfApiProgressReport.addItem('Auto update: OFF', 'removeRecordProgressTrigger');
   msfapi.addSubMenu(msfApiProgressReport);
