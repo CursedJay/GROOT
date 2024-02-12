@@ -26,7 +26,8 @@ function recordProgress() {
     .getRange('_Progress_Date')
     .getA1Notation()
     .match(/([A-Z]+)/)[0];
-  const lastDateEntry = Utilities.formatDate(sheet.getRange(`${colDate}${lastRow}`).getValue(), tz, 'MM/dd/yyyy');
+  const lastDateEntry =
+    lastRow > 1 ? Utilities.formatDate(sheet.getRange(`${colDate}${lastRow}`).getValue(), tz, 'MM/dd/yyyy') : '';
 
   // Check if date is the same
   if (currentDate === lastDateEntry) {

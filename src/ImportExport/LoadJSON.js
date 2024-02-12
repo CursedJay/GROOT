@@ -709,6 +709,7 @@ function setJSON_Links(links) {
 }
 
 function setJSON_Progress(progress) {
+  if (!progress) return;
   if (progress.length === 0) return;
   const sheet = GetSheet('_ProgressData');
   sheet.getRange(2, 1, progress.length, progress[0].length).setValues(progress);
