@@ -1,3 +1,16 @@
+function rosterSortAsInGame() {
+  //const sheet = GetSheet('Roster');
+  const shards = getNamedRange('Roster_Shards').getColumn();
+  const power = getNamedRange('Roster_Power').getColumn();
+  const fav = getNamedRange('Roster_Fav').getColumn();
+  const range = getNamedRange('Roster_Data');
+  range.sort([
+    { column: fav, ascending: false },
+    { column: power, ascending: false },
+    { column: shards, ascending: false }
+  ]);
+}
+
 function ShardsToNextLevelNotes() {
   const rosterNotesRange = getNamedRange('Roster_Notes');
   const rosterNotesData = rosterNotesRange.getValues();
