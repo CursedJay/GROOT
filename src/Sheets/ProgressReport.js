@@ -9,10 +9,12 @@ function recordProgress() {
   const currentDate = Utilities.formatDate(date, tz, 'MM/dd/yyyy');
 
   const lastRow = sheet.getLastRow();
-  const colTCP = getNamedRange('_Progress_TCP')
+  const colTCP = sheet
+    .getRange('_Progress_TCP')
     .getA1Notation()
     .match(/([A-Z]+)/)[0];
-  const colSTP = getNamedRange('_Progress_STP')
+  const colSTP = sheet
+    .getRange('_Progress_STP')
     .getA1Notation()
     .match(/([A-Z]+)/)[0];
   const lastTCPEntry = sheet.getRange(`${colTCP}${lastRow}`).getValue();
@@ -20,7 +22,8 @@ function recordProgress() {
   //Checks if TCP changed
   if (tcp <= lastTCPEntry) return;
 
-  const colDate = getNamedRange('_Progress_Date')
+  const colDate = sheet
+    .getRange('_Progress_Date')
     .getA1Notation()
     .match(/([A-Z]+)/)[0];
   const lastDateEntry = Utilities.formatDate(sheet.getRange(`${colDate}${lastRow}`).getValue(), tz, 'MM/dd/yyyy');
