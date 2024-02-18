@@ -32,7 +32,7 @@ function recordProgress() {
   // Check if date is the same
   if (currentDate === lastDateEntry) {
     //Edit last row if date didn't change to limit data entries
-    const lastRowRange = sheet.getRange(lastRow, getNamedRange('_Progress_TCP').getColumn(), 1, 2);
+    const lastRowRange = sheet.getRange(lastRow, sheet.getRange('_Progress_TCP').getColumn(), 1, 2);
     lastRowRange.setValues([[tcp, stp]]);
   } else {
     //Add a new row
