@@ -40,7 +40,10 @@ function DS_Update_Localization_UI() {
     'ID_STORE_CATEGORYNAME_ORBS',
     'ID_UI_FINDER_WAR_ORB',
     'ID_LOYALTY_HEADER',
-    'ID_UI_STORE'
+    'ID_UI_STORE',
+    'ID_SSQUADS_CATEGORY_BATTLEWORLD',
+    'ID_STORE_NAME_BATTLEWORLD',
+    'ID_UI_FINDER_BW_SUPPLIES'
   ];
 
   const storeIds = [
@@ -56,7 +59,8 @@ function DS_Update_Localization_UI() {
     'ID_GACHA_CRATE_EVENT_RAID_BRAWLER_201907_NAME',
     'ID_GACHA_CRATE_LEGACY_01_NAME',
     'ID_GACHA_CRATE_FCO_LEGACY_2_SPECIAL_NAME',
-    'ID_GACHA_CRATE_LEGACY_03_NAME'
+    'ID_GACHA_CRATE_LEGACY_03_NAME',
+    'ID_GACHA_CRATE_RAID_SPOTLIGHT_NAME'
   ];
 
   const uiLocalFiles = GrootApi.getLocalizationFile('ui');
