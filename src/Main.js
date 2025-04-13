@@ -106,19 +106,26 @@ function CreateMenu() {
   menuImport.addItem('Finish Update', 'FinishUpdate');
 
   const menuExport = ui.createMenu('Export');
-  menuExport.addItem('Export MSF.gg War Defense (csv)', 'msfgg_exportWarDefense');
+  menuExport.addItem('Export Sheet Data to JSON', 'saveJSON');
   menuExport.addSeparator();
-  menuExport.addItem('Export to Google Drive', 'saveJSON');
+  menuExport.addItem('Export Roster to JSON', 'exportRosterToJSON');
+  //menuExport.addItem('Export Roster to CSV', 'saveJSON');
+  menuExport.addSeparator();
+  menuExport.addItem('Export Inventory to JSON', 'exportInventoryToJSON');
+  menuExport.addItem('Export Inventory to JSON (Localized)', 'exportInventoryLocalizedToJSON');
+  menuExport.addItem('Export Inventory to CSV', 'exportInventoryToCSV');
+  menuExport.addItem('Export Inventory to CSV (Localized)', 'exportInventoryLocalizedToCSV');
 
   ui.createMenu('Zaratools')
     .addSubMenu(msfapi)
     .addSubMenu(dataSource)
+    .addSeparator()
     //.addSubMenu(menuUpdate)
     .addSubMenu(menuImport)
     .addSubMenu(menuExport)
     // Ingame Sort
     .addSeparator()
-    .addItem('Ingame Sort', 'IngameSort')
+    .addItem('Sort Roster as In-Game', 'rosterSortAsInGame')
     .addItem('Notes as shards required for the next level', 'ShardsToNextLevelNotes')
     .addToUi();
 }
