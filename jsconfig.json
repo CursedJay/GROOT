@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2022"
+    "target": "ES2023",
+    "module": "CommonJS"
   },
-  "include": ["src/**/*.js"],
   "exclude": ["node_modules", "**/node_modules/*"]
 }

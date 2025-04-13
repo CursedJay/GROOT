@@ -1,11 +1,5 @@
 {
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "json",
-    "jsonc",
-    "json5"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "json", "jsonc", "json5"],
   "eslint.trace.server": "messages",
   "javascript.format.enable": false,
   "javascript.validate.enable": false,
