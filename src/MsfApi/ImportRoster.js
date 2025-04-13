@@ -63,10 +63,23 @@ function api_importRoster(since) {
     //const noIso = Object.keys(character.iso8).length === 0; //no iso equipped returns an empty iso object
     const activeIso8 = character.iso8?.active;
     const matrixLevel = character.iso8?.[activeIso8];
+    const isoColors = ['GREEN', 'BLUE', 'PURPLE'];
+    const isoMatrixColor = () => {
+      const level = matrixLevel ?? 0;
+      if (level === 0) return '';
+      return isoColors[Math.ceil(level / 5) - 1];
+    };
 
     rosterData[s][11] = activeIso8 === undefined ? '' : valueOf(activeIso8);
-    rosterData[s][12] = character.iso8?.matrix?.toUpperCase() ?? (matrixLevel >= 1 ? 'GREEN' : ''); //todo: localisation
-    rosterData[s][13] = matrixLevel === undefined ? '' : matrixLevel <= 5 ? matrixLevel : matrixLevel - 5; //level 1-5 Green, 6-10 Blue
+    rosterData[s][12] = isoMatrixColor();
+    rosterData[s][13] =
+      matrixLevel === undefined
+        ? ''
+        : matrixLevel <= 5
+          ? matrixLevel
+          : matrixLevel <= 10
+            ? matrixLevel - 5
+            : matrixLevel - 10; //level 1-5 Green, 6-10 Blue, 11-15 purple
     rosterData[s][14] = character.iso8?.armor ?? '';
     rosterData[s][15] = character.iso8?.resist ?? '';
     rosterData[s][16] = character.iso8?.health ?? '';

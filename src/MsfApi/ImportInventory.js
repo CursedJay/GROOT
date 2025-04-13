@@ -29,7 +29,7 @@ function api_importIso(since) {
   const idRanges = [];
   const valueRanges = [];
 
-  for (let column = 1; column <= 10; column++) {
+  for (let column = 1; column <= 15; column++) {
     idRanges.push(`Inventory_Ids_Iso_${column}`);
     valueRanges.push(`Inventory_Values_Iso_${column}`);
   }
@@ -108,7 +108,7 @@ function api_ImportInventoryGeneric(
     }
 
     // Iso
-    for (let column = 1; column <= 10; column++) {
+    for (let column = 1; column <= 15; column++) {
       const isoIdRange = `Inventory_Ids_Iso_${column}`;
       const isoValueRange = `Inventory_Values_Iso_${column}`;
       updateInventoryValues(inventory.isoitem, isoIdRange, isoValueRange);
@@ -129,7 +129,7 @@ function api_ImportInventoryGeneric(
 }
 
 function saveInventoryJSON() {
-  const inventory = GrootApi.getGearInventory('fresh');
+  const inventory = GrootApi.getInventoryByType(undefined, 'fresh');
   const dateTime = Utilities.formatDate(new Date(), 'GMT+8', "yyyy-MM-dd'T'HH:mm:ss.SS");
   const filename = `msf_inventory_${dateTime}.json`;
 
