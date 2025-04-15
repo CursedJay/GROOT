@@ -1,5 +1,3 @@
-const { forEach } = require('../../eslint.config.cjs');
-
 function api_importProfileAlliance() {
   const profile = GrootApi.getAllianceProfile();
   //saveReqToFile(profile, "alliance.json")
