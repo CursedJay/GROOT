@@ -39,8 +39,12 @@ function recordProgress() {
     lastRowRange.setValues([[tcp, stp]]);
 
     // Alliance TCP
-    const lastRowRangeAlliance = sheet.getRange(lastRow, getNamedRange('_Progress_AllianceAvgTCP').getColumn(), 1, 3);
-    lastRowRangeAlliance.setValues([[allianceData?.tcp || '', allianceData?.stp || '', allianceData?.totalTcp || '']]);
+    if (allianceData) {
+      const lastRowRangeAlliance = sheet.getRange(lastRow, getNamedRange('_Progress_AllianceAvgTCP').getColumn(), 1, 3);
+      lastRowRangeAlliance.setValues([
+        [allianceData?.tcp || '', allianceData?.stp || '', allianceData?.totalTcp || '']
+      ]);
+    }
   } else {
     //Add a new row
     const deltaTCPform = `=${colTCP}${lastRow + 1}-${colTCP}${lastRow}`;
