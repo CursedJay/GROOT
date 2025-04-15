@@ -583,11 +583,16 @@ function getJSON_Progress() {
 
   // get dates as displayed values and flatten to 1D
   const dates = sheet.getRange(2, 1, dataRows).getDisplayValues().flat();
+  // TCP    STP
   const progressData = sheet.getRange(2, 2, dataRows, 2).getValues();
+  // AllianceTCP   AllianceSTP   AllianceTotalTCP
+  const progressAllianceData = sheet.getRange(2, 6, dataRows, 3).getValues();
 
   // combine dates with progress values
+  // 1      2      3      4          5          6             7             8
+  // Date   TCP    STP    DeltaTCP   DeltaSTP   AllianceTCP   AllianceSTP   AllianceTotalTCP
   const datesValuesArray = dates.map((date, i) => {
-    return [date].concat(progressData[i]);
+    return [date].concat(progressData[i], '', '', progressAllianceData[i]);
   });
   return datesValuesArray;
 }

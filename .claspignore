@@ -3,3 +3,4 @@ node_modules/**
 .git/**
 .eslintrc.js
 .gitignore
+eslint.config.cjs
