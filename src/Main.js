@@ -70,7 +70,10 @@ function CreateMenu() {
   const msfapi = ui.createMenu('MSF API');
   msfapi.addItem('Update roster', 'api_importRoster');
   msfapi.addItem('Update inventory', 'api_ImportInventoryGeneric');
-  msfapi.addItem('Calculate gear usage', 'api_CalculateGearUsage');
+  const gearUsage = ui.createMenu('Calculate gear usage');
+  gearUsage.addItem('Farming', 'api_CalculateGearUsage');
+  gearUsage.addItem('Saga Prof X', 'api_CalculateGearUsageSaga');
+  msfapi.addSubMenu(gearUsage);
   msfapi.addSeparator();
   const msfapiForceUpdate = ui.createMenu('Force update');
   msfapiForceUpdate.addItem('Force update roster', 'api_importFullRoster');
