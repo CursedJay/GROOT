@@ -161,6 +161,13 @@ function setJSON(json) {
   }
 
   try {
+    setJSON_SagaX(json.SagaX);
+  } catch (e) {
+    _loadErrorCount++;
+    _loadErrorMsg += `${e}\n`;
+  }
+
+  try {
     setJSON_Progress(json.Progress);
   } catch (e) {
     _loadErrorCount++;
@@ -705,6 +712,13 @@ function setJSON_Links(links) {
   for (let r = 0; r < links.length; r++) {
     _data[_links_Title_Y + r][_links_X] = links[r].Title;
     _data[_links_URL_Y + r][_links_X] = links[r].URL;
+  }
+}
+
+function setJSON_SagaX(sagaX) {
+  const x = 19;
+  for (let r = 0; r < sagaX.Heroes.length; r++) {
+    _data[r][x] = sagaX.Heroes[r];
   }
 }
 

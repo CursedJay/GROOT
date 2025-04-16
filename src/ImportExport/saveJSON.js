@@ -136,6 +136,13 @@ function getJSON() {
   }
 
   try {
+    json.SagaX = getJSON_SagaX();
+  } catch (e) {
+    _saveErrorCount++;
+    _saveErrorMsg += `${e}\n`;
+  }
+
+  try {
     json.Progress = getJSON_Progress();
   } catch (e) {
     _saveErrorCount++;
@@ -573,6 +580,16 @@ function getJSON_Links() {
   }
 
   return links;
+}
+
+function getJSON_SagaX() {
+  const sagaXavier = { Heroes: [] };
+  const x = 19;
+  const amount = 25;
+  for (let r = 0; r < amount; r++) {
+    sagaXavier.Heroes[r] = _data[r][x];
+  }
+  return sagaXavier;
 }
 
 function getJSON_Progress() {
