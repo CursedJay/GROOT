@@ -25,6 +25,7 @@ function api_CalculateGearUsage(forceClean) {
   if (forceClean) {
     // If this is a force, then clear out the cached gear data
     gearUsageCacheRange.clearContent();
+    gearUsageCache.length = 0;
   } else {
     // Get the cached characters so we can skip retrieving any character that is cached already
     for (const gearUsageCacheRow of gearUsageCache) {
@@ -106,7 +107,9 @@ function api_CalculateGearUsage(forceClean) {
   let updateCount = 0;
 
   // Add the new gear rows to the gear cache values
-  for (let i = 0; i < gearUsageCache.length; i++) {
+  for (let i = 0; i < gearUsageCacheUpdatedValues.length; i++) {
+    if (!gearUsageCache[i]) gearUsageCache.push('');
+
     let currentUsageRow = gearUsageCache[i];
 
     if (!currentUsageRow[0] && updateCount < gearUsageCacheUpdatedValues.length) {
@@ -185,6 +188,8 @@ function api_CalculateGearUsage(forceClean) {
     }
   }
 
+  const sheet = GetSheet('_GearUsage');
+  ResizeSheet(sheet, gearUsageCache.length + 2, 9);
   // Write the gear cache to the page
   // NOTE: Bypassing helper method to write a LOT of rows (10,000) to the sheet
   SpreadsheetApp.getActive().getRangeByName(gearUsageCacheRangeName).setValues(gearUsageCache);
@@ -272,4 +277,177 @@ function resolveCraftedGearQuantities(craftedGearIds, craftedGearQuantities) {
   }
 
   return currentCraftedGearIds;
+}
+
+/** Calculate gear usage for all characters included in farming */
+// !! Workaround. Need to use GearUsage cache instead. (api_CalculateGearUsage)
+function api_CalculateGearUsageSaga(forceClean = false) {
+  //const craftedGearMap = updateCraftedGearUsage();
+
+  //if (!forceClean) {
+  // Clear gear usage
+  // 0               1
+  // CraftedGearHash Needed
+  //const gearUsageUsageRange = getNamedRange('GearUsage_Usage');
+  //gearUsageUsageRange.clearContent();
+  //}
+
+  const cachedCharIds = new Set();
+  const gearUsageCacheRangeName = '_SagaGearUsage_Cache';
+  // 0           1        2             3          4           5               6
+  // CharacterId GearTier CraftedGearId MaterialId MaterialQty CraftedGearHash Needed
+  const gearUsageCacheRange = getNamedRange(gearUsageCacheRangeName);
+  const gearUsageCache = gearUsageCacheRange.getValues();
+
+  if (forceClean) {
+    // If this is a force, then clear out the cached gear data
+    gearUsageCacheRange.clearContent();
+  } else {
+    // Get the cached characters so we can skip retrieving any character that is cached already
+    for (const gearUsageCacheRow of gearUsageCache) {
+      const currentCharId = gearUsageCacheRow[0];
+
+      if (!cachedCharIds.has(currentCharId)) {
+        cachedCharIds.add(currentCharId);
+      }
+    }
+  }
+
+  // 0           1
+  // CharacterId Include
+  const characterIds = GrootApi.getCharacterList();
+  const idsNotInCache = new Set();
+
+  for (charId of characterIds) {
+    // If they're not in the cache, add them
+    if (charId && !cachedCharIds.has(charId)) {
+      idsNotInCache.add(charId);
+    }
+  }
+
+  const gearUsageCacheUpdatedValues = [];
+  const g20MinisIds = [
+    'GEAR_RED_BIO_MAT_C1',
+    'GEAR_RED_BIO_MAT_C8',
+    'GEAR_RED_MUTANT_MAT_C1',
+    'GEAR_RED_MUTANT_MAT_C8',
+    'GEAR_RED_MYSTIC_MAT_C1',
+    'GEAR_RED_MYSTIC_MAT_C8',
+    'GEAR_RED_SKILL_MAT_C1',
+    'GEAR_RED_SKILL_MAT_C8',
+    'GEAR_RED_TECH_MAT_C1',
+    'GEAR_RED_TECH_MAT_C8'
+  ];
+  // Get gear data from API for anyone that isn't in the cache already
+  if (idsNotInCache.size > 0) {
+    for (const includedId of idsNotInCache) {
+      const charId = includedId;
+      const characterGear = GrootApi.getGearByCharacterId(charId);
+
+      //const currentGearLevel = currentEquippedGears[characterFarmingRowMap[charId]][0];
+
+      // Get all the gear information for gears that are at the same tier 20
+      Object.entries(characterGear.gearTiers).forEach(([tierString, gearTier]) => {
+        const tier = Number(tierString);
+        if (tier !== 19) return;
+
+        const slots = gearTier?.slots;
+        if (!slots) return;
+
+        for (const slot of slots) {
+          if (slot.piece.flatCost) {
+            Object.values(slot.piece.flatCost).forEach((flatItem) => {
+              if (g20MinisIds.includes(flatItem.item.id)) {
+                gearUsageCacheUpdatedValues.push([
+                  charId,
+                  tier,
+                  slot.piece.id,
+                  flatItem.item.id,
+                  flatItem.quantity,
+                  '',
+                  false
+                ]);
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+  // Keeps track of newly retrieved rows to add to the spreadsheet
+  let updateCount = 0;
+  const rosterIdRows = getNamedRange('Roster_Id').getValues().flat();
+  const rosterData = getNamedRange('Roster_Import_Data').getValues();
+
+  // Add the new gear rows to the gear cache values
+  for (let i = 0; i < gearUsageCache.length; i++) {
+    let currentUsageRow = gearUsageCache[i];
+
+    if (!currentUsageRow[0] && updateCount < gearUsageCacheUpdatedValues.length) {
+      currentUsageRow = gearUsageCacheUpdatedValues[updateCount];
+      gearUsageCache[i] = currentUsageRow;
+      updateCount++;
+    }
+
+    // Skip if there's no data in the row
+    const currentCharId = currentUsageRow[0];
+    if (!currentCharId) continue;
+
+    const currentGearTier = currentUsageRow[1]; //19
+
+    const row = rosterIdRows.indexOf(currentUsageRow[0]);
+    // 4 GearTier    5-10 Pieces 1-6
+    const currentEquippedGearRow = rosterData[row].slice(4, 11);
+
+    if (currentEquippedGearRow[0] > currentGearTier) {
+      // If the currently equipped tier is the same or higher, then make sure it's not included and continue
+      currentUsageRow[5] = '';
+      currentUsageRow[6] = false;
+      continue;
+    }
+
+    const currentCraftedGearId = currentUsageRow[2];
+
+    // Check to see if it's already equipped
+    if (
+      isPieceEquippedAlready(currentEquippedGearRow, currentCraftedGearId, currentEquippedGearRow[0], currentGearTier)
+    ) {
+      currentUsageRow[5] = 'AlreadyEquipped';
+      currentUsageRow[6] = false;
+      continue;
+    }
+
+    // Check if there's a crafted piece we can use
+    // const foundForCurrent = craftedGearMap.find((craftedGearItem) => {
+    //   return (
+    //     // Crafted piece is already assigned to this slot
+    //     (craftedGearItem.id === currentCraftedGearId &&
+    //       craftedGearItem.characterId === currentCharId &&
+    //       craftedGearItem.gearTier === currentGearTier) ||
+    //     // Crafted piece is available for this slot
+    //     (craftedGearItem.id === currentCraftedGearId &&
+    //       craftedGearItem.characterId === '' &&
+    //       craftedGearItem.gearTier === 0)
+    //   );
+    // });
+
+    // if (foundForCurrent) {
+    //   // Current gear is covered by crafted piece
+    //   currentUsageRow[5] = `${currentCharId}${currentGearTier}`;
+    //   currentUsageRow[6] = false;
+
+    //   if (foundForCurrent.characterId === '') {
+    //     foundForCurrent.characterId = currentCharId;
+    //     foundForCurrent.gearTier = currentGearTier;
+    //   }
+    // } else {
+    // Need materials for this piece
+    currentUsageRow[5] = '';
+    currentUsageRow[6] = true;
+    //}
+  }
+
+  // Write the gear cache to the page
+  // NOTE: Bypassing helper method to write a LOT of rows (10,000) to the sheet
+  SpreadsheetApp.getActive().getRangeByName(gearUsageCacheRangeName).setValues(gearUsageCache);
 }
