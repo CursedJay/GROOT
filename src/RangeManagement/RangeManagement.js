@@ -63,3 +63,12 @@ function SortTable(data, keyColumns) {
     return CompareData(y, x, 0, keyColumns);
   });
 }
+
+function GetLastRowWithData(range) {
+  for (let i = 0; range.length > i; i++) {
+    if (!range[i][0]) {
+      return i;
+    }
+  }
+  return range.length;
+}

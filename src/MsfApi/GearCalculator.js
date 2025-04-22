@@ -107,7 +107,8 @@ function api_CalculateGearUsage(forceClean) {
   let updateCount = 0;
 
   // Add the new gear rows to the gear cache values
-  for (let i = 0; i < gearUsageCacheUpdatedValues.length; i++) {
+  const gearCacheLength = gearUsageCacheUpdatedValues.length + GetLastRowWithData(gearUsageCache);
+  for (let i = 0; i < gearCacheLength; i++) {
     if (!gearUsageCache[i]) gearUsageCache.push('');
 
     let currentUsageRow = gearUsageCache[i];
@@ -188,8 +189,12 @@ function api_CalculateGearUsage(forceClean) {
     }
   }
 
+  if (gearUsageCache.length > gearCacheLength) {
+    gearUsageCache.length = gearCacheLength;
+  }
+
   const sheet = GetSheet('_GearUsage');
-  ResizeSheet(sheet, gearUsageCache.length + 2, 9);
+  ResizeSheet(sheet, gearCacheLength + 2, 9);
   // Write the gear cache to the page
   // NOTE: Bypassing helper method to write a LOT of rows (10,000) to the sheet
   SpreadsheetApp.getActive().getRangeByName(gearUsageCacheRangeName).setValues(gearUsageCache);
