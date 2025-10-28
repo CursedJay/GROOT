@@ -9,6 +9,7 @@ function DS_Update_Localization_Gear() {
   for (let index = 0; index < _langIds.length; index++) {
     const langId = _langIds[index].toLowerCase();
 
+    if (!gearLocalFiles[langId]) continue; //language url is missing
     // Fetch the CSVs from the URLs returned by the API
     const res = UrlFetchApp.fetch(gearLocalFiles[langId]);
     const content = res.getContentText();

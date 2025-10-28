@@ -16,6 +16,7 @@ function DS_Update_Localization_Challenges() {
   for (let index = 0; index < _langIds.length; index++) {
     const langId = _langIds[index].toLowerCase();
 
+    if (!challengesLocalFiles[langId]) continue; //language url is missing
     // Fetch the CSVs from the URLs returned by the API
     const challengesRes = UrlFetchApp.fetch(challengesLocalFiles[langId]);
     const challengesContent = challengesRes.getContentText();
@@ -51,6 +52,7 @@ function DS_Update_Localization_Challenges() {
       data[listIndex[id]][index + 1] = challengesCsv[r][1];
     }
 
+    if (!missionsLocalFiles[langId]) continue; //language url is missing
     // Fetch the CSVs from the URLs returned by the API
     const missionsRes = UrlFetchApp.fetch(missionsLocalFiles[langId]);
     const missionsContent = missionsRes.getContentText();
@@ -73,6 +75,7 @@ function DS_Update_Localization_Challenges() {
       data[listIndex[id]][index + 1] = missionsCsv[r][1];
     }
 
+    if (!uiLocalFiles[langId]) continue; //language url is missing
     // Fetch the UI CSVs from the URLs returned by the API
     const uiRes = UrlFetchApp.fetch(uiLocalFiles[langId]);
     const uiContent = uiRes.getContentText();

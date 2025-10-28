@@ -10,6 +10,7 @@ function DS_Update_Localization_Roster() {
   for (let index = 0; index < _langIds.length; index++) {
     const langId = _langIds[index].toLowerCase();
 
+    if (!localizationFiles[langId]) continue; //language url is missing
     // Fetch the CSVs from the URLs returned by the API
     const res = UrlFetchApp.fetch(localizationFiles[langId]);
     const content = res.getContentText();

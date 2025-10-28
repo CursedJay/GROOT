@@ -29,6 +29,7 @@ function DS_Update_Localization_Iso8() {
     const langId = _langIds[index].toLowerCase();
 
     for (let source = 0; source < sourceFiles.length; source++) {
+      if (!sourceFiles[source][langId]) continue; //language url is missing
       // Fetch the CSVs from the URLs returned by the API
       const res = UrlFetchApp.fetch(sourceFiles[source][langId]);
       const content = res.getContentText();
