@@ -1,5 +1,5 @@
 const js = require('@eslint/js');
-const eslintConfigPrettier = require('eslint-config-prettier');
+const eslintConfigPrettier = require('eslint-config-prettier/flat');
 const eslintPluginJsonc = require('eslint-plugin-jsonc');
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 //const googleAppsScript = require('eslint-plugin-googleappsscript');

@@ -6,13 +6,13 @@
   "author": "CursedJay",
   "license": "ISC",
   "devDependencies": {
-    "@types/google-apps-script": "^1.0.97",
-    "eslint": "^9.24.0",
-    "eslint-config-prettier": "^10.1.2",
+    "@types/google-apps-script": "^2.0.7",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-googleappsscript": "^1.0.5",
-    "eslint-plugin-jsonc": "^2.20.0",
-    "eslint-plugin-prettier": "^5.2.6",
-    "prettier": "3.5.3"
+    "eslint-plugin-jsonc": "^2.21.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "3.6.2"
   },
   "repository": {
     "type": "git",
