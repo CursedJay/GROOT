@@ -1,23 +1,14 @@
 let _loadVersion = 0;
 let _loadToolName;
-let _isGroot;
 
-// Load saved roster
-function loadJSON() {
-  loadJSON_Base(_zaratoolsFolder, _grootFilename);
-}
+let _loadErrorCount;
+let _loadErrorMsg;
 
 // When using update to latest version.
 function loadJSON_Update() {
   const docId = SpreadsheetApp.getActive().getId();
   if (loadJSON_Base(_zaratoolsFolder, docId)) return;
-
-  loadJSON_Base('MSF_Groots_Tools', docId);
 }
-
-let _loadErrorCount;
-let _loadErrorMsg;
-
 function loadJSON_Base(foldername, filename) {
   const folder = getFolder(foldername, false);
   if (folder == null) return false;
@@ -25,9 +16,9 @@ function loadJSON_Base(foldername, filename) {
   const file = getFile(folder, filename);
   if (file == null) return false;
 
-  const sheet = SpreadsheetApp.getActive().getSheetByName('_Import');
-  const sheetRange = sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns());
-  _data = sheetRange.getValues();
+  const sheetImport = SpreadsheetApp.getActive().getSheetByName('_Import');
+  const sheetRangeImport = sheetImport.getRange(1, 1, sheetImport.getMaxRows(), sheetImport.getMaxColumns());
+  _data = sheetRangeImport.getValues();
 
   const content = file.getBlob().getDataAsString();
   const json = JSON.parse(content);
@@ -37,7 +28,7 @@ function loadJSON_Base(foldername, filename) {
 
   setJSON(json);
 
-  sheetRange.setValues(_data);
+  sheetRangeImport.setValues(_data);
   AddMissingCharacters();
 
   if (_loadErrorCount > 0)
@@ -50,8 +41,6 @@ function setJSON(json) {
   _loadVersion = json.Header.Version;
   _loadToolName = json.Header.Source;
 
-  _isGroot = _loadToolName == 'GROOT';
-
   try {
     setJSON_Profile(json.Profile);
   } catch (e) {
@@ -60,22 +49,14 @@ function setJSON(json) {
   }
 
   try {
-    if (_isGroot) {
-      setJSON_GROOT(json.GROOT);
+    setJSON_GROOT(json.GROOT);
 
-      if (json.hasOwnProperty('MSFgg')) {
-        _data[30][4] = json.MSFgg.UserID;
-        _data[31][4] = json.MSFgg.Key;
-      }
-
-      _data[40][3] = json.MSFToolBot.SheetId;
-    } else {
-      setJSON_GROOT(json.Profile);
-
-      if (json.Profile.hasOwnProperty('MSFPalAllianceId')) _data[_pref_Y + 9][_pref_X] = json.Profile.MSFPalAllianceId;
-
-      if (json.Profile.hasOwnProperty('MSFPalApiKey')) _data[_pref_Y + 10][_pref_X] = json.Profile.MSFPalApiKey;
+    if (json.hasOwnProperty('MSFgg')) {
+      _data[30][4] = json.MSFgg.UserID;
+      _data[31][4] = json.MSFgg.Key;
     }
+
+    _data[40][3] = json.MSFToolBot.SheetId;
   } catch (e) {
     _loadErrorCount++;
     _loadErrorMsg += `${e}\n`;
@@ -95,55 +76,39 @@ function setJSON(json) {
     _loadErrorMsg += `${e}\n`;
   }
 
-  if (_isGroot) {
-    try {
-      setJSON_Teams(json.Teams);
-    } catch (e) {
-      _loadErrorCount++;
-      _loadErrorMsg += `${e}\n`;
-    }
+  try {
+    setJSON_Teams(json.Teams);
+  } catch (e) {
+    _loadErrorCount++;
+    _loadErrorMsg += `${e}\n`;
+  }
 
-    try {
-      setJSON_War(json.War);
-    } catch (e) {
-      _loadErrorCount++;
-      _loadErrorMsg += `${e}\n`;
-    }
+  try {
+    setJSON_War(json.War);
+  } catch (e) {
+    _loadErrorCount++;
+    _loadErrorMsg += `${e}\n`;
+  }
 
-    try {
-      setJSON_Raid(json.Raid);
-    } catch (e) {
-      _loadErrorCount++;
-      _loadErrorMsg += `${e}\n`;
-    }
+  try {
+    setJSON_Raid(json.Raid);
+  } catch (e) {
+    _loadErrorCount++;
+    _loadErrorMsg += `${e}\n`;
+  }
 
-    try {
-      if (json.hasOwnProperty('Blitz')) setJSON_Blitz(json.Blitz);
-    } catch (e) {
-      _loadErrorCount++;
-      _loadErrorMsg += `${e}\n`;
-    }
+  try {
+    if (json.hasOwnProperty('Mission')) setJSON_Mission(json.Mission);
+  } catch (e) {
+    _loadErrorCount++;
+    _loadErrorMsg += `${e}\n`;
+  }
 
-    try {
-      if (json.hasOwnProperty('Mission')) setJSON_Mission(json.Mission);
-    } catch (e) {
-      _loadErrorCount++;
-      _loadErrorMsg += `${e}\n`;
-    }
-
-    try {
-      if (json.hasOwnProperty('Links')) setJSON_Links(json.Links);
-    } catch (e) {
-      _loadErrorCount++;
-      _loadErrorMsg += `${e}\n`;
-    }
-  } else {
-    try {
-      setJSON_Raid_RO(json.Raid);
-    } catch (e) {
-      _loadErrorCount++;
-      _loadErrorMsg += `${e}\n`;
-    }
+  try {
+    if (json.hasOwnProperty('Links')) setJSON_Links(json.Links);
+  } catch (e) {
+    _loadErrorCount++;
+    _loadErrorMsg += `${e}\n`;
   }
 
   try {
@@ -184,21 +149,16 @@ function setJSON(json) {
 // Preferences
 function setJSON_Profile(profile) {
   _data[_profile_Y + 0][_profile_X] = profile.Name;
-  _data[_profile_Y + 1][_profile_X] = _isGroot ? profile.Portrait : profile.Icon;
+  _data[_profile_Y + 1][_profile_X] = profile.Portrait;
   _data[_profile_Y + 2][_profile_X] = profile.Id;
 
-  if (_isGroot || profile.hasOwnProperty('ResetTime')) _data[_profile_Y + 3][_profile_X] = profile.ResetTime;
+  if (profile.hasOwnProperty('ResetTime')) _data[_profile_Y + 3][_profile_X] = profile.ResetTime;
 
   _data[_profile_Y + 4][_profile_X] = profile.MVPCount;
   _data[_profile_Y + 5][_profile_X] = profile.ArenaRank;
   _data[_profile_Y + 6][_profile_X] = profile.ArenaTopRank;
   _data[_profile_Y + 7][_profile_X] = profile.BlitzWins;
-
-  if (_isGroot) {
-    _data[_pref_Y][_pref_X] = profile.Language;
-  } else if (profile.Preferences.hasOwnProperty('Language')) {
-    setJSON_Lang(profile.Preferences.Language);
-  }
+  _data[_pref_Y][_pref_X] = profile.Language;
 }
 
 // Only for the Roster Organizer versions
@@ -259,30 +219,24 @@ function setJSON_GROOT(data) {
   _data[_pref_Y + 2][_pref_X] = data.Preferences.WarDuplicate;
   _data[_pref_Y + 3][_pref_X] = data.Preferences.BlitzDuplicate;
 
-  _data[_pref_Y + 12][_pref_X] = _isGroot
-    ? data.Preferences.Colors.Gear
-    : roColorSettingConvert[data.Preferences.ColorGear];
-  _data[_pref_Y + 14][_pref_X] = _isGroot
-    ? data.Preferences.Colors.Abilities
-    : roColorSettingConvert[data.Preferences.ColorAbility];
-  _data[81][_pref_X] = _isGroot ? data.Preferences.GearTierOverride : '';
+  _data[_pref_Y + 12][_pref_X] = data.Preferences.Colors.Gear;
+  _data[_pref_Y + 14][_pref_X] = data.Preferences.Colors.Abilities;
+  _data[81][_pref_X] = data.Preferences.GearTierOverride;
 
-  if (_isGroot) {
-    _data[_pref_Y + 11][_pref_X] = data.Preferences.Colors.Heroes;
-    _data[_pref_Y + 13][_pref_X] = data.Preferences.Colors.Level;
-    _data[_pref_Y + 15][_pref_X] = data.Preferences.Colors.Shards;
+  _data[_pref_Y + 11][_pref_X] = data.Preferences.Colors.Heroes;
+  _data[_pref_Y + 13][_pref_X] = data.Preferences.Colors.Level;
+  _data[_pref_Y + 15][_pref_X] = data.Preferences.Colors.Shards;
 
-    for (let r = 0; r < _pref_color_teams_H; r++) {
-      _data[_pref_color_teams_Y + r][_pref_color_teams_X + 0] = data.Preferences.Colors.Teams.Index[r];
-      _data[_pref_color_teams_Y + r][_pref_color_teams_X + 1] = data.Preferences.Colors.Teams.Id[r];
-    }
-
-    _data[_pref_Y + 4][_pref_X] = data.Preferences.Images.Portraits;
-    _data[_pref_Y + 5][_pref_X] = data.Preferences.Images.Gear;
-    _data[_pref_Y + 6][_pref_X] = data.Preferences.Images.Teams;
-    _data[_pref_Y + 7][_pref_X] = data.Preferences.Images.Stars;
-    _data[_pref_Y + 8][_pref_X] = data.Preferences.Images.Resource;
+  for (let r = 0; r < _pref_color_teams_H; r++) {
+    _data[_pref_color_teams_Y + r][_pref_color_teams_X + 0] = data.Preferences.Colors.Teams.Index[r];
+    _data[_pref_color_teams_Y + r][_pref_color_teams_X + 1] = data.Preferences.Colors.Teams.Id[r];
   }
+
+  _data[_pref_Y + 4][_pref_X] = data.Preferences.Images.Portraits;
+  _data[_pref_Y + 5][_pref_X] = data.Preferences.Images.Gear;
+  _data[_pref_Y + 6][_pref_X] = data.Preferences.Images.Teams;
+  _data[_pref_Y + 7][_pref_X] = data.Preferences.Images.Stars;
+  _data[_pref_Y + 8][_pref_X] = data.Preferences.Images.Resource;
 }
 
 function setJSON_Roster(roster) {
@@ -296,24 +250,18 @@ function setJSON_Roster(roster) {
     classOf[classData[i][0]] = classData[i][1];
   }
 
-  if (!_isGroot && roster.hasOwnProperty('Language')) {
-    setJSON_Lang(roster.Language);
-  }
-
   // Set Flag names
   for (let f = 0; f < 4; f++) {
     _data[_roster_Y + f][_roster_X] = roster.FlagNames[f];
   }
 
-  if (_isGroot) {
-    // Set current team filter
-    //_data[_roster_Y + 10][_roster_X] = roster.TeamFilter;
-    // Disable for now, would need to activate the script and not sure it's something to save anyway
+  // Set current team filter
+  //_data[_roster_Y + 10][_roster_X] = roster.TeamFilter;
+  // Disable for now, would need to activate the script and not sure it's something to save anyway
 
-    // Set custom columns values
-    for (let f = 0; f < 6; f++) {
-      _data[_roster_Y + 9 - f][_roster_X] = roster.Filters[f];
-    }
+  // Set custom columns values
+  for (let f = 0; f < 6; f++) {
+    _data[_roster_Y + 9 - f][_roster_X] = roster.Filters[f];
   }
 
   // Unlike most data, set directly all characters data directly in the roster page to save space on the import / export and manage checkboxes properly
@@ -323,83 +271,48 @@ function setJSON_Roster(roster) {
   for (let y = 0; y < count; y++) {
     const hero = roster.Hero[ids[y]];
 
-    if (_isGroot) {
-      rosterIds[y] = [hero.Id, hero.Favorite];
+    rosterIds[y] = [hero.Id, hero.Favorite];
 
-      const dataLine = [];
+    const dataLine = [];
 
-      dataLine.push(hero.StarLevel);
-      dataLine.push(hero.RedStarLevel);
-      dataLine.push(hero?.DiamondLevel || '');
-      dataLine.push(hero.Level);
+    dataLine.push(hero.StarLevel);
+    dataLine.push(hero.RedStarLevel);
+    dataLine.push(hero?.DiamondLevel || '');
+    dataLine.push(hero.Level);
 
-      dataLine.push(hero.GearTier);
-      for (let g = 0; g < 6; g++) dataLine.push(hero.GearParts[g]);
+    dataLine.push(hero.GearTier);
+    for (let g = 0; g < 6; g++) dataLine.push(hero.GearParts[g]);
 
-      // Pre-iso8 version
-      if (!hero.hasOwnProperty('Iso8')) {
-        dataLine.push('');
-        dataLine.push('');
-        for (let p = 0; p < 5; p++) dataLine.push('');
-      }
-      // Old versions
-      else if (hero.Iso8.hasOwnProperty('Class')) {
-        dataLine.push(classOf[hero.Iso8.Class]);
-        dataLine.push(hero.Iso8.Level);
-        for (let p = 0; p < 5; p++) {
-          if (hero.Iso8.Parts[p] == true || hero.Iso8.Parts[p] == false) dataLine.push('');
-          else dataLine.push(hero.Iso8.Parts[p]);
-        }
-      } else {
-        dataLine.push(classOf[hero.Iso8.SkillId]);
-        dataLine.push(hero.Iso8.IsoMatrix);
-        dataLine.push(hero.Iso8.MatrixQuality);
-        for (let p = 0; p < 5; p++) {
-          dataLine.push(hero.Iso8.Stats[p]);
-        }
-      }
-
-      for (let a = 0; a < 4; a++) dataLine.push(hero.Abilities[a]);
-      dataLine.push(hero.Power);
-      dataLine.push(hero.Shards);
-      dataLine.push(hero.Notes);
-      for (let f = 0; f < 4; f++) dataLine.push(hero.Flags[f]);
-
-      rosterData[y] = dataLine;
-    } else {
-      rosterIds[y] = [hero.Id, false];
-
-      rosterData[y] = [
-        hero.StarLevel,
-        hero.RedStarLevel,
-        hero.Level,
-        hero.GearTier,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        hero.Abilities[0],
-        hero.Abilities[1],
-        hero.Abilities[2],
-        hero.Abilities[3],
-        hero.Power,
-        hero.Shards,
-        hero.Notes,
-        hero.Flags[0] == true,
-        hero.Flags[1] == true,
-        hero.Flags[2] == true,
-        hero.Flags[3] == true
-      ];
+    // Pre-iso8 version
+    if (!hero.hasOwnProperty('Iso8')) {
+      dataLine.push('');
+      dataLine.push('');
+      for (let p = 0; p < 5; p++) dataLine.push('');
     }
+    // Old versions
+    else if (hero.Iso8.hasOwnProperty('Class')) {
+      dataLine.push(classOf[hero.Iso8.Class]);
+      dataLine.push(hero.Iso8.Level);
+      for (let p = 0; p < 5; p++) {
+        if (hero.Iso8.Parts[p] == true || hero.Iso8.Parts[p] == false) dataLine.push('');
+        else dataLine.push(hero.Iso8.Parts[p]);
+      }
+    } else {
+      dataLine.push(classOf[hero.Iso8.SkillId]);
+      dataLine.push(hero.Iso8.IsoMatrix);
+      dataLine.push(hero.Iso8.MatrixQuality);
+      for (let p = 0; p < 5; p++) {
+        dataLine.push(hero.Iso8.Stats[p]);
+      }
+    }
+
+    for (let a = 0; a < 4; a++) dataLine.push(hero.Abilities[a]);
+    dataLine.push(hero.Power);
+    dataLine.push(hero.Shards);
+    dataLine.push(hero.Notes);
+    for (let f = 0; f < 4; f++) dataLine.push(hero.Flags[f]);
+
+    rosterData[y] = dataLine;
   }
 
   setNamedRangeValuesResize('Roster_Import_Ids', rosterIds);
@@ -425,26 +338,16 @@ function setJSON_StarkTech(starkTech) {
   }
   _data[_starktech_Y + 27][_starktech_X] = date;
 
-  if (_isGroot) {
-    for (let i = 0; i < 3; i++) {
-      _data[_starktech_Y + 28 + i][_starktech_X] = starkTech.Donations.Alliance.Usual[i];
-      _data[_starktech_Y + 31 + i][_starktech_X] = starkTech.Donations.Alliance.Special[i];
-    }
-
-    _data[_starktech_Y + 34][_starktech_X] = starkTech.Donations.Days.Normal;
-    _data[_starktech_Y + 35][_starktech_X] = starkTech.Donations.Days.Special;
-
-    _data[_starktech_Y + 36][_starktech_X] = starkTech.Donations.Player[0];
-    _data[_starktech_Y + 37][_starktech_X] = starkTech.Donations.Player[1];
-  } else {
-    for (let i = 0; i < 3; i++) {
-      _data[_starktech_Y + 28 + i][_starktech_X] = starkTech.Donations['AllianceUsual'][i];
-      _data[_starktech_Y + 31 + i][_starktech_X] = starkTech.Donations['AllianceSpecial'][i];
-    }
-
-    _data[_starktech_Y + 34][_starktech_X] = starkTech.SpecialCycle - starkTech.SpecialDays;
-    _data[_starktech_Y + 35][_starktech_X] = starkTech.SpecialDays;
+  for (let i = 0; i < 3; i++) {
+    _data[_starktech_Y + 28 + i][_starktech_X] = starkTech.Donations.Alliance.Usual[i];
+    _data[_starktech_Y + 31 + i][_starktech_X] = starkTech.Donations.Alliance.Special[i];
   }
+
+  _data[_starktech_Y + 34][_starktech_X] = starkTech.Donations.Days.Normal;
+  _data[_starktech_Y + 35][_starktech_X] = starkTech.Donations.Days.Special;
+
+  _data[_starktech_Y + 36][_starktech_X] = starkTech.Donations.Player[0];
+  _data[_starktech_Y + 37][_starktech_X] = starkTech.Donations.Player[1];
 
   _data[_starktech_Y + 38][_starktech_X] = starkTech.MinPower;
 }
@@ -569,38 +472,6 @@ function setJSON_Raid_RO(raid) {
   }
 }
 
-function setJSON_Blitz(blitz) {
-  for (let r = 0; r < blitz.Team.length; r++) {
-    _data[_blitz_team_Y + r][_blitz_team_names_X] = blitz.Team[r].Name;
-    _data[_blitz_team_Y + r][_blitz_team_tier_X] = blitz.Team[r].Tier;
-  }
-
-  _data[_blitz_filter_Y][_blitz_filter_X] = blitz.Filter;
-
-  const rampup = [];
-  for (let r = 0; r < blitz.Rampup.Team.length; r++) {
-    rampup[r] = [blitz.Rampup.Team[r].Win, blitz.Rampup.Team[r].Name];
-  }
-  setNamedRangeValues('Blitz_RampUp', rampup);
-
-  _data[_blitz_plan_Y][_blitz_plan_X] = blitz.FreeCycle.Count;
-  _data[_blitz_plan_Y + 1][_blitz_plan_X] = blitz.DailyExtra.Count;
-  _data[_blitz_plan_Y + 2][_blitz_plan_X] = blitz.FreeCycle.StartTier;
-  _data[_blitz_plan_Y + 3][_blitz_plan_X] = blitz.FreeCycle.StartFight;
-
-  const cycle = [];
-  for (let r = 0; r < blitz.FreeCycle.Team.length; r++) {
-    cycle[r] = [blitz.FreeCycle.Team[r].Win, blitz.FreeCycle.Team[r].Name];
-  }
-  setNamedRangeValues('Blitz_Cycle', cycle);
-
-  for (let r = 0; r < blitz.DailyExtra.Team.length; r++) {
-    _data[_blitz_plan_extra_Y + r][_blitz_plan_extra_X] = blitz.DailyExtra.Team[r].Tier;
-    _data[_blitz_plan_extra_Y + _blitz_plan_extra_H + r][_blitz_plan_extra_X] = blitz.DailyExtra.Team[r].Fight;
-    _data[_blitz_plan_extra_Y + 2 * _blitz_plan_extra_H + r][_blitz_plan_extra_X] = blitz.DailyExtra.Team[r].Name;
-  }
-}
-
 function setJSON_Mission(mission) {
   for (let r = 0; r < mission.Event.length; r++) {
     _data[_mission_eventType_Y + r][_mission_eventType_X] = mission.Event[r].Type;
@@ -684,20 +555,15 @@ function setJSON_Farming(farming) {
     }
     const hero = farming.Hero[id];
 
-    if (_isGroot) {
-      names[i] = [hero.Priority, hero.Index, valueOf(id)];
-      target[i] = [
-        hero.Target.StarLevel,
-        hero.Target.RedStarLevel,
-        hero.Target.DiamondLevel,
-        hero.Target.Level,
-        hero.Target.GearTier,
-        hero.Target.Iso8
-      ];
-    } else {
-      names[i] = [hero.Priority, '', valueOf(id)];
-      target[i] = [hero.Target.StarLevel, '', hero.Target.Level, hero.Target.GearTier];
-    }
+    names[i] = [hero.Priority, hero.Index, valueOf(id)];
+    target[i] = [
+      hero.Target.StarLevel,
+      hero.Target.RedStarLevel,
+      hero.Target.DiamondLevel,
+      hero.Target.Level,
+      hero.Target.GearTier,
+      hero.Target.Iso8
+    ];
 
     for (let a = 0; a < 4; a++) {
       target[i][6 + a] = hero.Target.Abilities[a];

@@ -99,14 +99,13 @@ function CreateMenu() {
   //menuUpdate.addItem("Begin update to latest version", "updateVersion");
   //menuUpdate.addItem("Begin update to latest beta version", "updateBetaVersion");
 
-  const menuImport = ui.createMenu('Import');
-  menuImport.addItem('Import roster from MSF.gg', 'msfgg_import');
-  menuImport.addSeparator();
-  menuImport.addItem('Import from Google Drive', 'loadJSON');
-  menuImport.addItem('Import from MANTIS', 'mantis_import');
-  menuImport.addItem('Import from MSF Toolbot', 'msftoolbot_import');
-  menuImport.addSeparator();
-  menuImport.addItem('Finish Update', 'FinishUpdate');
+  //const menuImport = ui.createMenu('Import');
+  //menuImport.addItem('Import roster from MSF.gg', 'msfgg_import');
+  //menuImport.addSeparator();
+  //menuImport.addItem('Import from Google Drive', 'loadJSON');
+  //menuImport.addItem('Import from MANTIS', 'mantis_import');
+  //menuImport.addItem('Import from MSF Toolbot', 'msftoolbot_import');
+  //menuImport.addSeparator();
 
   const menuExport = ui.createMenu('Export');
   menuExport.addItem('Export Sheet Data to JSON', 'saveJSON');
@@ -118,18 +117,19 @@ function CreateMenu() {
   menuExport.addItem('Export Inventory to JSON (Localized)', 'exportInventoryLocalizedToJSON');
   menuExport.addItem('Export Inventory to CSV', 'exportInventoryToCSV');
   menuExport.addItem('Export Inventory to CSV (Localized)', 'exportInventoryLocalizedToCSV');
-
+  const menuTools = ui.createMenu('Misc.');
+  menuTools.addItem('Sort Roster as In-Game', 'rosterSortAsInGame');
+  menuTools.addItem('Notes as shards required for the next level', 'ShardsToNextLevelNotes');
+  menuTools.addItem('Finish Update', 'FinishUpdate');
   ui.createMenu('Zaratools')
     .addSubMenu(msfapi)
     .addSubMenu(dataSource)
     .addSeparator()
     //.addSubMenu(menuUpdate)
-    .addSubMenu(menuImport)
+    //.addSubMenu(menuImport)
     .addSubMenu(menuExport)
-    // Ingame Sort
     .addSeparator()
-    .addItem('Sort Roster as In-Game', 'rosterSortAsInGame')
-    .addItem('Notes as shards required for the next level', 'ShardsToNextLevelNotes')
+    .addSubMenu(menuTools)
     .addToUi();
 }
 
